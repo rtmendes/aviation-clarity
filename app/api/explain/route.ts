@@ -1,11 +1,12 @@
-import { buildLearningModel, safetyScan } from '@/lib/explanation-engine';
+import { describeProvider } from '@/lib/ai';
+import { explain } from '@/lib/generation/explain';
 import { fail, ok, optionalEnum, readJson, requireString } from '@/lib/http';
-import { recordAgentRun } from '@/lib/repositories';
 import type { Sensitivity } from '@/lib/types';
-import { detectRisk } from '@/src/core/aviation-explanation';
-import { qaContent } from '@/src/core/qa';
 
 export const dynamic = 'force-dynamic';
+// Generation is slower than a normal request; the default function timeout
+// would cut a long completion off mid-flight.
+export const maxDuration = 60;
 
 const SENSITIVITIES: readonly Sensitivity[] = [
   'general',
@@ -18,13 +19,16 @@ const SENSITIVITIES: readonly Sensitivity[] = [
 /**
  * Aviation Explanation Engine.
  *
- * The response is an instructional scaffold, not verified aviation guidance.
- * Every run is passed through the QA gate and recorded in `agent_runs` so that
- * what was generated, and what it was flagged for, is auditable after the fact.
+ * Produces a structured content package for one concept. Output is an
+ * instructional aid, never operational guidance: every package is run through
+ * the QA gate, and anything flagged is persisted as needing review rather than
+ * as usable content.
+ *
+ * With no AI provider configured the route still answers, in `scaffold` mode,
+ * returning the deterministic outline. The response always says which mode
+ * produced it so a caller is never misled about what it is holding.
  */
 export async function POST(request: Request) {
-  const startedAt = Date.now();
-
   const body = await readJson(request);
   if (!body.ok) return fail(body.message, 400);
 
@@ -34,48 +38,35 @@ export async function POST(request: Request) {
   const sensitivity = optionalEnum(body.value, 'sensitivity', SENSITIVITIES, 'technical');
   if (!sensitivity.ok) return fail(sensitivity.message, 400);
 
-  const model = buildLearningModel(topic.value, sensitivity.value);
-  const serialized = JSON.stringify(model);
+  const audience = typeof body.value.audience === 'string' ? body.value.audience : undefined;
+  const topicId = typeof body.value.topicId === 'string' ? body.value.topicId : undefined;
+  const forceScaffold = body.value.mode === 'scaffold';
 
-  const scan = safetyScan(serialized);
-  const qa = qaContent(`${topic.value}\n${serialized}`);
-  const riskFlags = detectRisk(`${topic.value} ${serialized}`);
-
-  // Anything the QA gate blocks, or the safety scanner flags, requires
-  // qualified human review before this can be published or used operationally.
-  const requiresReview = scan.blocked || !qa.pass || riskFlags.length > 0;
-
-  const payload = {
+  const outcome = await explain({
     topic: topic.value,
     sensitivity: sensitivity.value,
-    model,
-    safety: {
-      ...scan,
-      riskFlags,
-      qa,
-      requiresHumanReview: requiresReview,
-      notice: requiresReview
-        ? 'Instructional aid only. Verify against authoritative sources and obtain qualified review before operational use or publication.'
-        : 'Instructional aid only. Not a substitute for authoritative guidance.',
-    },
-    generatedAt: new Date().toISOString(),
-  };
-
-  // The audit trail is best-effort: losing it must not cost the caller their
-  // response, but a failure to record is reported so it is not silent.
-  const audit = await recordAgentRun({
-    agentName: 'aviation-translator',
-    status: requiresReview ? 'blocked' : 'complete',
-    input: { topic: topic.value, sensitivity: sensitivity.value },
-    output: model,
-    safetyFlags: [...scan.flags, ...riskFlags, ...qa.findings.map((f) => f.code)],
-    durationMs: Date.now() - startedAt,
+    ...(audience ? { audience } : {}),
+    ...(topicId ? { topicId } : {}),
+    ...(forceScaffold ? { forceScaffold: true } : {}),
   });
 
+  if (!outcome.ok) {
+    // 502 for an upstream problem, 422 when the model answered but the answer
+    // was unusable — these need different operator responses.
+    const status = outcome.error.code === 'upstream' ? 502 : 422;
+    return fail(outcome.error.message, status, { code: outcome.error.code });
+  }
+
+  return ok(outcome.result);
+}
+
+/** Reports whether generation is available, without exposing credentials. */
+export async function GET() {
+  const provider = describeProvider();
   return ok({
-    ...payload,
-    audit: audit.ok
-      ? { recorded: true, runId: audit.data.id }
-      : { recorded: false, reason: audit.error.message },
+    engine: 'aviation-explanation-engine',
+    generation: provider.configured
+      ? { available: true, provider: provider.name, model: provider.modelId }
+      : { available: false, mode: 'scaffold', reason: 'No AI provider is configured.' },
   });
 }

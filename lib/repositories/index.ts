@@ -12,6 +12,7 @@ import type {
   AgentRunRow,
   AssetType,
   ContentAssetRow,
+  KnowledgeUnitRow,
   Sensitivity,
   SourceRow,
   TopicRow,
@@ -169,6 +170,57 @@ export async function listContentAssets(
 }
 
 // ---------------------------------------------------------------------------
+// Knowledge units
+// ---------------------------------------------------------------------------
+
+export type CreateKnowledgeUnitInput = {
+  summary: string;
+  learningModel: Json;
+  topicId?: string | null;
+  /**
+   * 'review' whenever the QA gate flagged anything. A generated unit is never
+   * written as 'verified': verification means a qualified human checked it
+   * against an authoritative source, which no generation step can assert.
+   */
+  status: KnowledgeUnitRow['status'];
+};
+
+export async function createKnowledgeUnit(
+  input: CreateKnowledgeUnitInput,
+): Promise<Result<KnowledgeUnitRow>> {
+  return withClient(true, async (client) => {
+    const { data, error } = await client
+      .from('knowledge_units')
+      .insert({
+        summary: input.summary,
+        learning_model: input.learningModel,
+        topic_id: input.topicId ?? null,
+        status: input.status,
+      })
+      .select()
+      .single();
+
+    if (error) return unavailable(error.message);
+    if (!data) return unavailable('Insert returned no row.');
+    return { ok: true, data };
+  });
+}
+
+export async function listKnowledgeUnits(limit = 25): Promise<Result<KnowledgeUnitRow[]>> {
+  const bounded = Math.min(Math.max(limit, 1), 100);
+  return withClient(false, async (client) => {
+    const { data, error } = await client
+      .from('knowledge_units')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(bounded);
+
+    if (error) return unavailable(error.message);
+    return { ok: true, data: data ?? [] };
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Agent runs (audit trail)
 // ---------------------------------------------------------------------------
 
@@ -299,4 +351,4 @@ export async function probeDatabase(): Promise<DatabaseProbe> {
   }
 }
 
-export type { AssetType, ContentAssetRow, SourceRow, TopicRow, TopicStatus };
+export type { AssetType, ContentAssetRow, KnowledgeUnitRow, SourceRow, TopicRow, TopicStatus };
