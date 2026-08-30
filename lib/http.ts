@@ -26,7 +26,10 @@ export function fail(
 export function failFromRepo(error: RepoError): NextResponse {
   switch (error.code) {
     case 'not_configured':
-      return fail(error.message, 503, { missing: error.missing ?? [] });
+      return fail(error.message, 503, {
+        missing: error.missing ?? [],
+        invalid: error.invalid ?? [],
+      });
     case 'not_found':
       return fail(error.message, 404);
     case 'invalid':

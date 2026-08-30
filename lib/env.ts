@@ -29,7 +29,7 @@ export type SupabaseServerConfig = {
 
 export type ConfigResult<T> =
   | { ok: true; config: T }
-  | { ok: false; missing: string[] };
+  | { ok: false; missing: string[]; invalid: string[] };
 
 function firstPresent(...values: (string | undefined)[]): string | null {
   for (const value of values) {
@@ -65,15 +65,42 @@ export function resolveSecretKey(): string | null {
   );
 }
 
+/**
+ * True when `value` is a URL supabase-js will accept.
+ *
+ * supabase-js throws on a malformed URL rather than returning an error, so a
+ * value like `supabase.insightprofit.live` (no scheme) would otherwise escape
+ * as an unhandled 500 from whichever route touched it first.
+ */
+export function isValidSupabaseUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 export function getServerConfig(): ConfigResult<SupabaseServerConfig> {
   const url = resolveSupabaseUrl();
   const publishableKey = resolvePublishableKey();
 
   const missing: string[] = [];
+  const invalid: string[] = [];
+
   if (!url) missing.push('NEXT_PUBLIC_SUPABASE_URL');
+  else if (!isValidSupabaseUrl(url)) {
+    invalid.push(
+      'NEXT_PUBLIC_SUPABASE_URL (or SUPABASE_URL) must be an absolute http(s) URL, ' +
+        'for example https://supabase.insightprofit.live',
+    );
+  }
+
   if (!publishableKey) missing.push('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY');
 
-  if (!url || !publishableKey) return { ok: false, missing };
+  if (!url || !publishableKey || invalid.length > 0) {
+    return { ok: false, missing, invalid };
+  }
 
   return {
     ok: true,

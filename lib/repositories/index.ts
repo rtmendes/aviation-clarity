@@ -24,17 +24,23 @@ export type RepoError = {
   message: string;
   /** Names of missing environment variables, when code is 'not_configured'. */
   missing?: string[];
+  /** Variables that are set but unusable, when code is 'not_configured'. */
+  invalid?: string[];
 };
 
 export type Result<T> = { ok: true; data: T } | { ok: false; error: RepoError };
 
-function notConfigured(missing: string[]): Result<never> {
+function notConfigured(missing: string[], invalid: string[]): Result<never> {
   return {
     ok: false,
     error: {
       code: 'not_configured',
-      message: 'Supabase is not configured for this environment.',
+      message:
+        invalid.length > 0
+          ? 'Supabase is misconfigured for this environment.'
+          : 'Supabase is not configured for this environment.',
       missing,
+      invalid,
     },
   };
 }
@@ -49,7 +55,7 @@ async function withClient<T>(
   fn: (client: Client) => Promise<Result<T>>,
 ): Promise<Result<T>> {
   const result = privileged ? getAdminSupabase() : getSupabase();
-  if (!result.ok) return notConfigured(result.missing);
+  if (!result.ok) return notConfigured(result.missing, result.invalid);
   try {
     return await fn(result.client);
   } catch (cause) {
@@ -242,11 +248,15 @@ export type DatabaseProbe = {
 export async function probeDatabase(): Promise<DatabaseProbe> {
   const client = getSupabase();
   if (!client.ok) {
+    const problems = [
+      ...client.missing.map((name) => `missing ${name}`),
+      ...client.invalid,
+    ];
     return {
       reachable: false,
       latencyMs: null,
       schemaReady: false,
-      detail: `Not configured: missing ${client.missing.join(', ')}`,
+      detail: `Not configured: ${problems.join('; ')}`,
     };
   }
 

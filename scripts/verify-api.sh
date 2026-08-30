@@ -123,5 +123,31 @@ check 'explain flags safety-critical topics for review' \
   "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
      -d '{"topic":"engine failure on takeoff","sensitivity":"safety"}')"
 
+# A misconfigured deployment must degrade to a clear 503, never a 500.
+# Regression guard: a URL without a scheme made supabase-js throw out of the
+# route and surface as an unhandled 500 in production.
+kill -- "-$APP_PID" 2>/dev/null || true
+sleep 2
+
+NEXT_PUBLIC_SUPABASE_URL='supabase.insightprofit.live' \
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='stub-publishable-key' \
+AVIATION_CLARITY_API_TOKEN="$TOKEN" \
+  setsid npx next start -p "$APP_PORT" >/tmp/aviation-clarity-verify-bad.log 2>&1 &
+APP_PID=$!
+
+for _ in $(seq 1 60); do
+  curl -sS -o /dev/null "$BASE/api/health" 2>/dev/null && break
+  sleep 0.5
+done
+
+check 'malformed Supabase URL yields 503, not 500' \
+  '503' "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/health")"
+
+check 'malformed Supabase URL is explained' \
+  'absolute http(s) URL' "$(curl -s "$BASE/api/health")"
+
+check 'routes stay up under a malformed URL' \
+  '503' "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/topics")"
+
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
 [[ $fail -eq 0 ]]
