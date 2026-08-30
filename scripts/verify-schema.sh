@@ -170,8 +170,10 @@ check 'approval without a named reviewer is rejected' 'ac_knowledge_units_approv
 check 'an unrecognised reviewer credential is rejected' 'ac_reviewers_credential_check' \
   "$(psql -d "$DB" -c "insert into public.ac_reviewers (name,credential) values ('x','definitely-not-a-rating');" 2>&1)"
 
-check 'review decisions are not readable anonymously' '0' \
-  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.ac_review_events;")"
+# Refused at the GRANT now, one layer earlier than RLS — anon was only ever
+# reaching this table because of the blanket grant that has since been removed.
+check 'review decisions are not readable anonymously' 'permission denied' \
+  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.ac_review_events;" 2>&1)"
 
 
 # --- Phase 03: rendered asset storage ----------------------------------------
@@ -257,8 +259,8 @@ check 'a buyer sees only their own entitlement' '1' \
 check 'a different signed-in user sees none of it' '0' \
   "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'someone@else.com'; select count(*) from public.ac_entitlements;")"
 
-check 'entitlements are invisible to anonymous callers' '0' \
-  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.ac_entitlements;")"
+check 'entitlements are invisible to anonymous callers' 'permission denied' \
+  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.ac_entitlements;" 2>&1)"
 
 check 'raw webhook payloads are readable by nobody but the server' '0' \
   "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'buyer@example.com'; select count(*) from public.ac_stripe_events;" 2>/dev/null || echo 0)"
@@ -336,6 +338,20 @@ for t in profiles products agent_runs; do
   check "no trigger is attached to the other app's $t" '0' \
     "$(psql -tAq -d "$DB" -c "select count(*) from pg_trigger where tgrelid='public.$t'::regclass and not tgisinternal;")"
 done
+
+# The exposure this file exists to prevent, stated as a query rather than a
+# property of the migration text. RLS is only half the story: it filters tables
+# that have it enabled, and the foreign tables do not, so a GRANT alone is
+# enough to hand another product's customer records to the publishable key.
+# `grant select on all tables in schema public` did exactly that until it was
+# replaced with an explicit list.
+for t in profiles products agent_runs; do
+  check "anon holds no grant on the other app's $t" '0' \
+    "$(psql -tAq -d "$DB" -c "select count(*) from information_schema.role_table_grants where table_schema='public' and table_name='$t' and grantee in ('anon','authenticated');")"
+done
+
+check 'anon cannot actually read the other app rows' 'permission denied' \
+  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.profiles;" 2>&1)"
 
 check "the other app's profiles keeps its own columns" 'id,email,stripe_customer_id,subscription_status,plan' \
   "$(psql -tAq -d "$DB" -c "select string_agg(column_name,',' order by ordinal_position) from information_schema.columns where table_schema='public' and table_name='profiles';")"

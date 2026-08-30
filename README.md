@@ -227,10 +227,17 @@ RLS statements would have enabled row-level security on live tables belonging
 to those apps — which hides every row from an application whose policies do not
 match.
 
+Grants are issued table by table for the same reason. `grant select on all
+tables in schema public` reaches all 626, and RLS does not save the other
+applications' rows because it only filters tables that have it enabled and
+theirs do not — so the grant alone let the publishable key read another
+product's customer billing records.
+
 `supabase/APPLY-ALL.sql` is the whole schema in one file, for the Supabase SQL
 editor. `scripts/verify-schema.sh` applies it beside stand-ins for those three
-foreign tables and asserts their rows, columns, RLS state, policies and
-triggers all come through unchanged.
+foreign tables and asserts their rows, columns, RLS state, policies, triggers
+and grants all come through unchanged — including a read attempted as `anon`
+that must be refused.
 
 See `docs/GO-LIVE.md` for the three remaining deployment steps.
 

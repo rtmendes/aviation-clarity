@@ -46,6 +46,10 @@
 -- 0001_init.sql
 -- =============================================================================
 
+-- =============================================================================
+-- 0001_init.sql
+-- =============================================================================
+
 -- Aviation Clarity — initial schema
 --
 -- Target: self-hosted Supabase at https://supabase.insightprofit.live
@@ -381,7 +385,32 @@ $$;
 -- or authenticated except the one on assessment_attempts.
 
 grant usage on schema public to anon, authenticated;
-grant select on all tables in schema public to anon, authenticated;
+
+-- Granted table by table, never `on all tables in schema public`.
+--
+-- This database is shared: `public` holds 626 tables belonging to other
+-- InsightProfit applications, and a blanket grant reaches every one of them.
+-- Row Level Security would not save them, because RLS only filters tables that
+-- have it enabled and those tables do not — so the grant alone would let the
+-- publishable key, which ships in the browser, read another product's customer
+-- billing records outright. Listing the tables is the whole defence.
+grant select on
+  public.ac_profiles,
+  public.ac_topics,
+  public.ac_sources,
+  public.ac_claims,
+  public.ac_claim_sources,
+  public.ac_knowledge_units,
+  public.ac_workflows,
+  public.ac_content_assets,
+  public.ac_products,
+  public.ac_product_events,
+  public.ac_assessments,
+  public.ac_assessment_attempts,
+  public.ac_agent_runs,
+  public.ac_analytics_events
+to anon, authenticated;
+
 grant insert on public.ac_assessment_attempts to authenticated;
 grant update (display_name) on public.ac_profiles to authenticated;
 

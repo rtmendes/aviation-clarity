@@ -52,6 +52,15 @@ triggers, functions and policies alike, because in PostgreSQL all of those
 share one namespace per schema. Storage buckets are `aviation-assets-draft`
 and `aviation-assets-approved`, since bucket ids are global to the instance.
 
+It also grants table by table rather than with
+`grant select on all tables in schema public`. That distinction is not
+cosmetic: a blanket grant reaches all 626 tables, and Row Level Security does
+not save the other applications' rows because RLS only filters tables that have
+it enabled and theirs do not. The grant alone was enough for the publishable
+key — which ships in the browser — to read another product's customer billing
+records. That was caught in review and is now covered by a check that tries the
+read as `anon` and requires it to be refused.
+
 **Nothing in the file reads, alters or drops any object it did not create.**
 That is verified, not asserted: the file is applied to a scratch database
 seeded with stand-ins for those three foreign tables, and afterwards their
