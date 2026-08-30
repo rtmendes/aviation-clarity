@@ -93,6 +93,40 @@ Providers sit behind `GenerationProvider` in `lib/ai/`, so swapping vendors
 does not touch product code. Adding one means implementing the interface and
 registering it in `lib/ai/index.ts`.
 
+## Assets
+
+`GET /api/assets/{cover|social|worksheet}` renders artwork from templates —
+no manual design step, and no headless browser. It uses `next/og` (satori plus
+resvg), which Next already ships, so the renderer adds no dependency.
+
+```bash
+curl -o cover.png "https://<host>/api/assets/cover?\
+title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=approved"
+```
+
+Every asset is a pure function of its URL: same URL, byte-identical PNG. That
+is what makes ~1,600 assets tractable — output can be cached hard, diffed, and
+re-rendered on demand instead of stored as precious one-offs. Fonts are
+vendored in `assets/fonts/` (both SIL Open Font Licence) rather than fetched,
+because a render that depends on a network call is neither deterministic nor
+reliable in production.
+
+**Review state is part of the artwork.** Anything not approved carries an
+unmistakable band — `DRAFT — NOT REVIEWED` in amber, or `BLOCKED — DO NOT
+PUBLISH` in red. `state` defaults to `draft`, so an asset whose review status is
+unknown never renders as if it were finished. An unreviewed worksheet that
+looks publishable is how unverified aviation material reaches a student.
+
+Design tokens live in `lib/design/tokens.ts` and are the single source of truth
+for both the site and the artwork; `npm run verify:tokens` fails CI if
+`globals.css` drifts from them.
+
+Rendered assets are stored in two Supabase buckets rather than one with a flag:
+`assets-draft` is private, `assets-approved` is public. Moving an object between
+them *is* the publish step. Nothing can be stored without recording the template
+version, the inputs and a checksum — a database constraint, so an asset that
+cannot be reproduced cannot be saved.
+
 ## Verification and review
 
 Generation is the cheap half. What makes aviation training material safe to
@@ -146,6 +180,7 @@ npm run build
 npm run verify:api      # routes end to end against a PostgREST stub
 npm run verify:schema   # migrations against a real PostgreSQL database
 npm run verify:sources  # every registered citation still resolves
+npm run verify:tokens   # globals.css has not drifted from the design tokens
 npm run smoke           # connectivity to the self-hosted Supabase instance
 ```
 
