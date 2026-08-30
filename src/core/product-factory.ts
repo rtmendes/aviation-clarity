@@ -1,0 +1,3 @@
+export type ProductKind='template'|'checklist'|'assessment'|'toolkit'|'course'|'membership'|'service';
+export type ProductSpec={name:string;problem:string;audience:string;kind:ProductKind;promise:string;deliverables:string[];priceRange:string;validationSignals:string[]};
+export function productSpec(problem:string,audience:string):ProductSpec{return {name:`Clarity Kit: ${problem}`,problem,audience,kind:'toolkit',promise:'Give the customer an immediately usable way to make measurable progress.',deliverables:['quick-start guide','checklist','worksheet','implementation template','success criteria'],priceRange:'$29-$149',validationSignals:['search demand','repeated questions','pre-sales interest','diagnostic completion','purchase conversion']};}
