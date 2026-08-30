@@ -1,0 +1,2 @@
+export type MarketingOpportunity={audience:string;problem:string;visibilityGap:string;offer:string;proof:string;channel:string;cta:string};
+export function buildMarketingOpportunity(audience:string,problem:string):MarketingOpportunity{return {audience,problem,visibilityGap:'Insufficient discoverability or unclear differentiation',offer:'A focused diagnostic plus implementation toolkit',proof:'Before/after metrics, customer evidence and source-backed insights',channel:'Search + YouTube + email + local/community distribution',cta:'Run the diagnostic'};}
