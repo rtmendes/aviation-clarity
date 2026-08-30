@@ -186,6 +186,13 @@ check 'cost is computed from configured prices' '"costUsd":0.0065' "$GEN"
 
 check 'generated content is persisted' '"stored":true' "$GEN"
 
+# The id must come back, or a caller cannot find the unit it just created.
+# An earlier version of the PostgREST stub returned an array where the real
+# service returns a bare object, which made these read as undefined.
+check 'the persisted unit id is returned' '"knowledgeUnitId":"' "$GEN"
+
+check 'the audit run id is returned' '"runId":"' "$GEN"
+
 check 'safety-critical generation is flagged for review' '"requiresHumanReview":true' "$GEN"
 
 check 'model-flagged claims are surfaced' 'claimsRequiringVerification' "$GEN"

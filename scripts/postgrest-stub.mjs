@@ -117,7 +117,12 @@ const server = createServer((req, res) => {
         ...input,
       };
       rows.push(row);
-      send(201, [row]);
+      // PostgREST returns a bare object, not an array, when the client asks
+      // for one — which is what supabase-js `.single()` does. Returning an
+      // array unconditionally made `.single()` hand back the array itself, so
+      // `data.id` read as undefined and the stub silently hid it.
+      const wantsObject = String(req.headers['accept'] ?? '').includes('vnd.pgrst.object+json');
+      send(201, wantsObject ? row : [row]);
     });
     return;
   }
