@@ -143,6 +143,35 @@ function triggerRefusal(table, patch, row) {
   return null;
 }
 
+/**
+ * The `select` policies the publishable key is subject to, from 0002 and 0005.
+ *
+ * Reproduced because the stub had, three times, accepted a read that the live
+ * instance refuses — and so passed a route that returns nothing in production.
+ * A read on the publishable key that no policy admits is invisible, exactly as
+ * Row Level Security makes it: PostgREST does not report a permission error,
+ * it returns no row, and a route that treats "no row" as "does not exist"
+ * turns an RLS mistake into a 404 nobody can explain.
+ *
+ * The secret key bypasses all of this, as it does on the live instance.
+ */
+const anonPolicies = {
+  topics: (r) => r.status === 'published',
+  sources: () => true,
+  claims: (r) => r.verified === true,
+  claim_sources: () => true,
+  knowledge_units: (r) => r.status === 'approved',
+  content_assets: (r) => r.status === 'published' && !r.product_id,
+  products: (r) => r.status === 'live',
+  // No policy admits these to anon at all.
+  reviewers: () => false,
+  review_events: () => false,
+  agent_runs: () => false,
+  orders: () => false,
+  entitlements: () => false,
+  stripe_events: () => false,
+};
+
 /** Uploaded storage objects, keyed by "bucket/path". */
 const objects = new Map();
 
@@ -279,7 +308,8 @@ const server = createServer((req, res) => {
   const wantsObject = String(req.headers['accept'] ?? '').includes('vnd.pgrst.object+json');
 
   if (req.method === 'GET') {
-    const result = applyFilters(rows);
+    const visible = privileged ? rows : rows.filter(anonPolicies[table] ?? (() => false));
+    const result = applyFilters(visible);
     const limit = Number(url.searchParams.get('limit') ?? result.length);
     const page = result.slice(0, limit);
     // maybeSingle()/single() ask for a bare object.

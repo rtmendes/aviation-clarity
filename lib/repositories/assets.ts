@@ -124,14 +124,17 @@ export async function recordRenderedAsset(
 }
 
 /**
- * One asset by id, read unprivileged.
+ * One asset by id, read privileged.
  *
- * Delivery decides access from the entitlement, not from this read, but the
- * lookup still goes through RLS so that a row the public role cannot see is not
- * turned into a signed URL by a route that forgot to check.
+ * Access is decided by the entitlement check in the delivery route, which is
+ * the only gate that can answer "has this person paid for this". Layering an
+ * anon read underneath it looked like defence in depth and was the opposite:
+ * the `anon` policy admits only assets that are published *and* attached to no
+ * product, which is precisely the set nobody buys — so every purchased asset
+ * read back as no row, and the buyer got a 404 instead of their download.
  */
 export async function getContentAsset(id: string): Promise<Result<ContentAssetRow>> {
-  return withClient(false, async (client) => {
+  return withClient(true, async (client) => {
     const { data, error } = await client
       .from('content_assets')
       .select('*')

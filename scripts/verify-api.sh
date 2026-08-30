@@ -205,8 +205,17 @@ check 'safety-critical generation is flagged for review' '"requiresHumanReview":
 
 check 'model-flagged claims are surfaced' 'claimsRequiringVerification' "$GEN"
 
-check 'persisted unit is queued for review, never verified' \
-  '"status":"review"' "$(curl -s "$BASE/api/knowledge-units")"
+# The public route shows approved units only — Row Level Security admits
+# nothing else to the anon key. A unit fresh out of generation is at 'review',
+# so it must NOT appear here; it appears in the token-gated review queue, which
+# is checked below. This check read '"status":"review"' until the stub started
+# enforcing RLS, at which point it was asserting something the live instance
+# would never return.
+check 'a unit awaiting review is not published to readers' '"count":0' \
+  "$(curl -s "$BASE/api/knowledge-units")"
+
+check 'a unit awaiting review does reach the reviewer queue' '"status":"review"' \
+  "$(curl -s "$BASE/api/review/queue" -H "authorization: Bearer $TOKEN")"
 
 check 'scaffold mode can still be forced' '"mode":"scaffold"' \
   "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \

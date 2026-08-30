@@ -4,9 +4,13 @@ import { listKnowledgeUnits } from '@/lib/repositories';
 export const dynamic = 'force-dynamic';
 
 /**
- * The generated knowledge base. Units awaiting review are visible here so a
- * reviewer has a queue to work from; Row Level Security keeps anything not yet
- * approved away from anonymous callers.
+ * The approved knowledge base — what a reader is allowed to see.
+ *
+ * This reads through the anon key, and Row Level Security admits only units at
+ * `approved`, so nothing awaiting review appears here however the caller is
+ * signed in. An earlier comment claimed this doubled as a reviewer's queue; it
+ * never could, because the key it reads with is the same for every caller. The
+ * queue is `/api/review/queue`, which reads privileged and is token-gated.
  */
 export async function GET(request: Request) {
   const limitParam = new URL(request.url).searchParams.get('limit');
