@@ -50,6 +50,13 @@ export type SourceType =
 
 export type AgentRunStatus = 'queued' | 'running' | 'blocked' | 'complete' | 'failed';
 
+/** Credentials whose holder can sign off on aviation content. */
+export type Credential =
+  | 'CFI' | 'CFII' | 'MEI' | 'ATP' | 'DPE' | 'AME' | 'A&P' | 'IA' | 'editorial';
+
+export type ReviewAction = 'verified' | 'rejected' | 'approved' | 'reopened';
+export type ReviewEntity = 'claim' | 'knowledge_unit' | 'content_asset';
+
 export type Json = string | number | boolean | null | { [k: string]: Json } | Json[];
 
 export type TopicRow = {
@@ -82,13 +89,44 @@ export type SourceRow = {
 export type ClaimRow = {
   id: string;
   topic_id: string | null;
+  knowledge_unit_id: string | null;
   body: string;
   risk: 'low' | 'medium' | 'high';
   verified: boolean;
   verified_at: string | null;
   verified_by: string | null;
+  reviewer_id: string | null;
+  review_note: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type ReviewerRow = {
+  id: string;
+  name: string;
+  email: string | null;
+  credential: Credential;
+  credential_ref: string | null;
+  profile_id: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ReviewEventRow = {
+  id: string;
+  reviewer_id: string | null;
+  entity_type: ReviewEntity;
+  entity_id: string;
+  action: ReviewAction;
+  note: string | null;
+  source_ids: string[];
+  created_at: string;
+};
+
+export type ClaimSourceRow = {
+  claim_id: string;
+  source_id: string;
 };
 
 export type KnowledgeUnitRow = {
@@ -97,6 +135,8 @@ export type KnowledgeUnitRow = {
   summary: string;
   learning_model: Json;
   status: 'draft' | 'verified' | 'review' | 'approved';
+  approved_by: string | null;
+  approved_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -176,10 +216,36 @@ export type SourceInsert = {
 export type ClaimInsert = {
   body: string;
   topic_id?: string | null;
+  knowledge_unit_id?: string | null;
   risk?: 'low' | 'medium' | 'high';
   verified?: boolean;
   verified_at?: string | null;
   verified_by?: string | null;
+  reviewer_id?: string | null;
+  review_note?: string | null;
+};
+
+export type ReviewerInsert = {
+  name: string;
+  credential: Credential;
+  email?: string | null;
+  credential_ref?: string | null;
+  profile_id?: string | null;
+  active?: boolean;
+};
+
+export type ReviewEventInsert = {
+  entity_type: ReviewEntity;
+  entity_id: string;
+  action: ReviewAction;
+  reviewer_id?: string | null;
+  note?: string | null;
+  source_ids?: string[];
+};
+
+export type ClaimSourceInsert = {
+  claim_id: string;
+  source_id: string;
 };
 
 export type KnowledgeUnitInsert = {
@@ -187,6 +253,8 @@ export type KnowledgeUnitInsert = {
   topic_id?: string | null;
   learning_model?: Json;
   status?: KnowledgeUnitRow['status'];
+  approved_by?: string | null;
+  approved_at?: string | null;
 };
 
 export type ContentAssetInsert = {
@@ -240,6 +308,9 @@ export interface Database {
       content_assets: Table<ContentAssetRow, ContentAssetInsert>;
       agent_runs: Table<AgentRunRow, AgentRunInsert>;
       products: Table<ProductRow, ProductInsert>;
+      reviewers: Table<ReviewerRow, ReviewerInsert>;
+      review_events: Table<ReviewEventRow, ReviewEventInsert>;
+      claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

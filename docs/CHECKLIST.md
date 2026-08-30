@@ -31,8 +31,11 @@ Last updated: 2026-08-30
 - [ ] Agent execution API beyond the explanation engine
 - [x] Generation core — provider adapter, structured outputs, versioned
       prompts, token/cost accounting (Phase 01)
-- [x] Research/source registry (schema plus read API)
+- [x] Research/source registry — 14 verified authoritative sources, write API,
+      link-rot checker
 - [x] QA/approval gate (enforced in the database, not only in code)
+- [x] Claim-level verification with citations, credentialed reviewers, and an
+      append-only decision log (Phase 02)
 - [ ] RAG knowledge base
 - [ ] Explanation Engine UI
 - [x] Content package generator (single-concept; batch run is Phase 05)

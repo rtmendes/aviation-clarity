@@ -85,5 +85,55 @@ check 'anonymous writes are rejected' 'permission denied' \
 check 'the agent audit trail is not readable anonymously' '0' \
   "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.agent_runs;")"
 
+
+# --- Phase 02: the verification gate -----------------------------------------
+
+psql -q -d "$DB" >/dev/null <<'SQL'
+insert into public.reviewers (id, name, credential, credential_ref)
+  values ('99999999-9999-9999-9999-999999999999', 'Test CFI', 'CFI', 'CFI-000000');
+insert into public.knowledge_units (id, summary, status)
+  values ('88888888-8888-8888-8888-888888888888', 'Why airplanes stall', 'review');
+insert into public.sources (id, title, url, source_type)
+  values ('77777777-7777-7777-7777-777777777777',
+          'FAA Airplane Flying Handbook', 'https://www.faa.gov/', 'faa');
+insert into public.claims (id, knowledge_unit_id, body, risk)
+  values ('66666666-6666-6666-6666-666666666666',
+          '88888888-8888-8888-8888-888888888888',
+          'Aircraft-specific critical angle of attack', 'high');
+SQL
+
+check 'a claim cannot be verified without a cited source' 'without at least one cited source' \
+  "$(psql -d "$DB" -c "update public.claims set verified=true, verified_at=now(), reviewer_id='99999999-9999-9999-9999-999999999999' where id='66666666-6666-6666-6666-666666666666';" 2>&1)"
+
+check 'a unit cannot be approved while a claim is unverified' 'still unverified' \
+  "$(psql -d "$DB" -c "update public.knowledge_units set status='approved', approved_by='99999999-9999-9999-9999-999999999999', approved_at=now() where id='88888888-8888-8888-8888-888888888888';" 2>&1)"
+
+# Cite the source, then verify — both in one transaction, which is what the
+# deferred trigger exists to allow.
+psql -q -d "$DB" >/dev/null 2>&1 <<'SQL'
+begin;
+insert into public.claim_sources (claim_id, source_id)
+  values ('66666666-6666-6666-6666-666666666666', '77777777-7777-7777-7777-777777777777');
+update public.claims set verified=true, verified_at=now(),
+       reviewer_id='99999999-9999-9999-9999-999999999999'
+ where id='66666666-6666-6666-6666-666666666666';
+commit;
+SQL
+
+check 'a cited claim can be verified' 't' \
+  "$(psql -tAq -d "$DB" -c "select verified from public.claims where id='66666666-6666-6666-6666-666666666666';")"
+
+check 'a unit approves once its claims are verified' 'approved' \
+  "$(psql -tAq -d "$DB" -c "update public.knowledge_units set status='approved', approved_by='99999999-9999-9999-9999-999999999999', approved_at=now() where id='88888888-8888-8888-8888-888888888888' returning status;" 2>&1)"
+
+check 'approval without a named reviewer is rejected' 'knowledge_units_approval_is_attributable' \
+  "$(psql -d "$DB" -c "insert into public.knowledge_units (summary,status) values ('x','approved');" 2>&1)"
+
+check 'an unrecognised reviewer credential is rejected' 'reviewers_credential_check' \
+  "$(psql -d "$DB" -c "insert into public.reviewers (name,credential) values ('x','definitely-not-a-rating');" 2>&1)"
+
+check 'review decisions are not readable anonymously' '0' \
+  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.review_events;")"
+
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
 [[ $fail -eq 0 ]]

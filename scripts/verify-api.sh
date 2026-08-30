@@ -93,7 +93,7 @@ check 'topics status filter is applied' \
   '"count":0' "$(curl -s "$BASE/api/topics?status=queued")"
 
 check 'sources list returns seeded row' \
-  'FAA Airplane Flying Handbook' "$(curl -s "$BASE/api/sources")"
+  'Airplane Flying Handbook' "$(curl -s "$BASE/api/sources")"
 
 check 'unauthenticated write is rejected' \
   'Unauthorized' \
@@ -231,6 +231,106 @@ check 'a failed generation is still audited' '"status":"failed"' \
 check 'the failure reason is recorded on the run' 'upstream: Provider returned HTTP 500.' \
   "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
      "http://127.0.0.1:$STUB_PORT/rest/v1/agent_runs")"
+
+# ---------------------------------------------------------------------------
+# Phase 02: the verification pipeline
+# ---------------------------------------------------------------------------
+
+echo
+echo 'Verifying the review pipeline:'
+
+REVIEWER='33333333-3333-3333-3333-333333333333'
+INACTIVE='44444444-4444-4444-4444-444444444444'
+SOURCE='22222222-2222-2222-2222-222222222222'
+
+check 'reviewers list only active credentialed people' 'Dana Reyes' \
+  "$(curl -s "$BASE/api/reviewers")"
+
+check 'inactive reviewers are excluded' '"count":1' "$(curl -s "$BASE/api/reviewers")"
+
+# Generation above already produced a unit with a flagged claim.
+check 'generation records claims for review' '"claimsRecorded":1' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"Why airplanes stall","sensitivity":"safety"}')"
+
+QUEUE=$(curl -s "$BASE/api/review/queue")
+check 'the review queue surfaces unverified work' '"awaitingReview":' "$QUEUE"
+check 'queue entries carry their unverified count' '"unverifiedCount":' "$QUEUE"
+
+CLAIM_ID=$(printf '%s' "$QUEUE" | grep -oE '"knowledge_unit_id":"[^"]+","body"' >/dev/null 2>&1; \
+  printf '%s' "$QUEUE" | python3 -c "import sys,json;q=json.load(sys.stdin)['queue'];print(next((c['id'] for e in q for c in e['claims'] if not c['verified']), ''))")
+UNIT_ID=$(printf '%s' "$QUEUE" | python3 -c "import sys,json;q=json.load(sys.stdin)['queue'];print(next((e['unit']['id'] for e in q if e['unverifiedCount']>0), ''))")
+
+check 'an unverified claim is present to review' "-" "${CLAIM_ID:--}"
+
+# --- the gate ---------------------------------------------------------------
+
+check 'approving a unit with unverified claims is refused' 'Verify every claim' \
+  "$(curl -s -X POST "$BASE/api/review/units" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d "{\"unitId\":\"$UNIT_ID\",\"reviewerId\":\"$REVIEWER\"}")"
+
+check 'that refusal is a 422, not a crash' '422' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/review/units" \
+     -H "authorization: Bearer $TOKEN" -H 'content-type: application/json' \
+     -d "{\"unitId\":\"$UNIT_ID\",\"reviewerId\":\"$REVIEWER\"}")"
+
+check 'verifying without citing a source is refused' 'Cite at least one source' \
+  "$(curl -s -X POST "$BASE/api/review/claims" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"$REVIEWER\",\"sourceIds\":[]}")"
+
+check 'citing a source that does not exist is refused' 'do not exist' \
+  "$(curl -s -X POST "$BASE/api/review/claims" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"$REVIEWER\",\"sourceIds\":[\"00000000-0000-0000-0000-000000000000\"]}")"
+
+check 'an unknown reviewer cannot verify' 'No such reviewer' \
+  "$(curl -s -X POST "$BASE/api/review/claims" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"00000000-0000-0000-0000-000000000000\",\"sourceIds\":[\"$SOURCE\"]}")"
+
+check 'an inactive reviewer cannot verify' 'no longer active' \
+  "$(curl -s -X POST "$BASE/api/review/claims" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"$INACTIVE\",\"sourceIds\":[\"$SOURCE\"]}")"
+
+check 'review endpoints require the operator token' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/review/claims" \
+     -H 'content-type: application/json' \
+     -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"$REVIEWER\",\"sourceIds\":[\"$SOURCE\"]}")"
+
+# --- the happy path ---------------------------------------------------------
+
+VERIFIED=$(curl -s -X POST "$BASE/api/review/claims" -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d "{\"claimId\":\"$CLAIM_ID\",\"reviewerId\":\"$REVIEWER\",\"sourceIds\":[\"$SOURCE\"],\"note\":\"Checked against AFH chapter 5.\"}")
+
+check 'a cited claim verifies' '"verified":true' "$VERIFIED"
+check 'verification names the credentialed reviewer' '"credential":"CFI"' "$VERIFIED"
+
+APPROVED=$(curl -s -X POST "$BASE/api/review/units" -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d "{\"unitId\":\"$UNIT_ID\",\"reviewerId\":\"$REVIEWER\"}")
+
+check 'the unit approves once every claim is verified' '"status":"approved"' "$APPROVED"
+check 'the approval records the certificate holder' 'CFI-1234567' "$APPROVED"
+
+check 'the decision is written to the review log' 'approved' \
+  "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
+     "http://127.0.0.1:$STUB_PORT/rest/v1/review_events")"
+
+# --- source registration ----------------------------------------------------
+
+check 'a source can be registered' '"source_type":"faa"' \
+  "$(curl -s -X POST "$BASE/api/sources" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d '{"title":"FAA-H-8083-25 PHAK","url":"https://www.faa.gov/phak","sourceType":"faa"}')"
+
+check 'a citation that is not a URL is refused' 'absolute http(s) URL' \
+  "$(curl -s -X POST "$BASE/api/sources" -H "authorization: Bearer $TOKEN" \
+     -H 'content-type: application/json' \
+     -d '{"title":"Something","url":"not-a-url"}')"
 
 # A misconfigured deployment must degrade to a clear 503, never a 500.
 # Regression guard: a URL without a scheme made supabase-js throw out of the
