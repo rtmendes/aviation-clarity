@@ -1,17 +1,38 @@
 name: CI
+
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    name: Typecheck and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
-      - run: npm install
+
+      # `npm ci` fails loudly if package.json and the lockfile disagree, which
+      # is what keeps production builds reproducible.
+      - run: npm ci
+
+      - run: npm run typecheck
+
       - run: npm run build
+
+  secret-scan:
+    name: Reject committed secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan tracked files for credential patterns
+        run: bash scripts/secret-scan.sh
