@@ -186,6 +186,15 @@ export type ContentAssetRow = {
   approved_by: string | null;
   approved_at: string | null;
   published_at: string | null;
+  /* Provenance (0004_assets.sql): what made this artwork, and where it went.
+     Without these an asset cannot be reproduced, re-rendered after a design
+     change, or checked against what was actually published. */
+  knowledge_unit_id: string | null;
+  template_version: string | null;
+  render_input: Json | null;
+  storage_bucket: string | null;
+  storage_path: string | null;
+  checksum: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -329,6 +338,12 @@ export type ContentAssetInsert = {
   approved_by?: string | null;
   approved_at?: string | null;
   published_at?: string | null;
+  knowledge_unit_id?: string | null;
+  template_version?: string | null;
+  render_input?: Json | null;
+  storage_bucket?: string | null;
+  storage_path?: string | null;
+  checksum?: string | null;
 };
 
 export type AgentRunInsert = {

@@ -206,6 +206,28 @@ export async function createKnowledgeUnit(
   });
 }
 
+/**
+ * One knowledge unit by id, read through the anon key.
+ *
+ * Deliberately unprivileged: this is what decides how much trust an asset's
+ * artwork may claim, and it must see exactly what a public reader sees. Reading
+ * it with the secret key would let a row that RLS hides still mint an
+ * "approved" band.
+ */
+export async function getKnowledgeUnit(id: string): Promise<Result<KnowledgeUnitRow>> {
+  return withClient(false, async (client) => {
+    const { data, error } = await client
+      .from('knowledge_units')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) return unavailable(error.message);
+    if (!data) return { ok: false, error: { code: 'not_found', message: 'No such knowledge unit.' } };
+    return { ok: true, data };
+  });
+}
+
 export async function listKnowledgeUnits(limit = 25): Promise<Result<KnowledgeUnitRow[]>> {
   const bounded = Math.min(Math.max(limit, 1), 100);
   return withClient(false, async (client) => {

@@ -57,6 +57,9 @@ return 503 naming the missing variables until they are provided. See
 | `/api/explain` | POST | none | Aviation Explanation Engine — generates a content package, gates it, persists it |
 | `/api/explain` | GET | none | whether generation is available, and on which model |
 | `/api/knowledge-units` | GET | none | the generated knowledge base and the review queue |
+| `/api/assets/{kind}` | GET | none | render artwork to PNG |
+| `/api/assets/{kind}` | POST | bearer token | render and store, with provenance |
+| `/api/delivery/{assetId}` | GET | Supabase session | signed download link for an entitled buyer |
 
 Write routes use the Supabase secret key, which bypasses Row Level Security, so
 they require `AVIATION_CLARITY_API_TOKEN` as a bearer token and fail closed when
@@ -113,19 +116,59 @@ reliable in production.
 
 **Review state is part of the artwork.** Anything not approved carries an
 unmistakable band — `DRAFT — NOT REVIEWED` in amber, or `BLOCKED — DO NOT
-PUBLISH` in red. `state` defaults to `draft`, so an asset whose review status is
-unknown never renders as if it were finished. An unreviewed worksheet that
-looks publishable is how unverified aviation material reaches a student.
+PUBLISH` in red. An unreviewed worksheet that looks publishable is how
+unverified aviation material reaches a student.
+
+**The band is earned, not requested.** `state` was once a plain query parameter,
+which meant anyone could render an emergency procedure stamped REVIEWED &
+APPROVED for content that had never been reviewed — or generated. The band now
+comes from the knowledge unit named by `unitId`:
+
+```bash
+# claims approval, gets draft — no unit named, so nothing has been reviewed
+curl -sI "https://<host>/api/assets/cover?title=Stall%20recovery&state=approved"
+# x-review-state: draft
+# x-review-state-requested-ignored: approved
+
+# the same request against a unit a CFI actually approved
+curl -sI "https://<host>/api/assets/cover?title=Stall%20recovery&state=approved&unitId=$UNIT"
+# x-review-state: approved
+```
+
+The rule is one-directional: a caller may mark an asset as *less* trusted than
+the database says — flagging something as blocked never needs permission — but
+never more. Without a `unitId` the ceiling is `draft`. A trigger in
+`0006_delivery.sql` enforces the same thing a layer down, because the route is
+one mistake away from being bypassed.
 
 Design tokens live in `lib/design/tokens.ts` and are the single source of truth
 for both the site and the artwork; `npm run verify:tokens` fails CI if
 `globals.css` drifts from them.
 
-Rendered assets are stored in two Supabase buckets rather than one with a flag:
-`assets-draft` is private, `assets-approved` is public. Moving an object between
-them *is* the publish step. Nothing can be stored without recording the template
-version, the inputs and a checksum — a database constraint, so an asset that
-cannot be reproduced cannot be saved.
+`POST /api/assets/{kind}` renders and keeps the result. Assets go to two
+Supabase buckets rather than one with a flag — `assets-draft` and
+`assets-approved` — and the review state picks the bucket, so moving an object
+between them *is* the publish step. Both buckets are private; every read is a
+signed URL. Nothing can be stored without recording the template version, the
+inputs and a checksum — a database constraint, so an asset that cannot be
+reproduced cannot be saved.
+
+The object path is the SHA-256 of the bytes, so an identical re-render resolves
+to the same object and the same row instead of a duplicate that has to be
+reconciled later. It also makes the stored path a verifiable claim: anyone
+holding the file can recompute it.
+
+## Delivery
+
+`GET /api/delivery/{assetId}` hands a purchased asset to the buyer who owns it.
+Three things are checked in order, each against the database rather than the
+request: the session is real (verified with Supabase, so a revoked one fails),
+the asset belongs to a product, and that session's email holds a live
+entitlement to it. Only then is a 5-minute signed URL minted.
+
+The entitlement is read per request rather than baked into a token, so a refund
+takes access away on the next click. An asset attached to no product is refused
+outright — it cannot have been bought, so no entitlement can grant it.
 
 ## Buying
 
