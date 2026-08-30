@@ -174,6 +174,21 @@ export type KnowledgeUnitRow = {
   updated_at: string;
 };
 
+/**
+ * A staff or customer account, keyed to auth.users.
+ *
+ * `role` is what `ac_is_staff()` reads, so it decides which half of the
+ * staff/customer RLS split a signed-in person falls on.
+ */
+export type ProfileRow = {
+  id: string;
+  email: string | null;
+  display_name: string | null;
+  role: 'member' | 'instructor' | 'reviewer' | 'admin';
+  created_at: string;
+  updated_at: string;
+};
+
 export type ContentAssetRow = {
   id: string;
   topic_id: string | null;
@@ -327,6 +342,13 @@ export type KnowledgeUnitInsert = {
   approved_at?: string | null;
 };
 
+export type ProfileInsert = {
+  id: string;
+  email?: string | null;
+  display_name?: string | null;
+  role?: ProfileRow['role'];
+};
+
 export type ContentAssetInsert = {
   asset_type: AssetType;
   topic_id?: string | null;
@@ -378,6 +400,7 @@ type Table<Row extends Record<string, unknown>, Insert extends Record<string, un
 export interface Database {
   public: {
     Tables: {
+      ac_profiles: Table<ProfileRow, ProfileInsert>;
       ac_topics: Table<TopicRow, TopicInsert>;
       ac_sources: Table<SourceRow, SourceInsert>;
       ac_claims: Table<ClaimRow, ClaimInsert>;
