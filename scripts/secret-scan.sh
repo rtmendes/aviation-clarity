@@ -10,8 +10,7 @@ patterns=(
   'rk_live_[A-Za-z0-9]{16,}'       # Stripe live restricted
   'whsec_[A-Za-z0-9]{16,}'         # Stripe webhook secret
   'sb_secret_[A-Za-z0-9_-]{16,}'   # Supabase secret key (current naming)
-  'service_role'                   # legacy Supabase service-role JWT claim
-  'eyJ[A-Za-z0-9_-]{20,}\.eyJ[A-Za-z0-9_-]{20,}\.'  # any JWT
+  'eyJ[A-Za-z0-9_-]{20,}\.eyJ[A-Za-z0-9_-]{20,}\.'  # any JWT, incl. legacy anon/service_role keys
   'postgres(ql)?://[^ \n"]*:[^ \n"@]+@'             # DSN with inline password
 )
 

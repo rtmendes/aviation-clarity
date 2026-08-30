@@ -1,29 +1,97 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
+# Connectivity check against the self-hosted Supabase instance.
+#
 # Run with Infisical so no credentials are written to disk:
-# infisical run --env=dev --path=/aviation-clarity -- bash scripts/integration-smoke.sh
+#   infisical run --env=dev --path=/aviation-clarity -- bash scripts/integration-smoke.sh
+#
+# Only presence and status are printed. No secret value is ever echoed.
+set -uo pipefail
 
-: "${SUPABASE_URL:=https://supabase.insightprofit.live}"
+: "${SUPABASE_URL:=${NEXT_PUBLIC_SUPABASE_URL:-https://supabase.insightprofit.live}}"
+
+KEY="${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_PUBLISHABLE_KEY:-${NEXT_PUBLIC_SUPABASE_ANON_KEY:-${SUPABASE_ANON_KEY:-}}}}"
+
+failures=0
 
 printf '\n== Aviation Clarity integration smoke test ==\n'
 printf 'Supabase URL: %s\n' "$SUPABASE_URL"
+if [[ -n "$KEY" ]]; then
+  printf 'API key:      present (authenticated checks enabled)\n'
+else
+  printf 'API key:      absent (gateway-reachability checks only)\n'
+fi
 
-printf '\n[1/3] Supabase REST gateway\n'
-curl -fsS -o /dev/null -w 'HTTP %{http_code}\n' "$SUPABASE_URL/rest/v1/" || {
-  echo 'Supabase REST gateway is unreachable.' >&2
-  exit 10
+# The Supabase gateway answers an unauthenticated request with 401
+# ("No API key found in request"). That is proof the gateway is alive, so it
+# counts as reachable — treating it as a failure, as an earlier version of this
+# script did, reports a perfectly healthy instance as down.
+# probe <label> <url> <expected-codes> [--no-key]
+probe() {
+  local label=$1 url=$2 expected=$3 with_key=${4:-with-key}
+  local args=(-sS -o /dev/null -w '%{http_code}' --max-time 20)
+  if [[ -n "$KEY" && "$with_key" == 'with-key' ]]; then
+    args+=(-H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+  fi
+
+  local code
+  if ! code=$(curl "${args[@]}" "$url" 2>/dev/null); then
+    printf '  FAIL  %-22s could not connect (DNS, TLS or network)\n' "$label"
+    failures=$((failures + 1))
+    return
+  fi
+
+  if [[ " $expected " == *" $code "* ]]; then
+    printf '  OK    %-22s HTTP %s\n' "$label" "$code"
+  else
+    printf '  FAIL  %-22s HTTP %s (expected one of: %s)\n' "$label" "$code" "$expected"
+    failures=$((failures + 1))
+  fi
 }
 
-printf '\n[2/3] Supabase Auth gateway\n'
-curl -fsS -o /dev/null -w 'HTTP %{http_code}\n' "$SUPABASE_URL/auth/v1/settings" || {
-  echo 'Supabase Auth gateway is unreachable.' >&2
-  exit 11
-}
+printf '\n[1/3] Gateway reachability\n'
+if [[ -n "$KEY" ]]; then
+  # With a valid key PostgREST answers 200; 404 means the schema is not applied.
+  probe 'REST gateway' "$SUPABASE_URL/rest/v1/"               '200 404'
+  probe 'Auth gateway' "$SUPABASE_URL/auth/v1/settings"        '200'
+  probe 'topics table' "$SUPABASE_URL/rest/v1/topics?limit=1"  '200 401 404'
+else
+  probe 'REST gateway' "$SUPABASE_URL/rest/v1/"         '200 401'
+  probe 'Auth gateway' "$SUPABASE_URL/auth/v1/settings" '200 401'
+fi
 
-printf '\n[3/3] Required environment names (values never printed)\n'
-for key in SUPABASE_URL NEXT_PUBLIC_SUPABASE_URL SUPABASE_PUBLISHABLE_KEY NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY; do
-  if [[ -n "${!key:-}" ]]; then printf '%s: present\n' "$key"; else printf '%s: MISSING\n' "$key"; fi
+printf '\n[2/3] Required environment names (values never printed)\n'
+for key in SUPABASE_URL NEXT_PUBLIC_SUPABASE_URL; do
+  if [[ -n "${!key:-}" ]]; then printf '  OK    %-38s present\n' "$key"
+  else printf '  WARN  %-38s missing\n' "$key"; fi
 done
 
-printf '\nSmoke test complete.\n'
+if [[ -n "$KEY" ]]; then
+  printf '  OK    %-38s present\n' 'publishable/anon key'
+else
+  printf '  FAIL  %-38s missing\n' 'publishable/anon key'
+  failures=$((failures + 1))
+fi
+
+for key in SUPABASE_SECRET_KEY SUPABASE_SERVICE_ROLE_KEY; do
+  [[ -n "${!key:-}" ]] && printf '  OK    %-38s present\n' "$key"
+done
+
+[[ -n "${AVIATION_CLARITY_API_TOKEN:-}" ]] \
+  && printf '  OK    %-38s present\n' 'AVIATION_CLARITY_API_TOKEN' \
+  || printf '  WARN  %-38s missing (writes disabled)\n' 'AVIATION_CLARITY_API_TOKEN'
+
+printf '\n[3/3] Application health endpoint\n'
+if [[ -n "${APP_URL:-}" ]]; then
+  # The application is not the Supabase gateway, so the key is not sent here.
+  probe 'app /api/health' "${APP_URL%/}/api/health" '200' --no-key
+else
+  printf '  SKIP  set APP_URL to check the deployed health endpoint\n'
+fi
+
+printf '\n'
+if [[ $failures -eq 0 ]]; then
+  printf 'Smoke test passed.\n'
+  exit 0
+fi
+printf 'Smoke test failed with %d problem(s).\n' "$failures"
+exit 1

@@ -24,14 +24,15 @@ Last updated: 2026-08-30
 - [x] Product Factory domain layer
 - [x] Database schema draft
 - [x] CI workflow scaffold
-- [ ] Persistent database adapter
-- [ ] Authentication
-- [ ] CRUD for topics/research/assets/products
-- [ ] Agent execution API
+- [x] Persistent database adapter
+- [x] Read/create API for topics; read API for sources and content assets
+- [ ] Authentication (Supabase Auth sessions; writes token-gated in the interim)
+- [ ] CRUD for products; update/delete for topics and assets
+- [ ] Agent execution API beyond the explanation engine
 - [ ] OpenAI production integration
-- [ ] Research/source registry
+- [x] Research/source registry (schema plus read API)
+- [x] QA/approval gate (enforced in the database, not only in code)
 - [ ] RAG knowledge base
-- [ ] QA/approval gate
 - [ ] Explanation Engine UI
 - [ ] Content package generator
 - [ ] Assessment engine
@@ -59,8 +60,13 @@ Last updated: 2026-08-30
 
 ## Infrastructure
 - [x] GitHub repository
-- [ ] Vercel project/deployment
-- [ ] Supabase production project
+- [x] Vercel project linked and auto-deploying `main`
+- [x] Production build passing
+- [x] Self-hosted Supabase reachable over HTTPS
+- [x] CI: typecheck, build, schema verification, API verification, secret scan
+- [ ] Supabase schema applied to the live instance
+- [ ] Vercel environment variables set
+- [ ] Successful production deployment
 - [ ] OpenAI production credential
 - [ ] Stripe
 - [ ] Domain
