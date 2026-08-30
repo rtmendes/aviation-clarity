@@ -13,7 +13,7 @@ anything not yet verified is marked as outstanding rather than assumed.
 | Production deployments | were failing; the build fix is on this branch and not yet merged |
 | Self-hosted Supabase `https://supabase.insightprofit.live` | gateway reachable over HTTPS, behind Kong and Cloudflare |
 | Supabase schema | migrations written and tested locally, **not yet applied to the instance** |
-| Vercel environment variables | **not yet set** |
+| Vercel environment variables | partially set; the Supabase URL is malformed — see below |
 
 ## Why the deployments were failing
 
@@ -21,6 +21,34 @@ anything not yet verified is marked as outstanding rather than assumed.
 build resolved a new version. It reached TypeScript 7, which removed the
 `baseUrl` compiler option, and `next build` aborted with `TS5102`. Versions
 are now pinned, `package-lock.json` is committed, and installs use `npm ci`.
+
+## Outstanding: the Supabase URL is missing its scheme
+
+Verified 2026-08-30 against preview deployment `dpl_7oSuUtynfMjEauTesuRJykvfiiNf`.
+`/api/health` reports:
+
+```json
+"supabaseUrl": "supabase.insightprofit.live",
+"detail": "Not configured: NEXT_PUBLIC_SUPABASE_URL (or SUPABASE_URL) must be
+           an absolute http(s) URL, for example https://supabase.insightprofit.live"
+```
+
+The publishable key, secret key and `OPENAI_API_KEY` are all present. The only
+malformed value is the URL: it is stored as a bare hostname, and supabase-js
+requires an absolute URL.
+
+**Fix:** in Vercel → Project Settings → Environment Variables, set
+`NEXT_PUBLIC_SUPABASE_URL` (and `SUPABASE_URL`, if set) to:
+
+```
+https://supabase.insightprofit.live
+```
+
+Then redeploy. `NEXT_PUBLIC_*` values are inlined at build time, so editing the
+variable alone does not take effect — a new build is required.
+
+`AVIATION_CLARITY_API_TOKEN` also appears to be unset; write routes return 503
+until it is added.
 
 ## 1. Vercel environment variables
 

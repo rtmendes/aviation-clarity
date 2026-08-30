@@ -43,7 +43,11 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
       REST and Auth gateways confirmed responding over HTTPS
 - [ ] Supabase schema applied to the instance — migrations written and tested
       locally; applying them needs database credentials
-- [ ] Vercel environment variables set
+- [ ] Vercel environment variables set — keys and `OPENAI_API_KEY` are present;
+      the Supabase URL is stored without its `https://` scheme and must be
+      corrected, and `AVIATION_CLARITY_API_TOKEN` is not set
+- [x] Production build succeeds — verified on preview deployments from this
+      branch, the first successful builds in the project
 - [ ] Production deployment succeeding
 - [ ] OpenAI production API credential
 - [ ] Stripe production account/configuration
