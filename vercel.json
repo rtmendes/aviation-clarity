@@ -1,1 +1,1 @@
-{"framework":"nextjs","buildCommand":"next build","installCommand":"npm install","outputDirectory":".next"}
+{"framework":"nextjs","buildCommand":"next build","installCommand":"npm install","git":{"deploymentEnabled":true},"headers":[{"source":"/api/(.*)","headers":[{"key":"Cache-Control","value":"no-store"}]}]}
