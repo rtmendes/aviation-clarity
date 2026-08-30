@@ -1,0 +1,8 @@
+export type BookSpec={title:string;series:string;audience:string;targetPages:number;chapters:number;chapterTemplate:string[];derivatives:string[]};
+export const trainerBooks:BookSpec[]=[
+ {title:'Decode Aviation',series:'Train the Trainer',audience:'CFIs and aviation educators',targetPages:100,chapters:10,chapterTemplate:['learning objective','plain-language model','technical frame','visual model','analogy','scenario','memory hook','retrieval practice','teaching exercise','source/QA notes'],derivatives:['video','podcast','article','shorts','worksheet','quiz']},
+ {title:'Remember Aviation',series:'Train the Trainer',audience:'CFIs and aviation educators',targetPages:100,chapters:10,chapterTemplate:['objective','memory model','worked example','retrieval practice','spaced-practice plan','common errors','instructor exercise','assessment','source/QA notes'],derivatives:['video','podcast','quiz','flashcards','worksheet']},
+ {title:'Teach Aviation',series:'Train the Trainer',audience:'CFIs and aviation educators',targetPages:100,chapters:10,chapterTemplate:['lesson objective','learner diagnosis','modality selection','demonstration','guided practice','questioning','misconception repair','assessment','debrief','source/QA notes'],derivatives:['lesson plan','video','podcast','worksheet','checklist']},
+ {title:'Pass the Test & Checkride',series:'Train the Trainer',audience:'CFIs and student pilots',targetPages:100,chapters:10,chapterTemplate:['objective','concept map','exam traps','scenario','retrieval set','error analysis','oral-practice prompts','confidence routine','review plan','source/QA notes'],derivatives:['quiz','study plan','video','podcast','worksheet','checklist']}
+];
+export function chapterCount(book:BookSpec){return book.chapters;}
