@@ -22,21 +22,42 @@ vercel --prod
 Verify `/api/health` after deployment.
 
 ## Supabase
-Create development and production projects separately. Apply migrations through a controlled migration workflow. Enable Row Level Security before exposing user-owned data.
 
-Required logical tables:
-- profiles
-- topics
-- sources
-- claims
-- knowledge_units
-- workflows
-- content_assets
-- products
-- product_events
-- assessments
-- assessment_attempts
-- analytics_events
+The deployment targets the self-hosted instance at
+`https://supabase.insightprofit.live`. Row Level Security is enabled on every
+table by `supabase/migrations/0002_rls.sql`, which must be applied before any
+user-owned data exists.
+
+All required logical tables are implemented in `supabase/migrations/0001_init.sql`:
+
+| Table | Purpose |
+| --- | --- |
+| `profiles` | user records, linked to `auth.users` |
+| `topics` | the work queue, with sensitivity and workflow status |
+| `sources` | authoritative research registry |
+| `claims` | statements, with the sources backing them |
+| `claim_sources` | join table between the two |
+| `knowledge_units` | verified, teachable units |
+| `workflows` | auditable per-topic state machine |
+| `content_assets` | generated assets and their QA findings |
+| `products` | product catalogue |
+| `product_events` | funnel and revenue events |
+| `assessments` | question sets |
+| `assessment_attempts` | learner attempts and scores |
+| `agent_runs` | audit trail for every agent invocation |
+| `analytics_events` | product analytics |
+
+Two policy rules are enforced by database constraints rather than application
+code, because application code can be bypassed by anything holding the secret
+key: a content asset cannot reach `published` without a recorded approver and
+timestamp, and a claim cannot be marked verified without recording who verified
+it and when.
+
+Verify a schema change before applying it to the instance:
+
+```bash
+npm run verify:schema
+```
 
 ## OpenAI
 Use runtime-injected credentials. Keep model selection and provider calls behind an adapter. Log request metadata and costs, not secret values.
@@ -47,12 +68,15 @@ Use test mode first. Verify webhook signatures. Treat webhook events as the sour
 ## Deployment acceptance
 A deployment is complete only when:
 - build succeeds
-- health endpoint returns success
+- `/api/health` returns `ok: true`, which requires a real database round trip
+  and the schema being present — it is not satisfied by environment variables
+  merely being set
 - critical routes load
 - environment variables resolve
-- database connectivity succeeds
-- no secrets appear in logs
-- smoke tests pass
+- no secrets appear in logs or the browser bundle
+- `npm run smoke` passes against the deployment
+
+See `docs/DEPLOYMENT.md` for the current verified state of each gate.
 
 ## Security
 Never paste credentials into ChatGPT, GitHub issues, source files, prompts, or commit messages. Use Infisical or the deployment platform's secret mechanism.

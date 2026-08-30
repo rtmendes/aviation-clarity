@@ -1,1 +1,30 @@
-{"name":"aviation-clarity","private":true,"version":"0.2.1","scripts":{"dev":"next dev","build":"next build","start":"next start","typecheck":"tsc --noEmit","verify":"npm run typecheck && npm run build"},"dependencies":{"next":"16.3.3","react":"19.1.0","react-dom":"19.1.0","lucide-react":"latest"},"devDependencies":{"typescript":"latest","@types/node":"latest","@types/react":"latest","@types/react-dom":"latest"}}
+{
+  "name": "aviation-clarity",
+  "private": true,
+  "version": "0.3.0",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run build && npm run verify:api",
+    "smoke": "bash scripts/integration-smoke.sh",
+    "verify:api": "bash scripts/verify-api.sh",
+    "verify:schema": "bash scripts/verify-schema.sh"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.112.4",
+    "next": "16.3.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.13",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "typescript": "5.9.3"
+  }
+}
