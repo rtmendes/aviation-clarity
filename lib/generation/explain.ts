@@ -5,6 +5,7 @@ import { PROMPT_VERSION, buildSystemPrompt, buildUserPrompt } from '@/lib/ai/pro
 import type { GeneratedLearningModel } from '@/lib/ai/schema';
 import { buildLearningModel } from '@/lib/explanation-engine';
 import { createKnowledgeUnit, recordAgentRun } from '@/lib/repositories';
+import { createClaims } from '@/lib/repositories/review';
 import type { Sensitivity } from '@/lib/types';
 import { detectRisk } from '@/src/core/aviation-explanation';
 import { qaContent, type QAReport } from '@/src/core/qa';
@@ -57,7 +58,13 @@ export type ExplainResult = {
     costUsd: number | null;
     durationMs: number;
   };
-  persistence: { stored: boolean; knowledgeUnitId?: string; reason?: string };
+  persistence: {
+    stored: boolean;
+    knowledgeUnitId?: string;
+    /** Claims written for review. Each must be cited before the unit can be approved. */
+    claimsRecorded?: number;
+    reason?: string;
+  };
   audit: { recorded: boolean; runId?: string; reason?: string };
   generatedAt: string;
 };
@@ -202,9 +209,33 @@ export async function explain(
       status: safety.requiresHumanReview ? 'review' : 'draft',
     });
 
-    persistence = stored.ok
-      ? { stored: true, knowledgeUnitId: stored.data.id }
-      : { stored: false, reason: stored.error.message };
+    if (!stored.ok) {
+      persistence = { stored: false, reason: stored.error.message };
+    } else {
+      // Everything the model flagged becomes a claim row a reviewer must cite.
+      // Left only in the JSON response, these would be advisory text; as rows
+      // they are what the approval gate counts.
+      const risk =
+        input.sensitivity === 'safety' || input.sensitivity === 'regulatory' || input.sensitivity === 'medical'
+          ? 'high'
+          : 'medium';
+
+      const claims = await createClaims(
+        model.claimsRequiringVerification.map((body) => ({
+          body,
+          risk,
+          knowledgeUnitId: stored.data.id,
+          topicId: input.topicId ?? null,
+        })),
+      );
+
+      persistence = {
+        stored: true,
+        knowledgeUnitId: stored.data.id,
+        claimsRecorded: claims.ok ? claims.data.length : 0,
+        ...(claims.ok ? {} : { reason: `Claims not recorded: ${claims.error.message}` }),
+      };
+    }
   }
 
   const audit = await recordAgentRun({

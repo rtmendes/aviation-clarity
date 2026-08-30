@@ -35,6 +35,16 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] Graceful `scaffold` mode when no provider is configured
 - [x] 20 verification checks covering success and every provider failure mode
 
+## Phase 02 — verification pipeline (complete)
+- [x] `reviewers` table: credentialed humans, independent of auth.users
+- [x] Claims linked to the knowledge unit that produced them
+- [x] Trigger: a claim cannot be verified without a cited source
+- [x] Trigger: a unit cannot be approved with unverified claims
+- [x] `review_events` append-only decision log
+- [x] 14 authoritative sources seeded, every URL verified to resolve
+- [x] Review queue ordered by unverified risk
+- [x] 58 API checks and 16 schema checks
+
 ## In progress
 - [ ] Replace placeholder content seed with prioritized aviation-specific opportunity database
 - [ ] Supabase Auth sessions in the UI (writes are token-gated in the interim)

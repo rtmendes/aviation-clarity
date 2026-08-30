@@ -93,6 +93,51 @@ Providers sit behind `GenerationProvider` in `lib/ai/`, so swapping vendors
 does not touch product code. Adding one means implementing the interface and
 registering it in `lib/ai/index.ts`.
 
+## Verification and review
+
+Generation is the cheap half. What makes aviation training material safe to
+publish is that a qualified human checked its claims against authoritative
+sources and signed their name to it.
+
+Two rules are enforced by **database triggers**, not application code, because
+anything holding the Supabase secret key can bypass application code:
+
+- **A claim cannot be verified without a cited source.**
+- **A knowledge unit cannot be approved while any of its claims is unverified.**
+
+The flow:
+
+1. Generation writes each `claimsRequiringVerification` entry into `claims`,
+   linked to the unit it came from. Regulatory, safety and medical topics are
+   recorded as high risk.
+2. `GET /api/review/queue` lists what is waiting, ordered by unverified risk so
+   the highest-exposure units surface first.
+3. `POST /api/review/claims` verifies one claim against sources from the
+   registry, recording which credentialed reviewer did it.
+4. `POST /api/review/units` approves the unit — refused until every claim is
+   verified.
+
+Every decision is appended to `review_events`, because in a safety-critical
+domain the sequence of decisions is itself evidence and state columns get
+overwritten by the next one.
+
+Reviewers live in their own table rather than `profiles`, which is keyed to
+`auth.users` and so cannot be populated until Phase 04. It is also the better
+model: what matters on an approval is which credentialed person signed it
+(`CFI`, `CFII`, `AME`, `DPE`…) and their certificate number, not which account
+was logged in.
+
+### The source registry
+
+`supabase/seed/authoritative-sources.sql` seeds 14 documents — 14 CFR parts,
+FAA handbooks, the AIM, the ACS, NTSB investigations. Every URL was confirmed to
+resolve before it was added; a citation registry with dead links is worse than
+an empty one, because a reviewer trusts it.
+
+```bash
+npm run verify:sources   # re-check for link rot
+```
+
 ## Verification
 
 ```bash
@@ -100,6 +145,7 @@ npm run typecheck
 npm run build
 npm run verify:api      # routes end to end against a PostgREST stub
 npm run verify:schema   # migrations against a real PostgreSQL database
+npm run verify:sources  # every registered citation still resolves
 npm run smoke           # connectivity to the self-hosted Supabase instance
 ```
 

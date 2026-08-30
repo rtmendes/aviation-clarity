@@ -35,7 +35,7 @@ const tables = {
   sources: [
     {
       id: '22222222-2222-2222-2222-222222222222',
-      title: 'FAA Airplane Flying Handbook',
+      title: 'FAA-H-8083-3 — Airplane Flying Handbook',
       url: 'https://www.faa.gov/',
       source_type: 'faa',
       authority_score: 1,
@@ -49,7 +49,62 @@ const tables = {
   content_assets: [],
   agent_runs: [],
   knowledge_units: [],
+  claims: [],
+  claim_sources: [],
+  review_events: [],
+  reviewers: [
+    {
+      id: '33333333-3333-3333-3333-333333333333',
+      name: 'Dana Reyes',
+      email: null,
+      credential: 'CFI',
+      credential_ref: 'CFI-1234567',
+      profile_id: null,
+      active: true,
+      created_at: '2026-08-01T00:00:00Z',
+      updated_at: '2026-08-01T00:00:00Z',
+    },
+    {
+      id: '44444444-4444-4444-4444-444444444444',
+      name: 'Inactive Reviewer',
+      email: null,
+      credential: 'CFI',
+      credential_ref: null,
+      profile_id: null,
+      active: false,
+      created_at: '2026-08-01T00:00:00Z',
+      updated_at: '2026-08-01T00:00:00Z',
+    },
+  ],
 };
+
+/**
+ * The two database triggers from 0003_review.sql, reproduced.
+ *
+ * Without these the stub would accept writes the real database refuses, and
+ * every API test of the review gate would pass while proving nothing. Returning
+ * the real trigger wording also exercises the error mapping the routes rely on.
+ */
+function triggerRefusal(table, patch, row) {
+  if (table === 'claims' && patch.verified === true) {
+    const cited = tables.claim_sources.some((cs) => cs.claim_id === row.id);
+    if (!cited) {
+      return `claim ${row.id} cannot be verified without at least one cited source`;
+    }
+  }
+  if (table === 'knowledge_units' && patch.status === 'approved') {
+    const unverified = tables.claims.filter(
+      (c) => c.knowledge_unit_id === row.id && c.verified === false,
+    ).length;
+    if (unverified > 0) {
+      return `knowledge unit ${row.id} cannot be approved: ${unverified} claim(s) still unverified`;
+    }
+    if (!patch.approved_by) {
+      return 'new row violates check constraint "knowledge_units_approval_is_attributable"';
+    }
+  }
+  return null;
+}
 
 /** Records what each request presented, so the harness can assert on it. */
 export const seen = [];
@@ -85,15 +140,56 @@ const server = createServer((req, res) => {
   const privileged = auth === SECRET;
   seen.push({ method: req.method, table, privileged, query: url.search });
 
-  if (req.method === 'GET') {
-    let result = rows;
+  const applyFilters = (input) => {
+    let result = input;
     for (const [key, value] of url.searchParams) {
       if (key === 'select' || key === 'order' || key === 'limit') continue;
       const eq = /^eq\.(.*)$/.exec(value);
-      if (eq) result = result.filter((row) => String(row[key]) === eq[1]);
+      if (eq) {
+        result = result.filter((row) => String(row[key]) === eq[1]);
+        continue;
+      }
+      const inList = /^in\.\((.*)\)$/.exec(value);
+      if (inList) {
+        const wanted = inList[1].split(',').map((v) => v.replace(/^"|"$/g, ''));
+        result = result.filter((row) => wanted.includes(String(row[key])));
+      }
     }
+    return result;
+  };
+
+  const wantsObject = String(req.headers['accept'] ?? '').includes('vnd.pgrst.object+json');
+
+  if (req.method === 'GET') {
+    const result = applyFilters(rows);
     const limit = Number(url.searchParams.get('limit') ?? result.length);
-    return send(200, result.slice(0, limit));
+    const page = result.slice(0, limit);
+    // maybeSingle()/single() ask for a bare object.
+    if (wantsObject) return send(200, page[0] ?? null);
+    return send(200, page);
+  }
+
+  if (req.method === 'PATCH') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const patch = JSON.parse(raw || '{}');
+      const targets = applyFilters(rows);
+
+      for (const row of targets) {
+        const refusal = triggerRefusal(table, patch, row);
+        if (refusal) return send(400, { message: refusal });
+      }
+
+      const updated = targets.map((row) => {
+        Object.assign(row, patch, { updated_at: new Date().toISOString() });
+        return row;
+      });
+
+      if (wantsObject) return send(200, updated[0] ?? null);
+      return send(200, updated);
+    });
+    return;
   }
 
   if (req.method === 'POST') {
@@ -105,24 +201,49 @@ const server = createServer((req, res) => {
     req.on('data', (chunk) => (raw += chunk));
     req.on('end', () => {
       const body = JSON.parse(raw || '{}');
-      const input = Array.isArray(body) ? body[0] : body;
+      const inputs = Array.isArray(body) ? body : [body];
       const now = new Date().toISOString();
-      const row = {
-        id: crypto.randomUUID(),
-        created_at: now,
-        updated_at: now,
-        status: 'queued',
-        priority: 3,
-        sensitivity: 'technical',
-        ...input,
-      };
-      rows.push(row);
+      const merge = String(req.headers['prefer'] ?? '').includes('merge-duplicates');
+
+      const written = inputs.map((input) => {
+        // claim_sources is a composite-key join table with no surrogate id.
+        if (table === 'claim_sources') {
+          const existing = rows.find(
+            (r) => r.claim_id === input.claim_id && r.source_id === input.source_id,
+          );
+          if (existing) return existing;
+          const link = { ...input };
+          rows.push(link);
+          return link;
+        }
+
+        if (merge && input.url) {
+          const existing = rows.find((r) => r.url === input.url);
+          if (existing) {
+            Object.assign(existing, input, { updated_at: now });
+            return existing;
+          }
+        }
+
+        const row = {
+          id: crypto.randomUUID(),
+          created_at: now,
+          updated_at: now,
+          status: 'queued',
+          priority: 3,
+          sensitivity: 'technical',
+          verified: false,
+          ...input,
+        };
+        rows.push(row);
+        return row;
+      });
+
       // PostgREST returns a bare object, not an array, when the client asks
       // for one — which is what supabase-js `.single()` does. Returning an
       // array unconditionally made `.single()` hand back the array itself, so
       // `data.id` read as undefined and the stub silently hid it.
-      const wantsObject = String(req.headers['accept'] ?? '').includes('vnd.pgrst.object+json');
-      send(201, wantsObject ? row : [row]);
+      send(201, wantsObject ? written[0] : written);
     });
     return;
   }
