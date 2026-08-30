@@ -1,0 +1,101 @@
+id,title,pillar,audience,priority
+1,Why airplanes stall even when the engine is running,learn,student pilots,1
+2,Adverse yaw explained with a simple visual model,learn,student pilots,1
+3,Airspace classes without memorizing a maze,learn,student pilots,1
+4,How to think about density altitude,learn,student pilots,1
+5,Weather briefing decoded for beginners,learn,student pilots,1
+6,Why pilots use checklists,teach,students and CFIs,1
+7,How to remember V-speeds,learn,student pilots,1
+8,The difference between indicated and true airspeed,learn,student pilots,1
+9,Weight and balance made intuitive,learn,student pilots,1
+10,How to read a sectional without overload,learn,student pilots,1
+11,Pattern work explained as a repeatable system,learn,student pilots,1
+12,What actually happens during a checkride,learn,student pilots,1
+13,How to study for FAA knowledge exams,learn,student pilots,1
+14,Why rote memorization fails in aviation,teach,CFIs,1
+15,Scenario-based learning for CFIs,teach,CFIs,1
+16,The three-layer aviation explanation method,teach,CFIs,1
+17,How to teach the same concept to visual and verbal learners,teach,CFIs,1
+18,How to turn regulations into scenarios,teach,CFIs,1
+19,How to build memorable aviation analogies,teach,CFIs,1
+20,How to detect a student knowledge gap,teach,CFIs,1
+21,How to debrief without overwhelming a student,teach,CFIs,1
+22,How to use retrieval practice in flight training,teach,CFIs,1
+23,How to turn a lesson into a one-page mental model,teach,CFIs,1
+24,How to build better oral-exam questions,teach,CFIs,1
+25,How to coach decision-making instead of just procedures,teach,CFIs,1
+26,The CFI lesson-plan operating system,teach,CFIs,1
+27,How to make ground school more engaging,teach,CFIs,1
+28,How to use stories safely in aviation instruction,teach,CFIs,1
+29,How to teach risk management without fear tactics,teach,CFIs,1
+30,How to create a student progress dashboard,teach,CFIs,1
+31,Why flight schools lose prospective students online,grow,flight schools,1
+32,The flight-school visibility audit,grow,flight schools,1
+33,How to turn a discovery flight into a customer journey,grow,flight schools,1
+34,Flight-school website conversion checklist,grow,flight schools,1
+35,How to answer the questions prospective students actually ask,grow,flight schools,1
+36,Local SEO for flight schools,grow,flight schools,1
+37,How to build a flight-school content moat,grow,flight schools,1
+38,How to use reviews as a growth system,grow,flight schools,1
+39,How to reduce lead-response time with AI,grow,flight schools,1
+40,Flight-school email nurture sequence,grow,flight schools,1
+41,How to market aviation services people cannot find,grow,aviation businesses,1
+42,The aviation business visibility score,grow,aviation businesses,1
+43,How FBOs can build local demand,grow,FBOs,1
+44,Marketing for aircraft maintenance businesses,grow,MROs,1
+45,Marketing for aircraft detailing businesses,grow,aviation services,1
+46,Marketing for aviation instructors,grow,CFIs,1
+47,How to turn expertise into aviation digital products,grow,aviation professionals,1
+48,How to build an aviation authority content engine,grow,aviation businesses,1
+49,How to use AI without publishing unsafe aviation claims,grow,aviation businesses,1
+50,The aviation customer journey map,grow,aviation businesses,1
+51,Pilot weekly planning system,live,pilots,1
+52,How to balance flight training with family life,live,student pilots,1
+53,Pilot career transition planner,live,pilots,1
+54,How to plan for irregular schedules,live,pilots,1
+55,Building a personal aviation financial runway,live,pilots,1
+56,How to manage training setbacks without losing momentum,live,student pilots,1
+57,Family communication for irregular aviation schedules,live,pilots,1
+58,How to protect recovery time in an aviation career,live,pilots,1
+59,Planning around checkrides and career milestones,live,pilots,1
+60,The pilot personal operating system,live,pilots,1
+61,How to make training fun without compromising safety,joy,student pilots,1
+62,100 ways to make aviation learning more memorable,joy,pilots,1
+63,Aviation bucket-list planning system,joy,pilots,1
+64,How to create meaningful milestones during flight training,joy,student pilots,1
+65,Building an aviation adventure journal,joy,pilots,1
+66,How to celebrate aviation progress professionally,joy,pilots,1
+67,The best aviation stories to teach lessons,joy,pilots,1
+68,How to build an aviation community around learning,joy,pilots,1
+69,How to make ground school feel less like school,joy,students,1
+70,The aviation joy operating system,joy,pilots,1
+71,AI prompts for CFIs,ai,CFIs,1
+72,AI research workflow for aviation businesses,ai,aviation businesses,1
+73,AI content repurposing workflow for aviation creators,ai,creators,1
+74,AI lesson-plan generator with verification gates,ai,CFIs,1
+75,AI study-session generator,ai,student pilots,1
+76,AI oral-exam practice system,ai,student pilots,1
+77,AI customer-response system for flight schools,ai,flight schools,1
+78,AI review-response workflow for aviation businesses,ai,aviation businesses,1
+79,AI SEO topic engine for flight schools,ai,flight schools,1
+80,AI aviation knowledge-base architecture,ai,aviation businesses,1
+81,The four-book CFI Trainer series,teach,CFIs,1
+82,The multimodal aviation teaching playbook,teach,CFIs,1
+83,The aviation memory workbook,learn,student pilots,1
+84,The checkride preparation operating system,learn,student pilots,1
+85,The flight-school marketing playbook,grow,flight schools,1
+86,The aviation business visibility toolkit,grow,aviation businesses,1
+87,The Pilot Life Planner,live,pilots,1
+88,The Pilot Career Transition Workbook,live,pilots,1
+89,The Aviation AI Workflow Library,ai,aviation professionals,1
+90,The Aviation Content Factory,ai,aviation creators,1
+91,How to turn FAA knowledge into teachable stories,teach,CFIs,2
+92,How to build a visual vocabulary for aviation,teach,CFIs,2
+93,How to diagnose why a student is not progressing,teach,CFIs,2
+94,How to create a preflight learning ritual,learn,student pilots,2
+95,How to build a personal knowledge-retention system,learn,student pilots,2
+96,How to compare flight schools using a decision framework,grow,students and families,2
+97,How to calculate the business value of better visibility,grow,aviation businesses,2
+98,How to build a 90-day aviation career plan,live,pilots,2
+99,How to build a resilience plan for aviation disruptions,live,pilots,2
+100,The Aviation Clarity master learning system,learn,aviation community,1
