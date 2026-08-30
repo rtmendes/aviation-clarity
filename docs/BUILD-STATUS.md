@@ -45,6 +45,16 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] Review queue ordered by unverified risk
 - [x] 58 API checks and 16 schema checks
 
+## Phase 03 — design system and asset rendering (complete)
+- [x] Design tokens as one source of truth, with a CI drift check
+- [x] Deterministic PNG rendering via next/og — no new dependency, no browser
+- [x] Cover, social card and printable worksheet templates
+- [x] Review state rendered into the artwork; unknown state renders as draft
+- [x] Fonts vendored (OFL) so renders need no network and are byte-stable
+- [x] Storage buckets split by review state; publish means moving between them
+- [x] Template version, inputs and checksum required on any stored asset
+- [x] 69 API checks and 22 schema checks
+
 ## In progress
 - [ ] Replace placeholder content seed with prioritized aviation-specific opportunity database
 - [ ] Supabase Auth sessions in the UI (writes are token-gated in the interim)

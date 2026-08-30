@@ -37,6 +37,23 @@ create or replace function auth.uid() returns uuid language sql stable as
   $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
 create or replace function auth.role() returns text language sql stable as
   $$ select coalesce(nullif(current_setting('request.jwt.claim.role', true), ''), 'anon') $$;
+-- Stand-in for the Supabase storage schema, so the bucket and policy logic in
+-- 0004 is actually exercised rather than silently skipped.
+create schema if not exists storage;
+create table if not exists storage.buckets (
+  id text primary key,
+  name text not null,
+  public boolean not null default false,
+  file_size_limit bigint,
+  allowed_mime_types text[]
+);
+create table if not exists storage.objects (
+  id uuid primary key default gen_random_uuid(),
+  bucket_id text references storage.buckets(id),
+  name text
+);
+alter table storage.objects enable row level security;
+
 do $$ begin
   if not exists (select 1 from pg_roles where rolname='anon') then create role anon nologin; end if;
   if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated nologin; end if;
@@ -134,6 +151,27 @@ check 'an unrecognised reviewer credential is rejected' 'reviewers_credential_ch
 
 check 'review decisions are not readable anonymously' '0' \
   "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.review_events;")"
+
+
+# --- Phase 03: rendered asset storage ----------------------------------------
+
+check 'both asset buckets are created' '2' \
+  "$(psql -tAq -d "$DB" -c "select count(*) from storage.buckets where id in ('assets-draft','assets-approved');")"
+
+check 'the draft bucket is private' 'f' \
+  "$(psql -tAq -d "$DB" -c "select public from storage.buckets where id='assets-draft';")"
+
+check 'the approved bucket is public' 't' \
+  "$(psql -tAq -d "$DB" -c "select public from storage.buckets where id='assets-approved';")"
+
+check 'only approved artwork is publicly readable' 'assets_approved_read_public' \
+  "$(psql -tAq -d "$DB" -c "select policyname from pg_policies where tablename='objects' and roles::text like '%anon%';")"
+
+check 'a stored asset must record how it was rendered' 'content_assets_render_is_traceable' \
+  "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, storage_bucket, storage_path) values ('worksheet','assets-draft','x.png');" 2>&1)"
+
+check 'a fully traced asset is accepted' 'INSERT' \
+  "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, storage_bucket, storage_path, template_version, render_input, checksum) values ('worksheet','assets-draft','y.png','2026-08-30.1','{}'::jsonb,'abc123');" 2>&1)"
 
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
 [[ $fail -eq 0 ]]

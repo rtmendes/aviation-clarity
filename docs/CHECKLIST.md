@@ -44,6 +44,14 @@ Last updated: 2026-08-30
 - [ ] Book production generator
 - [ ] Product checkout
 
+## Design and assets
+- [x] Design system and tokens
+- [x] Deterministic asset rendering (cover, social, worksheet)
+- [x] Review state carried into the artwork
+- [x] Asset storage split by approval, with provenance
+- [ ] Chapter diagrams from the generated visual model
+- [ ] Book interior layout / PDF export
+
 ## Content
 - [x] Initial 100-topic seed
 - [ ] 100-topic validated research backlog

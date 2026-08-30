@@ -332,6 +332,56 @@ check 'a citation that is not a URL is refused' 'absolute http(s) URL' \
      -H 'content-type: application/json' \
      -d '{"title":"Something","url":"not-a-url"}')"
 
+# ---------------------------------------------------------------------------
+# Phase 03: asset rendering
+# ---------------------------------------------------------------------------
+
+echo
+echo 'Verifying asset rendering:'
+
+TMPD=$(mktemp -d)
+
+render() { curl -sS -o "$TMPD/$1" -D "$TMPD/$1.h" "$BASE/api/assets/$2"; }
+
+render cover.png  'cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=approved'
+render social.png 'social?title=Why%20airplanes%20stall&state=review'
+render sheet.png  'worksheet?title=Why%20airplanes%20stall&state=draft&q=What%20determines%20a%20stall%3F'
+
+check 'a cover renders as PNG' 'PNG image data, 1200 x 1920' "$(file -b "$TMPD/cover.png")"
+check 'a social card renders as PNG' 'PNG image data, 1200 x 630' "$(file -b "$TMPD/social.png")"
+check 'a worksheet renders as PNG' 'PNG image data, 1275 x 1650' "$(file -b "$TMPD/sheet.png")"
+
+check 'the response declares its dimensions' 'x-asset-dimensions: 1200x1920' \
+  "$(tr -d '\r' < "$TMPD/cover.png.h")"
+
+check 'the response records the template version' 'x-template-version: 2026-08-30.1' \
+  "$(tr -d '\r' < "$TMPD/cover.png.h")"
+
+# Determinism is the property that makes 1,600 assets tractable: a re-render
+# must be byte-identical, or nothing downstream can be cached or diffed.
+render cover-again.png 'cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=approved'
+check 'the same URL renders byte-identical output' 'identical' \
+  "$(cmp -s "$TMPD/cover.png" "$TMPD/cover-again.png" && echo identical || echo differs)"
+
+# The state band must actually be in the pixels, not just the response.
+render cover-draft.png 'cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=draft'
+check 'review state changes the artwork' 'differs' \
+  "$(cmp -s "$TMPD/cover.png" "$TMPD/cover-draft.png" && echo identical || echo differs)"
+
+check 'an unknown asset kind is refused' '404' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/assets/poster?title=x")"
+
+check 'a missing title is refused' 'is required' \
+  "$(curl -s "$BASE/api/assets/cover")"
+
+check 'an unknown review state is refused' 'must be one of: approved, review, draft, blocked' \
+  "$(curl -s "$BASE/api/assets/cover?title=x&state=shipped")"
+
+check 'an over-long title is refused' 'at most 200 characters' \
+  "$(curl -s "$BASE/api/assets/cover?title=$(printf 'a%.0s' $(seq 1 201))")"
+
+rm -rf "$TMPD"
+
 # A misconfigured deployment must degrade to a clear 503, never a 500.
 # Regression guard: a URL without a scheme made supabase-js throw out of the
 # route and surface as an unhandled 500 in production.

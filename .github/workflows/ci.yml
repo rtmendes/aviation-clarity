@@ -27,6 +27,9 @@ jobs:
 
       - run: npm run typecheck
 
+      # Fails if the palette in globals.css has drifted from the design tokens.
+      - run: npm run verify:tokens
+
       - run: npm run build
 
   secret-scan:
