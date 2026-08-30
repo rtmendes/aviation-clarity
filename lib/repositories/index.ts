@@ -206,6 +206,34 @@ export async function createKnowledgeUnit(
   });
 }
 
+/**
+ * One knowledge unit by id, read privileged.
+ *
+ * This decides how much trust an asset's artwork may claim, so it has to see
+ * every unit — including the ones awaiting review, which are exactly the ones
+ * that must render an honest lower band.
+ *
+ * Reading it through the anon key was the first instinct and it was wrong: RLS
+ * shows `anon` only approved units, so a unit still in review came back as no
+ * row at all, and the route turned an honest `review` band into a 404. That is
+ * the unsafe direction — it denies the truthful render and leaves the caller
+ * with nothing, while offering no protection, since the privileged read reveals
+ * only a band, never content.
+ */
+export async function getKnowledgeUnit(id: string): Promise<Result<KnowledgeUnitRow>> {
+  return withClient(true, async (client) => {
+    const { data, error } = await client
+      .from('knowledge_units')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) return unavailable(error.message);
+    if (!data) return { ok: false, error: { code: 'not_found', message: 'No such knowledge unit.' } };
+    return { ok: true, data };
+  });
+}
+
 export async function listKnowledgeUnits(limit = 25): Promise<Result<KnowledgeUnitRow[]>> {
   const bounded = Math.min(Math.max(limit, 1), 100);
   return withClient(false, async (client) => {

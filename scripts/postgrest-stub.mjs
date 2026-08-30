@@ -114,13 +114,22 @@ const tables = {
  * the real trigger wording also exercises the error mapping the routes rely on.
  */
 function triggerRefusal(table, patch, row) {
-  if (table === 'claims' && patch.verified === true) {
+  if (table === 'claims' && patch.verified === true && row) {
     const cited = tables.claim_sources.some((cs) => cs.claim_id === row.id);
     if (!cited) {
       return `claim ${row.id} cannot be verified without at least one cited source`;
     }
   }
-  if (table === 'knowledge_units' && patch.status === 'approved') {
+  if (table === 'content_assets' && ['approved', 'published'].includes(patch.status)) {
+    const unitId = patch.knowledge_unit_id ?? row?.knowledge_unit_id ?? null;
+    if (unitId) {
+      const unit = tables.knowledge_units.find((u) => u.id === unitId);
+      if (!unit || unit.status !== 'approved') {
+        return `content asset cannot be marked ${patch.status} while knowledge unit ${unitId} is ${unit?.status ?? 'missing'}`;
+      }
+    }
+  }
+  if (table === 'knowledge_units' && patch.status === 'approved' && row) {
     const unverified = tables.claims.filter(
       (c) => c.knowledge_unit_id === row.id && c.verified === false,
     ).length;
@@ -133,6 +142,38 @@ function triggerRefusal(table, patch, row) {
   }
   return null;
 }
+
+/**
+ * The `select` policies the publishable key is subject to, from 0002 and 0005.
+ *
+ * Reproduced because the stub had, three times, accepted a read that the live
+ * instance refuses — and so passed a route that returns nothing in production.
+ * A read on the publishable key that no policy admits is invisible, exactly as
+ * Row Level Security makes it: PostgREST does not report a permission error,
+ * it returns no row, and a route that treats "no row" as "does not exist"
+ * turns an RLS mistake into a 404 nobody can explain.
+ *
+ * The secret key bypasses all of this, as it does on the live instance.
+ */
+const anonPolicies = {
+  topics: (r) => r.status === 'published',
+  sources: () => true,
+  claims: (r) => r.verified === true,
+  claim_sources: () => true,
+  knowledge_units: (r) => r.status === 'approved',
+  content_assets: (r) => r.status === 'published' && !r.product_id,
+  products: (r) => r.status === 'live',
+  // No policy admits these to anon at all.
+  reviewers: () => false,
+  review_events: () => false,
+  agent_runs: () => false,
+  orders: () => false,
+  entitlements: () => false,
+  stripe_events: () => false,
+};
+
+/** Uploaded storage objects, keyed by "bucket/path". */
+const objects = new Map();
 
 /** Records what each request presented, so the harness can assert on it. */
 export const seen = [];
@@ -156,10 +197,71 @@ const server = createServer((req, res) => {
     return res.end(JSON.stringify({ message: 'invalid token' }));
   }
 
-  const match = /^\/rest\/v1\/([a-z_]+)$/.exec(url.pathname);
-
   const apikey = req.headers['apikey'];
   const auth = String(req.headers['authorization'] ?? '').replace(/^Bearer\s+/i, '');
+
+  // -------------------------------------------------------------------------
+  // Storage
+  // -------------------------------------------------------------------------
+  //
+  // Only the two calls lib/design/storage.ts makes: upload an object, and sign
+  // a URL for one. Objects are held in memory by "bucket/path" so that a test
+  // can assert an upload landed in the bucket the review state chose — which is
+  // the whole point of splitting drafts from approved artwork.
+
+  const upload = /^\/storage\/v1\/object\/(assets-[a-z]+)\/(.+)$/.exec(url.pathname);
+  const sign = /^\/storage\/v1\/object\/sign\/(assets-[a-z]+)\/(.+)$/.exec(url.pathname);
+
+  if (sign) {
+    const key = `${sign[1]}/${sign[2]}`;
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { expiresIn } = JSON.parse(raw || '{}');
+      res.writeHead(objects.has(key) ? 200 : 404, { 'content-type': 'application/json' });
+      if (!objects.has(key)) return res.end(JSON.stringify({ message: 'Object not found' }));
+      seen.push({ method: 'SIGN', bucket: sign[1], path: sign[2], expiresIn });
+      // The real service returns a path, which supabase-js joins onto the
+      // storage base URL. Returning an absolute URL here would hide a join bug.
+      res.end(JSON.stringify({
+        signedURL: `/object/sign/${key}?token=stub-signature&expires=${expiresIn}`,
+      }));
+    });
+    return;
+  }
+
+  if (upload && (req.method === 'POST' || req.method === 'PUT')) {
+    // Writes to storage run on the secret key for the same reason writes to
+    // PostgREST do: RLS grants no insert to anon on the live instance.
+    if (auth !== SECRET) {
+      res.writeHead(403, { 'content-type': 'application/json' });
+      return res.end(JSON.stringify({ message: 'new row violates row-level security policy' }));
+    }
+    const key = `${upload[1]}/${upload[2]}`;
+    const chunks = [];
+    req.on('data', (chunk) => chunks.push(chunk));
+    req.on('end', () => {
+      const body = Buffer.concat(chunks);
+      const upsert = String(req.headers['x-upsert'] ?? '') === 'true';
+      if (objects.has(key) && !upsert) {
+        res.writeHead(409, { 'content-type': 'application/json' });
+        return res.end(JSON.stringify({ message: 'The resource already exists' }));
+      }
+      objects.set(key, body);
+      seen.push({
+        method: 'UPLOAD',
+        bucket: upload[1],
+        path: upload[2],
+        bytes: body.length,
+        contentType: req.headers['content-type'],
+      });
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ Id: key, Key: key }));
+    });
+    return;
+  }
+
+  const match = /^\/rest\/v1\/([a-z_]+)$/.exec(url.pathname);
 
   const send = (status, body) => {
     const payload = body === undefined ? '' : JSON.stringify(body);
@@ -206,7 +308,8 @@ const server = createServer((req, res) => {
   const wantsObject = String(req.headers['accept'] ?? '').includes('vnd.pgrst.object+json');
 
   if (req.method === 'GET') {
-    const result = applyFilters(rows);
+    const visible = privileged ? rows : rows.filter(anonPolicies[table] ?? (() => false));
+    const result = applyFilters(visible);
     const limit = Number(url.searchParams.get('limit') ?? result.length);
     const page = result.slice(0, limit);
     // maybeSingle()/single() ask for a bare object.
@@ -273,6 +376,11 @@ const server = createServer((req, res) => {
         });
       }
 
+      for (const input of inputs) {
+        const refusal = triggerRefusal(table, input, null);
+        if (refusal) return send(400, { message: refusal });
+      }
+
       const written = inputs.map((input) => {
         // claim_sources is a composite-key join table with no surrogate id.
         if (table === 'claim_sources') {
@@ -287,6 +395,20 @@ const server = createServer((req, res) => {
 
         if (merge && input.url) {
           const existing = rows.find((r) => r.url === input.url);
+          if (existing) {
+            Object.assign(existing, input, { updated_at: now });
+            return existing;
+          }
+        }
+
+        // supabase-js upsert names its conflict target in ?on_conflict=, so
+        // the stub resolves on the same columns the unique index covers.
+        const onConflict = url.searchParams.get('on_conflict');
+        if (onConflict) {
+          const cols = onConflict.split(',');
+          const existing = rows.find((r) =>
+            cols.every((c) => input[c] !== undefined && r[c] === input[c]),
+          );
           if (existing) {
             Object.assign(existing, input, { updated_at: now });
             return existing;

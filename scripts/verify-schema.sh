@@ -166,17 +166,48 @@ check 'both asset buckets are created' '2' \
 check 'the draft bucket is private' 'f' \
   "$(psql -tAq -d "$DB" -c "select public from storage.buckets where id='assets-draft';")"
 
-check 'the approved bucket is public' 't' \
+# 0004 made this bucket public. 0006 closed that: paths are content hashes and
+# so unguessable, but an unguessable URL is not access control, and approved
+# artwork now includes work people have paid for.
+check 'the approved bucket is no longer world-readable' 'f' \
   "$(psql -tAq -d "$DB" -c "select public from storage.buckets where id='assets-approved';")"
 
-check 'only approved artwork is publicly readable' 'assets_approved_read_public' \
+check 'no storage policy grants anonymous reads' '' \
   "$(psql -tAq -d "$DB" -c "select policyname from pg_policies where tablename='objects' and roles::text like '%anon%';")"
+
+check 'staff read artwork directly; everyone else gets a signed URL' 'assets_read_staff' \
+  "$(psql -tAq -d "$DB" -c "select policyname from pg_policies where schemaname='storage' and tablename='objects';")"
+
+# 0004 let any `authenticated` role read every draft. That was sound while only
+# staff had accounts; a customer signing in to collect a purchase broke it, and
+# 0006 narrowed the policy to staff — the same correction 0005 made in public.
+check 'the draft bucket is gated on staff, not on merely being signed in' 'is_staff' \
+  "$(psql -tAq -d "$DB" -c "select qual from pg_policies where schemaname='storage' and tablename='objects';")"
 
 check 'a stored asset must record how it was rendered' 'content_assets_render_is_traceable' \
   "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, storage_bucket, storage_path) values ('worksheet','assets-draft','x.png');" 2>&1)"
 
 check 'a fully traced asset is accepted' 'INSERT' \
   "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, storage_bucket, storage_path, template_version, render_input, checksum) values ('worksheet','assets-draft','y.png','2026-08-30.1','{}'::jsonb,'abc123');" 2>&1)"
+
+# The application derives an asset's band from the unit it renders, but the
+# application is one route away from being bypassed. This is the database half.
+psql -q -d "$DB" >/dev/null 2>&1 <<'SQL'
+insert into public.knowledge_units (id, summary, status)
+values ('cccccccc-0000-0000-0000-000000000001', 'Still under review', 'review');
+SQL
+
+check 'artwork cannot claim approval its content has not earned' \
+  'while knowledge unit' \
+  "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, knowledge_unit_id, status, storage_bucket, storage_path, template_version, render_input, checksum) values ('worksheet','cccccccc-0000-0000-0000-000000000001','approved','assets-approved','z.png','2026-08-30.1','{}'::jsonb,'def456');" 2>&1)"
+
+check 'artwork may carry an honest, lower band' 'INSERT' \
+  "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, knowledge_unit_id, status, storage_bucket, storage_path, template_version, render_input, checksum) values ('worksheet','cccccccc-0000-0000-0000-000000000001','qa','assets-draft','z.png','2026-08-30.1','{}'::jsonb,'def456');" 2>&1)"
+
+# The upsert in lib/repositories/assets.ts names this index as its conflict
+# target, which a partial index cannot serve.
+check 'the storage key is a full unique index, not a partial one' 'f' \
+  "$(psql -tAq -d "$DB" -c "select indpred is not null from pg_index where indexrelid = 'content_assets_storage_key'::regclass;")"
 
 
 # --- Phase 04: commerce and entitlements -------------------------------------

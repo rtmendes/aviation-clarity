@@ -1,6 +1,6 @@
 # Aviation Clarity™ Build Status
 
-Last updated: 2026-08-30 (infrastructure state verified against the live services)
+Last updated: 2026-08-30 (verification counts taken from a passing run of every suite)
 
 ## Completed
 - [x] Repository provisioned: `rtmendes/aviation-clarity`
@@ -52,6 +52,7 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] Review state rendered into the artwork; unknown state renders as draft
 - [x] Fonts vendored (OFL) so renders need no network and are byte-stable
 - [x] Storage buckets split by review state; publish means moving between them
+      (both made private in 0006 — every read is a signed URL)
 - [x] Template version, inputs and checksum required on any stored asset
 - [x] 69 API checks and 22 schema checks
 
@@ -66,7 +67,29 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] `authenticated` split into staff and customer (corrects a 0002 assumption)
 - [x] 86 API checks, 39 schema checks, 13 signature checks
 - [ ] Sign-in UI and a purchase page (no UI framework in place yet)
-- [ ] Signed download URLs from the approved asset bucket
+
+## Phase 05 — closing the gaps the full-system audit found (complete)
+Running every phase together for the first time surfaced three seams that each
+phase's own tests could not see.
+
+- [x] The review band is derived from the database, not asserted by the caller.
+      `?state=approved` alone had been enough to stamp REVIEWED & APPROVED on
+      an emergency procedure nobody had read; `unitId` now decides the band, a
+      caller can only ever ask for *less* trust, and an ignored request is named
+      in the response headers rather than silently downgraded
+- [x] Renders are stored: `POST /api/assets/{kind}` writes to the bucket the
+      review state chooses, keyed by the SHA-256 of the bytes, with the template
+      version and inputs recorded — so a re-render is the same object, not a
+      duplicate
+- [x] Purchased assets are deliverable: `GET /api/delivery/{assetId}` verifies
+      the session, reads the entitlement at request time, and mints a 5-minute
+      signed URL. A refund removes access on the next click
+- [x] Storage RLS corrected — `assets-draft` was readable by any signed-in user,
+      which stopped being staff-only once customers had accounts; the same
+      assumption 0005 corrected in `public`, missed in `storage`
+- [x] Database-level backstop: a content asset naming a knowledge unit cannot
+      sit at `approved` while that unit is not
+- [x] 115 API checks, 44 schema checks, 13 signature checks, 21 browser checks
 
 ## In progress
 - [ ] Replace placeholder content seed with prioritized aviation-specific opportunity database

@@ -205,8 +205,17 @@ check 'safety-critical generation is flagged for review' '"requiresHumanReview":
 
 check 'model-flagged claims are surfaced' 'claimsRequiringVerification' "$GEN"
 
-check 'persisted unit is queued for review, never verified' \
-  '"status":"review"' "$(curl -s "$BASE/api/knowledge-units")"
+# The public route shows approved units only — Row Level Security admits
+# nothing else to the anon key. A unit fresh out of generation is at 'review',
+# so it must NOT appear here; it appears in the token-gated review queue, which
+# is checked below. This check read '"status":"review"' until the stub started
+# enforcing RLS, at which point it was asserting something the live instance
+# would never return.
+check 'a unit awaiting review is not published to readers' '"count":0' \
+  "$(curl -s "$BASE/api/knowledge-units")"
+
+check 'a unit awaiting review does reach the reviewer queue' '"status":"review"' \
+  "$(curl -s "$BASE/api/review/queue" -H "authorization: Bearer $TOKEN")"
 
 check 'scaffold mode can still be forced' '"mode":"scaffold"' \
   "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
@@ -371,10 +380,12 @@ render cover-again.png 'cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trai
 check 'the same URL renders byte-identical output' 'identical' \
   "$(cmp -s "$TMPD/cover.png" "$TMPD/cover-again.png" && echo identical || echo differs)"
 
-# The state band must actually be in the pixels, not just the response.
-render cover-draft.png 'cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=draft'
+# The state band must actually be in the pixels, not just the response. Both
+# renders below ask for `approved`; only the one naming an approved unit gets
+# it, so a difference here is the trust rule showing up in the artwork.
+render cover-earned.png "cover?title=Decode%20Aviation&eyebrow=Train%20the%20Trainer&state=approved&unitId=$UNIT_ID"
 check 'review state changes the artwork' 'differs' \
-  "$(cmp -s "$TMPD/cover.png" "$TMPD/cover-draft.png" && echo identical || echo differs)"
+  "$(cmp -s "$TMPD/cover.png" "$TMPD/cover-earned.png" && echo identical || echo differs)"
 
 check 'an unknown asset kind is refused' '404' \
   "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/assets/poster?title=x")"
@@ -387,6 +398,59 @@ check 'an unknown review state is refused' 'must be one of: approved, review, dr
 
 check 'an over-long title is refused' 'at most 200 characters' \
   "$(curl -s "$BASE/api/assets/cover?title=$(printf 'a%.0s' $(seq 1 201))")"
+
+# --- the review band is earned, not asserted --------------------------------
+#
+# Before this, `state` was a plain query parameter: anyone could render an
+# emergency procedure stamped REVIEWED & APPROVED for content nobody had ever
+# looked at. The band is now derived from the knowledge unit named by `unitId`,
+# and a caller may only ever ask for *less* trust than the database grants.
+
+# $UNIT_ID was approved by a credentialed reviewer earlier in this run.
+render band-claimed.png 'cover?title=Stall%20recovery&state=approved'
+render band-honest.png  'cover?title=Stall%20recovery&state=draft'
+
+check 'claiming approval without a unit renders as draft' 'identical' \
+  "$(cmp -s "$TMPD/band-claimed.png" "$TMPD/band-honest.png" && echo identical || echo differs)"
+
+check 'an unearned band is reported as draft' 'x-review-state: draft' \
+  "$(tr -d '\r' < "$TMPD/band-claimed.png.h")"
+
+check 'the ignored request is named in the response' \
+  'x-review-state-requested-ignored: approved' \
+  "$(tr -d '\r' < "$TMPD/band-claimed.png.h")"
+
+render band-earned.png "cover?title=Stall%20recovery&unitId=$UNIT_ID&state=approved"
+check 'an approved unit does earn the approved band' 'x-review-state: approved' \
+  "$(tr -d '\r' < "$TMPD/band-earned.png.h")"
+
+check 'the earned band is in the pixels, not just the header' 'differs' \
+  "$(cmp -s "$TMPD/band-earned.png" "$TMPD/band-honest.png" && echo identical || echo differs)"
+
+# Lowering trust is always allowed: flagging something as blocked must never
+# require permission.
+render band-lowered.png "cover?title=Stall%20recovery&unitId=$UNIT_ID&state=blocked"
+check 'a caller may downgrade its own asset' 'x-review-state: blocked' \
+  "$(tr -d '\r' < "$TMPD/band-lowered.png.h")"
+
+# A unit still awaiting review cannot mint an approved band.
+GEN2=$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+  -d '{"topic":"Spin recovery","sensitivity":"safety"}')
+PENDING_UNIT=$(printf '%s' "$GEN2" | python3 -c "import sys,json;print(json.load(sys.stdin)['persistence']['knowledgeUnitId'])")
+
+render band-pending.png "cover?title=Spin%20recovery&unitId=$PENDING_UNIT&state=approved"
+check 'a unit awaiting review cannot claim approval' 'x-review-state: review' \
+  "$(tr -d '\r' < "$TMPD/band-pending.png.h")"
+
+check 'a render keyed to a unit is never shared-cached' 'cache-control: private' \
+  "$(tr -d '\r' < "$TMPD/band-earned.png.h")"
+
+check 'an unknown unit is refused' '404' \
+  "$(curl -s -o /dev/null -w '%{http_code}' \
+     "$BASE/api/assets/cover?title=x&unitId=00000000-0000-0000-0000-000000000000")"
+
+check 'a malformed unit id is refused' 'must be a UUID' \
+  "$(curl -s "$BASE/api/assets/cover?title=x&unitId=not-a-uuid")"
 
 rm -rf "$TMPD"
 
@@ -480,6 +544,89 @@ check 'the grant matches regardless of email casing' 'buyer@example.com' \
 
 check 'a different buyer sees nothing' '"count":0' \
   "$(curl -s "$BASE/api/entitlements" -H 'authorization: Bearer valid-other-token')"
+
+# ---------------------------------------------------------------------------
+# Storing a render, and handing it to the buyer who owns it
+# ---------------------------------------------------------------------------
+
+echo
+echo 'Verifying asset storage and delivery:'
+
+store() {
+  curl -s -X POST -H "authorization: Bearer $TOKEN" "$BASE/api/assets/$1"
+}
+
+check 'storing an asset requires the operator token' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/assets/cover?title=x")"
+
+PRODUCT=$(curl -s "$BASE/api/products" \
+  | python3 -c "import sys,json;print(json.load(sys.stdin)['products'][0]['id'])")
+
+STORED=$(store "cover?title=Checkride%20Clarity&unitId=$UNIT_ID&state=approved&productId=$PRODUCT")
+
+check 'a stored asset records its checksum' '"checksum":"' "$STORED"
+check 'a stored asset records the template version' '"templateVersion":"2026-08-30.1"' "$STORED"
+check 'a stored asset records the inputs it came from' '"earned":"approved"' "$STORED"
+
+# The bucket is the access-control boundary, so approval has to be the thing
+# that picks it. A flag on a row would be one bad query away from publishing
+# unreviewed material.
+check 'approved artwork lands in the public bucket' '"bucket":"assets-approved"' "$STORED"
+
+DRAFT_STORED=$(store "social?title=Spin%20recovery&unitId=$PENDING_UNIT&state=approved")
+check 'unreviewed artwork lands in the draft bucket' '"bucket":"assets-draft"' "$DRAFT_STORED"
+check 'unreviewed artwork keeps its honest band' '"state":"review"' "$DRAFT_STORED"
+
+ASSET_ID=$(printf '%s' "$STORED" | python3 -c "import sys,json;print(json.load(sys.stdin)['asset']['id'])")
+CHECKSUM=$(printf '%s' "$STORED" | python3 -c "import sys,json;print(json.load(sys.stdin)['asset']['checksum'])")
+
+# The storage path is the SHA-256 of the bytes, so an identical re-render is
+# the same object and the same row — not a second copy that has to be reconciled.
+AGAIN=$(store "cover?title=Checkride%20Clarity&unitId=$UNIT_ID&state=approved&productId=$PRODUCT")
+check 're-storing identical artwork is idempotent' "\"id\":\"$ASSET_ID\"" "$AGAIN"
+check 'the checksum is stable across renders' "$CHECKSUM" "$AGAIN"
+
+DRAFT_ID=$(printf '%s' "$DRAFT_STORED" | python3 -c "import sys,json;print(json.load(sys.stdin)['asset']['id'])")
+
+check 'delivery requires a session' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/delivery/$ASSET_ID")"
+
+check 'delivery refuses a forged session' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/delivery/$ASSET_ID" \
+     -H 'authorization: Bearer forged-token')"
+
+check 'a signed-in stranger is refused' '403' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/delivery/$ASSET_ID" \
+     -H 'authorization: Bearer valid-other-token')"
+
+# An asset attached to no product can never be bought, so no entitlement can
+# grant it — signing a URL for it would hand out unsold work to any account.
+check 'an asset outside the catalogue is refused' '403' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/delivery/$DRAFT_ID" \
+     -H 'authorization: Bearer valid-buyer-token')"
+
+DELIVERY=$(curl -s "$BASE/api/delivery/$ASSET_ID" -H 'authorization: Bearer valid-buyer-token')
+
+check 'the entitled buyer receives a signed URL' 'token=stub-signature' "$DELIVERY"
+check 'the link is short-lived' '"expiresInSeconds":300' "$DELIVERY"
+check 'delivery names the artwork it signed' "$CHECKSUM" "$DELIVERY"
+
+check 'an unknown asset is refused' '404' \
+  "$(curl -s -o /dev/null -w '%{http_code}' \
+     "$BASE/api/delivery/00000000-0000-0000-0000-000000000000" \
+     -H 'authorization: Bearer valid-buyer-token')"
+
+check 'a malformed asset id is refused' 'must be a UUID' \
+  "$(curl -s "$BASE/api/delivery/not-a-uuid" -H 'authorization: Bearer valid-buyer-token')"
+
+# A refund must take access away on the next click, not when a token happens
+# to expire — which is why the entitlement is read per request.
+REFUND='{"id":"evt_refund_1","type":"charge.refunded","data":{"object":{"payment_intent":"pi_test_1"}}}'
+sign_and_post_body "$REFUND" >/dev/null
+
+check 'a refund revokes delivery immediately' '403' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/delivery/$ASSET_ID" \
+     -H 'authorization: Bearer valid-buyer-token')"
 
 # A misconfigured deployment must degrade to a clear 503, never a 500.
 # Regression guard: a URL without a scheme made supabase-js throw out of the
