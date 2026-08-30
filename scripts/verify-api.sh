@@ -10,6 +10,7 @@ set -euo pipefail
 
 STUB_PORT=54321
 AI_PORT=54322
+STRIPE_PORT=54323
 APP_PORT=3112
 TOKEN='test-operator-token'
 pass=0
@@ -20,7 +21,7 @@ fail=0
 # the whole group is signalled, otherwise a stale server from a previous run
 # answers the next one and the results are meaningless.
 cleanup() {
-  for pid in "${STUB_PID:-}" "${AI_PID:-}" "${APP_PID:-}"; do
+  for pid in "${STUB_PID:-}" "${AI_PID:-}" "${STRIPE_PID:-}" "${APP_PID:-}"; do
     [[ -n "$pid" ]] && kill -- "-$pid" 2>/dev/null || true
   done
 }
@@ -36,6 +37,7 @@ require_free_port() {
 
 require_free_port "$STUB_PORT"
 require_free_port "$AI_PORT"
+require_free_port "$STRIPE_PORT"
 require_free_port "$APP_PORT"
 
 check() {
@@ -53,6 +55,9 @@ STUB_PID=$!
 
 setsid node scripts/openai-stub.mjs "$AI_PORT" >/dev/null 2>&1 &
 AI_PID=$!
+
+setsid node scripts/stripe-stub.mjs "$STRIPE_PORT" >/dev/null 2>&1 &
+STRIPE_PID=$!
 
 NEXT_PUBLIC_SUPABASE_URL="http://127.0.0.1:$STUB_PORT" \
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='stub-publishable-key' \
@@ -157,6 +162,9 @@ OPENAI_BASE_URL="http://127.0.0.1:$AI_PORT" \
 OPENAI_MODEL='stub-model' \
 OPENAI_INPUT_COST_PER_MTOK='2.50' \
 OPENAI_OUTPUT_COST_PER_MTOK='10.00' \
+STRIPE_SECRET_KEY='sk_test_stub' \
+STRIPE_WEBHOOK_SECRET='whsec_test_secret' \
+STRIPE_API_BASE="http://127.0.0.1:$STRIPE_PORT" \
   setsid npx next start -p "$APP_PORT" >/tmp/aviation-clarity-verify-ai.log 2>&1 &
 APP_PID=$!
 
@@ -381,6 +389,97 @@ check 'an over-long title is refused' 'at most 200 characters' \
   "$(curl -s "$BASE/api/assets/cover?title=$(printf 'a%.0s' $(seq 1 201))")"
 
 rm -rf "$TMPD"
+
+# ---------------------------------------------------------------------------
+# Phase 04: the purchase path
+# ---------------------------------------------------------------------------
+
+echo
+echo 'Verifying the purchase path:'
+
+check 'the catalogue lists only live products' 'Checkride Clarity' \
+  "$(curl -s "$BASE/api/products")"
+
+check 'products not on sale are hidden' '"count":1' "$(curl -s "$BASE/api/products")"
+
+# --- checkout ---------------------------------------------------------------
+
+CHECKOUT=$(curl -s -X POST "$BASE/api/checkout" -H 'content-type: application/json' \
+  -d '{"productSlug":"checkride-clarity","email":"Buyer@Example.com"}')
+
+check 'checkout returns a Stripe URL' 'checkout.stripe.test' "$CHECKOUT"
+check 'checkout records a pending order' '"orderId":"' "$CHECKOUT"
+
+SESSION_ID=$(printf '%s' "$CHECKOUT" | python3 -c "import sys,json;print(json.load(sys.stdin)['sessionId'])")
+
+check 'buying a product that is not live is refused' '409' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/checkout" \
+     -H 'content-type: application/json' \
+     -d '{"productSlug":"unreleased-kit","email":"a@b.com"}')"
+
+check 'buying a product that does not exist is refused' '404' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/checkout" \
+     -H 'content-type: application/json' -d '{"productSlug":"nope","email":"a@b.com"}')"
+
+check 'a malformed email is refused' 'valid email address' \
+  "$(curl -s -X POST "$BASE/api/checkout" -H 'content-type: application/json' \
+     -d '{"productSlug":"checkride-clarity","email":"not-an-email"}')"
+
+# --- webhook ----------------------------------------------------------------
+
+sign_and_post() {
+  local body=$1 secret=${2:-whsec_test_secret} skew=${3:-0}
+  local t sig
+  t=$(( $(date +%s) + skew ))
+  sig=$(printf '%s.%s' "$t" "$body" | openssl dgst -sha256 -hmac "$secret" -hex | sed 's/^.*= //')
+  curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/webhooks/stripe" \
+    -H "stripe-signature: t=$t,v1=$sig" -H 'content-type: application/json' -d "$body"
+}
+
+sign_and_post_body() {
+  local body=$1 t sig
+  t=$(date +%s)
+  sig=$(printf '%s.%s' "$t" "$body" | openssl dgst -sha256 -hmac 'whsec_test_secret' -hex | sed 's/^.*= //')
+  curl -s -X POST "$BASE/api/webhooks/stripe" \
+    -H "stripe-signature: t=$t,v1=$sig" -H 'content-type: application/json' -d "$body"
+}
+
+EVENT="{\"id\":\"evt_purchase_1\",\"type\":\"checkout.session.completed\",\"data\":{\"object\":{\"id\":\"$SESSION_ID\",\"payment_intent\":\"pi_test_1\",\"customer_details\":{\"email\":\"Buyer@Example.com\"}}}}"
+
+check 'an unsigned webhook is rejected' '400' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/webhooks/stripe" \
+     -H 'content-type: application/json' -d "$EVENT")"
+
+check 'a webhook signed with the wrong secret is rejected' '400' \
+  "$(sign_and_post "$EVENT" 'whsec_wrong')"
+
+check 'a replayed webhook outside the window is rejected' '400' \
+  "$(sign_and_post "$EVENT" 'whsec_test_secret' -400)"
+
+check 'a correctly signed webhook grants the entitlement' '"granted":true' \
+  "$(sign_and_post_body "$EVENT")"
+
+# Stripe retries until it gets a 2xx; a retry must not grant twice.
+check 'a retried webhook is a no-op' '"duplicate":true' "$(sign_and_post_body "$EVENT")"
+
+# --- delivery ---------------------------------------------------------------
+
+check 'entitlements require a session' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/entitlements")"
+
+check 'an invalid session is refused' '401' \
+  "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/entitlements" \
+     -H 'authorization: Bearer forged-token')"
+
+check 'the buyer sees what they bought' '"count":1' \
+  "$(curl -s "$BASE/api/entitlements" -H 'authorization: Bearer valid-buyer-token')"
+
+# The guest checkout used a differently-cased email than the session reports.
+check 'the grant matches regardless of email casing' 'buyer@example.com' \
+  "$(curl -s "$BASE/api/entitlements" -H 'authorization: Bearer valid-buyer-token')"
+
+check 'a different buyer sees nothing' '"count":0' \
+  "$(curl -s "$BASE/api/entitlements" -H 'authorization: Bearer valid-other-token')"
 
 # A misconfigured deployment must degrade to a clear 503, never a 500.
 # Regression guard: a URL without a scheme made supabase-js throw out of the

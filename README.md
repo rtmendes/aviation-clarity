@@ -127,6 +127,47 @@ them *is* the publish step. Nothing can be stored without recording the template
 version, the inputs and a checksum — a database constraint, so an asset that
 cannot be reproduced cannot be saved.
 
+## Buying
+
+`POST /api/checkout` starts a purchase and returns a Stripe Checkout URL. It is
+deliberately unauthenticated: requiring an account before payment loses buyers,
+and Checkout collects a verified email anyway. The price comes from the product
+row, never from the request — a client-supplied amount is a client-chosen
+amount.
+
+**Entitlements are keyed to an email, not an account.** The purchase grants
+against the email Checkout captured; it resolves to a profile whenever that
+person first signs in. Refunds set `revoked_at` rather than deleting, so the
+history survives.
+
+**Webhooks are the source of truth for payment state**, and they are verified
+before anything touches the database:
+
+1. Signature checked against the **raw** body, in constant time, with a
+   five-minute replay window. Re-serialising parsed JSON changes key order and
+   the signature will never match.
+2. The event is recorded under Stripe's own id as primary key. Stripe retries
+   until it gets a 2xx, so the same event arrives repeatedly as a matter of
+   course; a retry collides by construction rather than granting twice.
+3. Only then is it acted on.
+
+Signature verification lives in `lib/payments/signature.ts`, free of any
+environment access so it can be tested directly:
+
+```bash
+npm run verify:signature   # forgery, tampering, replay, secret rotation
+```
+
+**Access is enforced in Row Level Security**, not in a route. A signed-in buyer
+reads a paid asset only while a live entitlement matches the verified email on
+their token. `authenticated` is split by `public.is_staff()`: staff read the
+working set, everyone signed in reads what is published plus what they paid
+for.
+
+Neither Stripe nor the model provider uses a vendor SDK. Both surfaces are a
+couple of HTTP endpoints, and this project's builds were broken once already by
+a dependency resolving a new major at deploy time.
+
 ## Verification and review
 
 Generation is the cheap half. What makes aviation training material safe to
@@ -181,6 +222,7 @@ npm run verify:api      # routes end to end against a PostgREST stub
 npm run verify:schema   # migrations against a real PostgreSQL database
 npm run verify:sources  # every registered citation still resolves
 npm run verify:tokens   # globals.css has not drifted from the design tokens
+npm run verify:signature # Stripe webhook signature verification
 npm run smoke           # connectivity to the self-hosted Supabase instance
 ```
 
