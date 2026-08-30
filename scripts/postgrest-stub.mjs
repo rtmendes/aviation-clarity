@@ -17,7 +17,7 @@ const SECRET = 'stub-secret-key';
 
 /** @type {Record<string, any[]>} */
 const tables = {
-  topics: [
+  ac_topics: [
     {
       id: '11111111-1111-1111-1111-111111111111',
       title: 'Why airplanes stall',
@@ -32,7 +32,7 @@ const tables = {
       updated_at: '2026-08-01T00:00:00Z',
     },
   ],
-  sources: [
+  ac_sources: [
     {
       id: '22222222-2222-2222-2222-222222222222',
       title: 'FAA-H-8083-3 — Airplane Flying Handbook',
@@ -46,16 +46,16 @@ const tables = {
       updated_at: '2026-08-01T00:00:00Z',
     },
   ],
-  content_assets: [],
-  agent_runs: [],
-  knowledge_units: [],
-  claims: [],
-  claim_sources: [],
-  review_events: [],
-  orders: [],
-  entitlements: [],
-  stripe_events: [],
-  products: [
+  ac_content_assets: [],
+  ac_agent_runs: [],
+  ac_knowledge_units: [],
+  ac_claims: [],
+  ac_claim_sources: [],
+  ac_review_events: [],
+  ac_orders: [],
+  ac_entitlements: [],
+  ac_stripe_events: [],
+  ac_products: [
     {
       id: '55555555-5555-5555-5555-555555555555',
       name: 'Checkride Clarity',
@@ -80,7 +80,7 @@ const tables = {
       updated_at: '2026-08-01T00:00:00Z',
     },
   ],
-  reviewers: [
+  ac_reviewers: [
     {
       id: '33333333-3333-3333-3333-333333333333',
       name: 'Dana Reyes',
@@ -114,23 +114,23 @@ const tables = {
  * the real trigger wording also exercises the error mapping the routes rely on.
  */
 function triggerRefusal(table, patch, row) {
-  if (table === 'claims' && patch.verified === true && row) {
-    const cited = tables.claim_sources.some((cs) => cs.claim_id === row.id);
+  if (table === 'ac_claims' && patch.verified === true && row) {
+    const cited = tables.ac_claim_sources.some((cs) => cs.claim_id === row.id);
     if (!cited) {
       return `claim ${row.id} cannot be verified without at least one cited source`;
     }
   }
-  if (table === 'content_assets' && ['approved', 'published'].includes(patch.status)) {
+  if (table === 'ac_content_assets' && ['approved', 'published'].includes(patch.status)) {
     const unitId = patch.knowledge_unit_id ?? row?.knowledge_unit_id ?? null;
     if (unitId) {
-      const unit = tables.knowledge_units.find((u) => u.id === unitId);
+      const unit = tables.ac_knowledge_units.find((u) => u.id === unitId);
       if (!unit || unit.status !== 'approved') {
         return `content asset cannot be marked ${patch.status} while knowledge unit ${unitId} is ${unit?.status ?? 'missing'}`;
       }
     }
   }
-  if (table === 'knowledge_units' && patch.status === 'approved' && row) {
-    const unverified = tables.claims.filter(
+  if (table === 'ac_knowledge_units' && patch.status === 'approved' && row) {
+    const unverified = tables.ac_claims.filter(
       (c) => c.knowledge_unit_id === row.id && c.verified === false,
     ).length;
     if (unverified > 0) {
@@ -156,20 +156,20 @@ function triggerRefusal(table, patch, row) {
  * The secret key bypasses all of this, as it does on the live instance.
  */
 const anonPolicies = {
-  topics: (r) => r.status === 'published',
-  sources: () => true,
-  claims: (r) => r.verified === true,
-  claim_sources: () => true,
-  knowledge_units: (r) => r.status === 'approved',
-  content_assets: (r) => r.status === 'published' && !r.product_id,
-  products: (r) => r.status === 'live',
+  ac_topics: (r) => r.status === 'published',
+  ac_sources: () => true,
+  ac_claims: (r) => r.verified === true,
+  ac_claim_sources: () => true,
+  ac_knowledge_units: (r) => r.status === 'approved',
+  ac_content_assets: (r) => r.status === 'published' && !r.product_id,
+  ac_products: (r) => r.status === 'live',
   // No policy admits these to anon at all.
-  reviewers: () => false,
-  review_events: () => false,
-  agent_runs: () => false,
-  orders: () => false,
-  entitlements: () => false,
-  stripe_events: () => false,
+  ac_reviewers: () => false,
+  ac_review_events: () => false,
+  ac_agent_runs: () => false,
+  ac_orders: () => false,
+  ac_entitlements: () => false,
+  ac_stripe_events: () => false,
 };
 
 /** Uploaded storage objects, keyed by "bucket/path". */
@@ -209,8 +209,8 @@ const server = createServer((req, res) => {
   // can assert an upload landed in the bucket the review state chose — which is
   // the whole point of splitting drafts from approved artwork.
 
-  const upload = /^\/storage\/v1\/object\/(assets-[a-z]+)\/(.+)$/.exec(url.pathname);
-  const sign = /^\/storage\/v1\/object\/sign\/(assets-[a-z]+)\/(.+)$/.exec(url.pathname);
+  const upload = /^\/storage\/v1\/object\/(aviation-assets-[a-z]+)\/(.+)$/.exec(url.pathname);
+  const sign = /^\/storage\/v1\/object\/sign\/(aviation-assets-[a-z]+)\/(.+)$/.exec(url.pathname);
 
   if (sign) {
     const key = `${sign[1]}/${sign[2]}`;
@@ -354,11 +354,11 @@ const server = createServer((req, res) => {
       const merge = String(req.headers['prefer'] ?? '').includes('merge-duplicates');
 
       const conflict = inputs.find((input) => {
-        if (table === 'stripe_events') return rows.some((r) => r.id === input.id);
-        if (table === 'orders' && input.stripe_session_id) {
+        if (table === 'ac_stripe_events') return rows.some((r) => r.id === input.id);
+        if (table === 'ac_orders' && input.stripe_session_id) {
           return rows.some((r) => r.stripe_session_id === input.stripe_session_id);
         }
-        if (table === 'entitlements') {
+        if (table === 'ac_entitlements') {
           return rows.some(
             (r) => r.email === input.email && r.product_id === input.product_id && !r.revoked_at,
           );
@@ -368,8 +368,8 @@ const server = createServer((req, res) => {
 
       if (conflict) {
         const constraint =
-          table === 'stripe_events' ? 'stripe_events_pkey'
-          : table === 'orders' ? 'orders_stripe_session_id_key'
+          table === 'ac_stripe_events' ? 'stripe_events_pkey'
+          : table === 'ac_orders' ? 'orders_stripe_session_id_key'
           : 'entitlements_unique_grant';
         return send(409, {
           message: `duplicate key value violates unique constraint "${constraint}"`,
@@ -383,7 +383,7 @@ const server = createServer((req, res) => {
 
       const written = inputs.map((input) => {
         // claim_sources is a composite-key join table with no surrogate id.
-        if (table === 'claim_sources') {
+        if (table === 'ac_claim_sources') {
           const existing = rows.find(
             (r) => r.claim_id === input.claim_id && r.source_id === input.source_id,
           );

@@ -20,8 +20,13 @@ import type { ReviewStateKey } from './tokens';
  * explicit.
  */
 
-export const APPROVED_BUCKET = 'assets-approved';
-export const DRAFT_BUCKET = 'assets-draft';
+/*
+ * Bucket ids are global to the Supabase instance, and this one is shared with
+ * several other InsightProfit applications, so they are namespaced like the
+ * tables are.
+ */
+export const APPROVED_BUCKET = 'aviation-assets-approved';
+export const DRAFT_BUCKET = 'aviation-assets-draft';
 
 export function bucketFor(state: ReviewStateKey): string {
   return state === 'approved' ? APPROVED_BUCKET : DRAFT_BUCKET;

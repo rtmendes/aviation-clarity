@@ -243,11 +243,11 @@ check 'off-contract output is rejected by validation' 'did not match the content
 # failed must still leave a row, or cost and reliability become unknowable.
 check 'a failed generation is still audited' '"status":"failed"' \
   "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
-     "http://127.0.0.1:$STUB_PORT/rest/v1/agent_runs")"
+     "http://127.0.0.1:$STUB_PORT/rest/v1/ac_agent_runs")"
 
 check 'the failure reason is recorded on the run' 'upstream: Provider returned HTTP 500.' \
   "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
-     "http://127.0.0.1:$STUB_PORT/rest/v1/agent_runs")"
+     "http://127.0.0.1:$STUB_PORT/rest/v1/ac_agent_runs")"
 
 # ---------------------------------------------------------------------------
 # Phase 02: the verification pipeline
@@ -335,7 +335,7 @@ check 'the approval records the certificate holder' 'CFI-1234567' "$APPROVED"
 
 check 'the decision is written to the review log' 'approved' \
   "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
-     "http://127.0.0.1:$STUB_PORT/rest/v1/review_events")"
+     "http://127.0.0.1:$STUB_PORT/rest/v1/ac_review_events")"
 
 # --- source registration ----------------------------------------------------
 
@@ -571,10 +571,10 @@ check 'a stored asset records the inputs it came from' '"earned":"approved"' "$S
 # The bucket is the access-control boundary, so approval has to be the thing
 # that picks it. A flag on a row would be one bad query away from publishing
 # unreviewed material.
-check 'approved artwork lands in the public bucket' '"bucket":"assets-approved"' "$STORED"
+check 'approved artwork lands in the public bucket' '"bucket":"aviation-assets-approved"' "$STORED"
 
 DRAFT_STORED=$(store "social?title=Spin%20recovery&unitId=$PENDING_UNIT&state=approved")
-check 'unreviewed artwork lands in the draft bucket' '"bucket":"assets-draft"' "$DRAFT_STORED"
+check 'unreviewed artwork lands in the draft bucket' '"bucket":"aviation-assets-draft"' "$DRAFT_STORED"
 check 'unreviewed artwork keeps its honest band' '"state":"review"' "$DRAFT_STORED"
 
 ASSET_ID=$(printf '%s' "$STORED" | python3 -c "import sys,json;print(json.load(sys.stdin)['asset']['id'])")

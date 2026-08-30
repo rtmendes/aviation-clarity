@@ -211,6 +211,29 @@ Neither Stripe nor the model provider uses a vendor SDK. Both surfaces are a
 couple of HTTP endpoints, and this project's builds were broken once already by
 a dependency resolving a new major at deploy time.
 
+## The database is shared
+
+`supabase.insightprofit.live` hosts several InsightProfit applications — 626
+tables in `public` — so every object this project creates is namespaced `ac_`:
+tables, indexes, constraints, triggers, functions and policies alike, since
+those all share one namespace per schema. Storage buckets are
+`aviation-assets-*`, bucket ids being global to the instance.
+
+This is not tidiness. Three names collided outright: `profiles` belongs to a
+billing app, `products` to a funnel builder, `agent_runs` to a different agent
+framework. Unprefixed, `create table if not exists` would have skipped those
+three and left this application reading another product's tables, while the
+RLS statements would have enabled row-level security on live tables belonging
+to those apps — which hides every row from an application whose policies do not
+match.
+
+`supabase/APPLY-ALL.sql` is the whole schema in one file, for the Supabase SQL
+editor. `scripts/verify-schema.sh` applies it beside stand-ins for those three
+foreign tables and asserts their rows, columns, RLS state, policies and
+triggers all come through unchanged.
+
+See `docs/GO-LIVE.md` for the three remaining deployment steps.
+
 ## Verification and review
 
 Generation is the cheap half. What makes aviation training material safe to

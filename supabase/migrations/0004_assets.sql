@@ -15,38 +15,38 @@
 -- no way to decide what needs re-rendering. Without the inputs, an asset cannot
 -- be reproduced at all.
 
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists template_version text;
 
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists render_input jsonb;
 
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists storage_bucket text;
 
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists storage_path text;
 
 /* SHA-256 of the rendered bytes: lets a re-render be compared against what
    was published without downloading it. */
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists checksum text;
 
-alter table public.content_assets
+alter table public.ac_content_assets
   add column if not exists knowledge_unit_id uuid
-    references public.knowledge_units(id) on delete set null;
+    references public.ac_knowledge_units(id) on delete set null;
 
-create index if not exists content_assets_unit_idx
-  on public.content_assets (knowledge_unit_id);
+create index if not exists ac_content_assets_unit_idx
+  on public.ac_content_assets (knowledge_unit_id);
 
-create unique index if not exists content_assets_storage_key
-  on public.content_assets (storage_bucket, storage_path)
+create unique index if not exists ac_content_assets_storage_key
+  on public.ac_content_assets (storage_bucket, storage_path)
   where storage_bucket is not null and storage_path is not null;
 
 -- A stored asset must say how it was made, or it cannot be reproduced or
 -- audited later.
-alter table public.content_assets drop constraint if exists content_assets_render_is_traceable;
-alter table public.content_assets add constraint content_assets_render_is_traceable
+alter table public.ac_content_assets drop constraint if exists ac_content_assets_render_is_traceable;
+alter table public.ac_content_assets add constraint ac_content_assets_render_is_traceable
   check (
     storage_path is null
     or (template_version is not null and render_input is not null and checksum is not null)
@@ -74,8 +74,8 @@ begin
 
   insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
   values
-    ('assets-draft',    'assets-draft',    false, 10485760, array['image/png', 'image/svg+xml', 'application/pdf']),
-    ('assets-approved', 'assets-approved', true,  10485760, array['image/png', 'image/svg+xml', 'application/pdf'])
+    ('aviation-assets-draft',    'aviation-assets-draft',    false, 10485760, array['image/png', 'image/svg+xml', 'application/pdf']),
+    ('aviation-assets-approved', 'aviation-assets-approved', true,  10485760, array['image/png', 'image/svg+xml', 'application/pdf'])
   on conflict (id) do update set
     public = excluded.public,
     file_size_limit = excluded.file_size_limit,
@@ -93,18 +93,18 @@ begin
     return;
   end if;
 
-  execute 'drop policy if exists assets_draft_read_authenticated on storage.objects';
+  execute 'drop policy if exists ac_assets_draft_read_authenticated on storage.objects';
   execute $p$
-    create policy assets_draft_read_authenticated on storage.objects
+    create policy ac_assets_draft_read_authenticated on storage.objects
       for select to authenticated
-      using (bucket_id = 'assets-draft')
+      using (bucket_id = 'aviation-assets-draft')
   $p$;
 
-  execute 'drop policy if exists assets_approved_read_public on storage.objects';
+  execute 'drop policy if exists ac_assets_approved_read_public on storage.objects';
   execute $p$
-    create policy assets_approved_read_public on storage.objects
+    create policy ac_assets_approved_read_public on storage.objects
       for select to anon, authenticated
-      using (bucket_id = 'assets-approved')
+      using (bucket_id = 'aviation-assets-approved')
   $p$;
 end;
 $$;

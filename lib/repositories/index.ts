@@ -82,7 +82,7 @@ export async function listTopics(
 
   return withClient(false, async (client) => {
     let query = client
-      .from('topics')
+      .from('ac_topics')
       .select('*')
       .order('priority', { ascending: false })
       .order('created_at', { ascending: false })
@@ -109,7 +109,7 @@ export async function createTopic(
 ): Promise<Result<TopicRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('topics')
+      .from('ac_topics')
       .insert({
         title: input.title,
         audience: input.audience ?? null,
@@ -135,7 +135,7 @@ export async function listSources(limit = 50): Promise<Result<SourceRow[]>> {
   const bounded = Math.min(Math.max(limit, 1), 200);
   return withClient(false, async (client) => {
     const { data, error } = await client
-      .from('sources')
+      .from('ac_sources')
       .select('*')
       .order('authority_score', { ascending: false })
       .limit(bounded);
@@ -156,7 +156,7 @@ export async function listContentAssets(
   const bounded = Math.min(Math.max(limit, 1), 200);
   return withClient(false, async (client) => {
     let query = client
-      .from('content_assets')
+      .from('ac_content_assets')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(bounded);
@@ -190,7 +190,7 @@ export async function createKnowledgeUnit(
 ): Promise<Result<KnowledgeUnitRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('knowledge_units')
+      .from('ac_knowledge_units')
       .insert({
         summary: input.summary,
         learning_model: input.learningModel,
@@ -223,7 +223,7 @@ export async function createKnowledgeUnit(
 export async function getKnowledgeUnit(id: string): Promise<Result<KnowledgeUnitRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('knowledge_units')
+      .from('ac_knowledge_units')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -238,7 +238,7 @@ export async function listKnowledgeUnits(limit = 25): Promise<Result<KnowledgeUn
   const bounded = Math.min(Math.max(limit, 1), 100);
   return withClient(false, async (client) => {
     const { data, error } = await client
-      .from('knowledge_units')
+      .from('ac_knowledge_units')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(bounded);
@@ -275,7 +275,7 @@ export async function recordAgentRun(
 ): Promise<Result<AgentRunRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('agent_runs')
+      .from('ac_agent_runs')
       .insert({
         agent_name: input.agentName,
         topic_id: input.topicId ?? null,
@@ -299,7 +299,7 @@ export async function listAgentRuns(limit = 25): Promise<Result<AgentRunRow[]>> 
   const bounded = Math.min(Math.max(limit, 1), 100);
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('agent_runs')
+      .from('ac_agent_runs')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(bounded);
@@ -344,7 +344,7 @@ export async function probeDatabase(): Promise<DatabaseProbe> {
   try {
     // A single-row read, not an exact count: the probe runs on every health
     // check and must not degrade as the table grows.
-    const { error } = await client.client.from('topics').select('id').limit(1);
+    const { error } = await client.client.from('ac_topics').select('id').limit(1);
 
     const latencyMs = Date.now() - startedAt;
 

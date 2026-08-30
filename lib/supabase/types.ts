@@ -378,19 +378,19 @@ type Table<Row extends Record<string, unknown>, Insert extends Record<string, un
 export interface Database {
   public: {
     Tables: {
-      topics: Table<TopicRow, TopicInsert>;
-      sources: Table<SourceRow, SourceInsert>;
-      claims: Table<ClaimRow, ClaimInsert>;
-      knowledge_units: Table<KnowledgeUnitRow, KnowledgeUnitInsert>;
-      content_assets: Table<ContentAssetRow, ContentAssetInsert>;
-      agent_runs: Table<AgentRunRow, AgentRunInsert>;
-      products: Table<ProductRow, ProductInsert>;
-      reviewers: Table<ReviewerRow, ReviewerInsert>;
-      review_events: Table<ReviewEventRow, ReviewEventInsert>;
-      claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
-      orders: Table<OrderRow, OrderInsert>;
-      entitlements: Table<EntitlementRow, EntitlementInsert>;
-      stripe_events: Table<StripeEventRow, StripeEventInsert>;
+      ac_topics: Table<TopicRow, TopicInsert>;
+      ac_sources: Table<SourceRow, SourceInsert>;
+      ac_claims: Table<ClaimRow, ClaimInsert>;
+      ac_knowledge_units: Table<KnowledgeUnitRow, KnowledgeUnitInsert>;
+      ac_content_assets: Table<ContentAssetRow, ContentAssetInsert>;
+      ac_agent_runs: Table<AgentRunRow, AgentRunInsert>;
+      ac_products: Table<ProductRow, ProductInsert>;
+      ac_reviewers: Table<ReviewerRow, ReviewerInsert>;
+      ac_review_events: Table<ReviewEventRow, ReviewEventInsert>;
+      ac_claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
+      ac_orders: Table<OrderRow, OrderInsert>;
+      ac_entitlements: Table<EntitlementRow, EntitlementInsert>;
+      ac_stripe_events: Table<StripeEventRow, StripeEventInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

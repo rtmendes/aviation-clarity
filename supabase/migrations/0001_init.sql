@@ -18,7 +18,7 @@ create extension if not exists pgcrypto;
 -- Shared helpers
 -- ---------------------------------------------------------------------------
 
-create or replace function public.set_updated_at()
+create or replace function public.ac_set_updated_at()
 returns trigger
 language plpgsql
 as $$
@@ -32,7 +32,7 @@ $$;
 -- profiles
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.profiles (
+create table if not exists public.ac_profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text,
   display_name text,
@@ -46,7 +46,7 @@ create table if not exists public.profiles (
 -- topics
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.topics (
+create table if not exists public.ac_topics (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   slug text unique,
@@ -58,19 +58,19 @@ create table if not exists public.topics (
   status text not null default 'queued'
     check (status in ('queued', 'researching', 'verified', 'generating',
                       'qa', 'approved', 'published', 'blocked')),
-  created_by uuid references public.profiles(id) on delete set null,
+  created_by uuid references public.ac_profiles(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
-create index if not exists topics_status_priority_idx
-  on public.topics (status, priority desc, created_at desc);
+create index if not exists ac_topics_status_priority_idx
+  on public.ac_topics (status, priority desc, created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- sources  (authoritative research registry)
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.sources (
+create table if not exists public.ac_sources (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   url text not null,
@@ -86,30 +86,30 @@ create table if not exists public.sources (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists sources_type_idx on public.sources (source_type);
+create index if not exists ac_sources_type_idx on public.ac_sources (source_type);
 
 -- ---------------------------------------------------------------------------
 -- claims  (a statement, and the sources that back it)
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.claims (
+create table if not exists public.ac_claims (
   id uuid primary key default gen_random_uuid(),
-  topic_id uuid references public.topics(id) on delete cascade,
+  topic_id uuid references public.ac_topics(id) on delete cascade,
   body text not null,
   risk text not null default 'medium' check (risk in ('low', 'medium', 'high')),
   verified boolean not null default false,
   verified_at timestamptz,
-  verified_by uuid references public.profiles(id) on delete set null,
+  verified_by uuid references public.ac_profiles(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   -- A claim cannot be marked verified without recording who verified it and when.
-  constraint claims_verification_is_attributable
+  constraint ac_claims_verification_is_attributable
     check (verified = false or (verified_at is not null and verified_by is not null))
 );
 
-create table if not exists public.claim_sources (
-  claim_id uuid not null references public.claims(id) on delete cascade,
-  source_id uuid not null references public.sources(id) on delete cascade,
+create table if not exists public.ac_claim_sources (
+  claim_id uuid not null references public.ac_claims(id) on delete cascade,
+  source_id uuid not null references public.ac_sources(id) on delete cascade,
   primary key (claim_id, source_id)
 );
 
@@ -117,9 +117,9 @@ create table if not exists public.claim_sources (
 -- knowledge_units  (verified, teachable unit derived from claims)
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.knowledge_units (
+create table if not exists public.ac_knowledge_units (
   id uuid primary key default gen_random_uuid(),
-  topic_id uuid references public.topics(id) on delete cascade,
+  topic_id uuid references public.ac_topics(id) on delete cascade,
   summary text not null,
   learning_model jsonb not null default '{}'::jsonb,
   status text not null default 'draft'
@@ -128,15 +128,15 @@ create table if not exists public.knowledge_units (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists knowledge_units_topic_idx on public.knowledge_units (topic_id);
+create index if not exists ac_knowledge_units_topic_idx on public.ac_knowledge_units (topic_id);
 
 -- ---------------------------------------------------------------------------
 -- workflows  (auditable state machine per topic)
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.workflows (
+create table if not exists public.ac_workflows (
   id uuid primary key default gen_random_uuid(),
-  topic_id uuid not null references public.topics(id) on delete cascade,
+  topic_id uuid not null references public.ac_topics(id) on delete cascade,
   stage text not null default 'intake'
     check (stage in ('intake', 'research', 'verify', 'transform', 'generate',
                      'qa', 'approve', 'publish', 'measure', 'learn')),
@@ -147,15 +147,15 @@ create table if not exists public.workflows (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists workflows_topic_idx on public.workflows (topic_id);
+create index if not exists ac_workflows_topic_idx on public.ac_workflows (topic_id);
 
 -- ---------------------------------------------------------------------------
 -- content_assets
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.content_assets (
+create table if not exists public.ac_content_assets (
   id uuid primary key default gen_random_uuid(),
-  topic_id uuid references public.topics(id) on delete cascade,
+  topic_id uuid references public.ac_topics(id) on delete cascade,
   asset_type text not null
     check (asset_type in ('lesson', 'youtube', 'podcast', 'article', 'short',
                           'social', 'carousel', 'email', 'lead_magnet', 'quiz',
@@ -166,25 +166,25 @@ create table if not exists public.content_assets (
     check (status in ('queued', 'researching', 'verified', 'generating',
                       'qa', 'approved', 'published', 'blocked')),
   qa_findings jsonb not null default '[]'::jsonb,
-  approved_by uuid references public.profiles(id) on delete set null,
+  approved_by uuid references public.ac_profiles(id) on delete set null,
   approved_at timestamptz,
   published_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   -- Publication requires a recorded human approval. This is the database-level
   -- half of the safety policy in AGENTS.md; the application half can be bypassed.
-  constraint content_assets_publication_requires_approval
+  constraint ac_content_assets_publication_requires_approval
     check (status <> 'published' or (approved_by is not null and approved_at is not null))
 );
 
-create index if not exists content_assets_topic_idx on public.content_assets (topic_id);
-create index if not exists content_assets_status_idx on public.content_assets (status);
+create index if not exists ac_content_assets_topic_idx on public.ac_content_assets (topic_id);
+create index if not exists ac_content_assets_status_idx on public.ac_content_assets (status);
 
 -- ---------------------------------------------------------------------------
 -- products / product_events
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.products (
+create table if not exists public.ac_products (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   slug text unique,
@@ -201,10 +201,10 @@ create table if not exists public.products (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.product_events (
+create table if not exists public.ac_product_events (
   id uuid primary key default gen_random_uuid(),
-  product_id uuid not null references public.products(id) on delete cascade,
-  profile_id uuid references public.profiles(id) on delete set null,
+  product_id uuid not null references public.ac_products(id) on delete cascade,
+  profile_id uuid references public.ac_profiles(id) on delete set null,
   event_type text not null
     check (event_type in ('view', 'lead', 'checkout_started', 'purchase', 'refund')),
   amount_cents int,
@@ -213,26 +213,26 @@ create table if not exists public.product_events (
   created_at timestamptz not null default now()
 );
 
-create index if not exists product_events_product_idx
-  on public.product_events (product_id, created_at desc);
+create index if not exists ac_product_events_product_idx
+  on public.ac_product_events (product_id, created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- assessments / assessment_attempts
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.assessments (
+create table if not exists public.ac_assessments (
   id uuid primary key default gen_random_uuid(),
-  topic_id uuid references public.topics(id) on delete cascade,
+  topic_id uuid references public.ac_topics(id) on delete cascade,
   title text not null,
   questions jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.assessment_attempts (
+create table if not exists public.ac_assessment_attempts (
   id uuid primary key default gen_random_uuid(),
-  assessment_id uuid not null references public.assessments(id) on delete cascade,
-  profile_id uuid references public.profiles(id) on delete cascade,
+  assessment_id uuid not null references public.ac_assessments(id) on delete cascade,
+  profile_id uuid references public.ac_profiles(id) on delete cascade,
   answers jsonb not null default '[]'::jsonb,
   correct int not null default 0,
   total int not null default 0,
@@ -240,17 +240,17 @@ create table if not exists public.assessment_attempts (
   created_at timestamptz not null default now()
 );
 
-create index if not exists assessment_attempts_profile_idx
-  on public.assessment_attempts (profile_id, created_at desc);
+create index if not exists ac_assessment_attempts_profile_idx
+  on public.ac_assessment_attempts (profile_id, created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- agent_runs  (audit trail for every agent invocation)
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.agent_runs (
+create table if not exists public.ac_agent_runs (
   id uuid primary key default gen_random_uuid(),
   agent_name text not null,
-  topic_id uuid references public.topics(id) on delete set null,
+  topic_id uuid references public.ac_topics(id) on delete set null,
   status text not null default 'queued'
     check (status in ('queued', 'running', 'blocked', 'complete', 'failed')),
   input jsonb not null default '{}'::jsonb,
@@ -261,23 +261,23 @@ create table if not exists public.agent_runs (
   created_at timestamptz not null default now()
 );
 
-create index if not exists agent_runs_created_idx on public.agent_runs (created_at desc);
-create index if not exists agent_runs_agent_idx on public.agent_runs (agent_name, created_at desc);
+create index if not exists ac_agent_runs_created_idx on public.ac_agent_runs (created_at desc);
+create index if not exists ac_agent_runs_agent_idx on public.ac_agent_runs (agent_name, created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- analytics_events
 -- ---------------------------------------------------------------------------
 
-create table if not exists public.analytics_events (
+create table if not exists public.ac_analytics_events (
   id uuid primary key default gen_random_uuid(),
-  profile_id uuid references public.profiles(id) on delete set null,
+  profile_id uuid references public.ac_profiles(id) on delete set null,
   event_name text not null,
   properties jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
 
-create index if not exists analytics_events_name_idx
-  on public.analytics_events (event_name, created_at desc);
+create index if not exists ac_analytics_events_name_idx
+  on public.ac_analytics_events (event_name, created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- updated_at triggers
@@ -287,15 +287,19 @@ do $$
 declare
   t text;
 begin
+  -- Prefixed explicitly: this loop builds identifiers by string, so the rename
+  -- to ac_* could not reach it. Left unprefixed it would have attached this
+  -- project's trigger to the billing app's `profiles` and the funnel app's
+  -- `products`, which share this database.
   foreach t in array array[
-    'profiles', 'topics', 'sources', 'claims', 'knowledge_units',
-    'workflows', 'content_assets', 'products', 'assessments'
+    'ac_profiles', 'ac_topics', 'ac_sources', 'ac_claims', 'ac_knowledge_units',
+    'ac_workflows', 'ac_content_assets', 'ac_products', 'ac_assessments'
   ]
   loop
     execute format(
-      'drop trigger if exists set_updated_at on public.%I;
-       create trigger set_updated_at before update on public.%I
-         for each row execute function public.set_updated_at();', t, t);
+      'drop trigger if exists ac_set_updated_at on public.%I;
+       create trigger ac_set_updated_at before update on public.%I
+         for each row execute function public.ac_set_updated_at();', t, t);
   end loop;
 end;
 $$;
