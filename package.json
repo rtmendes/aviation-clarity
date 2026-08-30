@@ -1,7 +1,7 @@
 {
   "name": "aviation-clarity",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "engines": {
     "node": ">=20.9.0"
   },
@@ -15,7 +15,8 @@
     "verify:api": "bash scripts/verify-api.sh",
     "verify:schema": "bash scripts/verify-schema.sh",
     "verify:sources": "bash scripts/verify-sources.sh",
-    "verify:tokens": "node scripts/verify-tokens.mjs"
+    "verify:tokens": "node scripts/verify-tokens.mjs",
+    "verify:signature": "node scripts/verify-signature.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.4",

@@ -124,6 +124,39 @@ export type ReviewEventRow = {
   created_at: string;
 };
 
+export type OrderRow = {
+  id: string;
+  product_id: string | null;
+  email: string;
+  stripe_session_id: string | null;
+  stripe_payment_intent: string | null;
+  amount_cents: number;
+  currency: string;
+  status: 'pending' | 'paid' | 'refunded' | 'failed';
+  created_at: string;
+  updated_at: string;
+};
+
+export type EntitlementRow = {
+  id: string;
+  email: string;
+  product_id: string;
+  order_id: string | null;
+  profile_id: string | null;
+  granted_at: string;
+  revoked_at: string | null;
+  revoked_reason: string | null;
+};
+
+export type StripeEventRow = {
+  id: string;
+  type: string;
+  payload: Json;
+  processed_at: string | null;
+  error: string | null;
+  received_at: string;
+};
+
 export type ClaimSourceRow = {
   claim_id: string;
   source_id: string;
@@ -144,6 +177,7 @@ export type KnowledgeUnitRow = {
 export type ContentAssetRow = {
   id: string;
   topic_id: string | null;
+  product_id: string | null;
   asset_type: AssetType;
   title: string | null;
   body: string | null;
@@ -243,6 +277,33 @@ export type ReviewEventInsert = {
   source_ids?: string[];
 };
 
+export type OrderInsert = {
+  email: string;
+  amount_cents: number;
+  product_id?: string | null;
+  stripe_session_id?: string | null;
+  stripe_payment_intent?: string | null;
+  currency?: string;
+  status?: OrderRow['status'];
+};
+
+export type EntitlementInsert = {
+  email: string;
+  product_id: string;
+  order_id?: string | null;
+  profile_id?: string | null;
+  revoked_at?: string | null;
+  revoked_reason?: string | null;
+};
+
+export type StripeEventInsert = {
+  id: string;
+  type: string;
+  payload: Json;
+  processed_at?: string | null;
+  error?: string | null;
+};
+
 export type ClaimSourceInsert = {
   claim_id: string;
   source_id: string;
@@ -260,6 +321,7 @@ export type KnowledgeUnitInsert = {
 export type ContentAssetInsert = {
   asset_type: AssetType;
   topic_id?: string | null;
+  product_id?: string | null;
   title?: string | null;
   body?: string | null;
   status?: TopicStatus;
@@ -311,6 +373,9 @@ export interface Database {
       reviewers: Table<ReviewerRow, ReviewerInsert>;
       review_events: Table<ReviewEventRow, ReviewEventInsert>;
       claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
+      orders: Table<OrderRow, OrderInsert>;
+      entitlements: Table<EntitlementRow, EntitlementInsert>;
+      stripe_events: Table<StripeEventRow, StripeEventInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

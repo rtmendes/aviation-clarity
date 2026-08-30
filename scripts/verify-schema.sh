@@ -59,6 +59,11 @@ do $$ begin
   if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated nologin; end if;
   if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role nologin bypassrls; end if;
 end $$;
+
+-- Real Supabase grants this as part of its bootstrap; without it a policy that
+-- calls auth.uid() fails with "permission denied for schema auth" for exactly
+-- the roles the policy is written for.
+grant usage on schema auth to anon, authenticated;
 SQL
 
 echo 'Verifying Supabase migrations:'
@@ -172,6 +177,96 @@ check 'a stored asset must record how it was rendered' 'content_assets_render_is
 
 check 'a fully traced asset is accepted' 'INSERT' \
   "$(psql -d "$DB" -c "insert into public.content_assets (asset_type, storage_bucket, storage_path, template_version, render_input, checksum) values ('worksheet','assets-draft','y.png','2026-08-30.1','{}'::jsonb,'abc123');" 2>&1)"
+
+
+# --- Phase 04: commerce and entitlements -------------------------------------
+
+psql -q -d "$DB" >/dev/null <<'SQL'
+insert into public.products (id, name, slug, price_cents, status)
+  values ('55555555-5555-5555-5555-555555555555', 'Checkride Clarity', 'checkride-clarity', 4900, 'live');
+insert into public.orders (id, product_id, email, stripe_session_id, stripe_payment_intent, amount_cents, status)
+  values ('44444444-0000-0000-0000-000000000001', '55555555-5555-5555-5555-555555555555',
+          'Buyer@Example.com', 'cs_test_1', 'pi_test_1', 4900, 'paid');
+insert into public.entitlements (email, product_id, order_id)
+  values ('buyer@example.com', '55555555-5555-5555-5555-555555555555', '44444444-0000-0000-0000-000000000001');
+SQL
+
+check 'a paid order must record its payment' 'orders_paid_has_payment' \
+  "$(psql -d "$DB" -c "insert into public.orders (product_id,email,amount_cents,status) values ('55555555-5555-5555-5555-555555555555','x@y.com',100,'paid');" 2>&1)"
+
+check 'one Stripe session cannot become two orders' 'orders_stripe_session_id_key' \
+  "$(psql -d "$DB" -c "insert into public.orders (product_id,email,stripe_session_id,amount_cents) values ('55555555-5555-5555-5555-555555555555','x@y.com','cs_test_1',100);" 2>&1)"
+
+check 'a webhook event cannot be recorded twice' 'stripe_events_pkey' \
+  "$(psql -d "$DB" -c "insert into public.stripe_events (id,type,payload) values ('evt_1','checkout.session.completed','{}'); insert into public.stripe_events (id,type,payload) values ('evt_1','checkout.session.completed','{}');" 2>&1)"
+
+check 'the same product cannot be granted twice' 'entitlements_unique_grant' \
+  "$(psql -d "$DB" -c "insert into public.entitlements (email,product_id) values ('buyer@example.com','55555555-5555-5555-5555-555555555555');" 2>&1)"
+
+# Entitlement visibility is driven by the verified email on the caller's JWT.
+check 'a buyer sees only their own entitlement' '1' \
+  "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'buyer@example.com'; select count(*) from public.entitlements;")"
+
+check 'a different signed-in user sees none of it' '0' \
+  "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'someone@else.com'; select count(*) from public.entitlements;")"
+
+check 'entitlements are invisible to anonymous callers' '0' \
+  "$(psql -tAq -d "$DB" -c "set role anon; select count(*) from public.entitlements;")"
+
+check 'raw webhook payloads are readable by nobody but the server' '0' \
+  "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'buyer@example.com'; select count(*) from public.stripe_events;" 2>/dev/null || echo 0)"
+
+# Paid content follows the entitlement, not the UI.
+psql -q -d "$DB" >/dev/null <<'SQL'
+insert into public.content_assets (asset_type, product_id, status, title)
+  values ('worksheet', '55555555-5555-5555-5555-555555555555', 'qa', 'Paid worksheet');
+SQL
+
+check 'an entitled buyer can read the paid asset' 'Paid worksheet' \
+  "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'buyer@example.com'; select title from public.content_assets where product_id is not null;")"
+
+check 'an unentitled user cannot read it' '' \
+  "$(psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.email = 'someone@else.com'; select title from public.content_assets where product_id is not null;")"
+
+check 'a revoked entitlement stops granting access' '0' \
+  "$(psql -tAq -d "$DB" -c "update public.entitlements set revoked_at=now(), revoked_reason='refund' where email='buyer@example.com'; set role authenticated; set request.jwt.claim.email = 'buyer@example.com'; select count(*) from public.content_assets where product_id is not null;")"
+
+
+# --- The staff/customer split introduced by Phase 04 -------------------------
+# 0002 gave `authenticated` blanket read on the working set, which was sound
+# while only staff had accounts. Customer accounts break that assumption.
+
+psql -q -d "$DB" >/dev/null 2>&1 <<'SQL'
+insert into auth.users (id, email) values
+  ('aaaaaaaa-0000-0000-0000-000000000001', 'staff@example.com'),
+  ('aaaaaaaa-0000-0000-0000-000000000002', 'customer@example.com');
+insert into public.profiles (id, email, role) values
+  ('aaaaaaaa-0000-0000-0000-000000000001', 'staff@example.com', 'reviewer'),
+  ('aaaaaaaa-0000-0000-0000-000000000002', 'customer@example.com', 'member');
+insert into public.topics (title, status) values ('Unpublished internal topic', 'qa');
+SQL
+
+as_user() {
+  psql -tAq -d "$DB" -c "set role authenticated; set request.jwt.claim.sub = '$1'; set request.jwt.claim.email = '$2'; $3"
+}
+
+check 'staff can read unpublished topics' 'Unpublished internal topic' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000001' 'staff@example.com' "select title from public.topics where status='qa';")"
+
+check 'a signed-in customer cannot read unpublished topics' '' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000002' 'customer@example.com' "select title from public.topics where status='qa';")"
+
+check 'a signed-in customer can still read published topics' 'Public row' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000002' 'customer@example.com' "select title from public.topics where status='published';")"
+
+check 'a customer cannot read the agent audit trail' '0' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000002' 'customer@example.com' 'select count(*) from public.agent_runs;')"
+
+check 'a customer cannot read reviewer records' '0' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000002' 'customer@example.com' 'select count(*) from public.reviewers;')"
+
+check 'a customer cannot read unverified claims' '0' \
+  "$(as_user 'aaaaaaaa-0000-0000-0000-000000000002' 'customer@example.com' 'select count(*) from public.claims where verified = false;')"
 
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
 [[ $fail -eq 0 ]]

@@ -52,6 +52,34 @@ const tables = {
   claims: [],
   claim_sources: [],
   review_events: [],
+  orders: [],
+  entitlements: [],
+  stripe_events: [],
+  products: [
+    {
+      id: '55555555-5555-5555-5555-555555555555',
+      name: 'Checkride Clarity',
+      slug: 'checkride-clarity',
+      kind: 'toolkit',
+      description: 'Concept maps, exam traps and a confidence routine.',
+      price_cents: 4900,
+      currency: 'usd',
+      status: 'live',
+      created_at: '2026-08-01T00:00:00Z',
+      updated_at: '2026-08-01T00:00:00Z',
+    },
+    {
+      id: '66666666-6666-6666-6666-666666666666',
+      name: 'Unreleased Kit',
+      slug: 'unreleased-kit',
+      kind: 'toolkit',
+      price_cents: 9900,
+      currency: 'usd',
+      status: 'idea',
+      created_at: '2026-08-01T00:00:00Z',
+      updated_at: '2026-08-01T00:00:00Z',
+    },
+  ],
   reviewers: [
     {
       id: '33333333-3333-3333-3333-333333333333',
@@ -111,6 +139,23 @@ export const seen = [];
 
 const server = createServer((req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
+
+  // Supabase serves Auth on the same origin as REST, so session verification
+  // resolves against the same base URL the app already has.
+  if (url.pathname === '/auth/v1/user') {
+    const token = String(req.headers['authorization'] ?? '').replace(/^Bearer\s+/i, '');
+    res.writeHead(token === 'valid-buyer-token' || token === 'valid-other-token' ? 200 : 401, {
+      'content-type': 'application/json',
+    });
+    if (token === 'valid-buyer-token') {
+      return res.end(JSON.stringify({ id: '11111111-2222-3333-4444-555555555555', email: 'Buyer@Example.com' }));
+    }
+    if (token === 'valid-other-token') {
+      return res.end(JSON.stringify({ id: '99999999-8888-7777-6666-555555555555', email: 'someone@else.com' }));
+    }
+    return res.end(JSON.stringify({ message: 'invalid token' }));
+  }
+
   const match = /^\/rest\/v1\/([a-z_]+)$/.exec(url.pathname);
 
   const apikey = req.headers['apikey'];
@@ -204,6 +249,29 @@ const server = createServer((req, res) => {
       const inputs = Array.isArray(body) ? body : [body];
       const now = new Date().toISOString();
       const merge = String(req.headers['prefer'] ?? '').includes('merge-duplicates');
+
+      const conflict = inputs.find((input) => {
+        if (table === 'stripe_events') return rows.some((r) => r.id === input.id);
+        if (table === 'orders' && input.stripe_session_id) {
+          return rows.some((r) => r.stripe_session_id === input.stripe_session_id);
+        }
+        if (table === 'entitlements') {
+          return rows.some(
+            (r) => r.email === input.email && r.product_id === input.product_id && !r.revoked_at,
+          );
+        }
+        return false;
+      });
+
+      if (conflict) {
+        const constraint =
+          table === 'stripe_events' ? 'stripe_events_pkey'
+          : table === 'orders' ? 'orders_stripe_session_id_key'
+          : 'entitlements_unique_grant';
+        return send(409, {
+          message: `duplicate key value violates unique constraint "${constraint}"`,
+        });
+      }
 
       const written = inputs.map((input) => {
         // claim_sources is a composite-key join table with no surrogate id.

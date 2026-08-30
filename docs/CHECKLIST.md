@@ -26,7 +26,8 @@ Last updated: 2026-08-30
 - [x] CI workflow scaffold
 - [x] Persistent database adapter
 - [x] Read/create API for topics; read API for sources and content assets
-- [ ] Authentication (Supabase Auth sessions; writes token-gated in the interim)
+- [x] Authentication — server-side session verification
+- [ ] Sign-in UI
 - [ ] CRUD for products; update/delete for topics and assets
 - [ ] Agent execution API beyond the explanation engine
 - [x] Generation core — provider adapter, structured outputs, versioned
@@ -42,7 +43,7 @@ Last updated: 2026-08-30
 - [ ] Content package generator across the topic backlog
 - [ ] Assessment engine
 - [ ] Book production generator
-- [ ] Product checkout
+- [x] Product checkout (Stripe, verified webhooks, entitlements in RLS)
 
 ## Design and assets
 - [x] Design system and tokens

@@ -55,6 +55,19 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] Template version, inputs and checksum required on any stored asset
 - [x] 69 API checks and 22 schema checks
 
+## Phase 04 — monetization (core complete)
+- [x] Orders, entitlements and a Stripe event ledger
+- [x] Webhook signature verification: raw body, constant time, replay window
+- [x] Idempotent fulfilment — a retry cannot grant twice
+- [x] Guest checkout; entitlement keyed to email, resolved on sign-in
+- [x] Refunds revoke rather than delete
+- [x] Supabase Auth session verification, server-side
+- [x] Entitlement-gated content enforced in RLS
+- [x] `authenticated` split into staff and customer (corrects a 0002 assumption)
+- [x] 86 API checks, 39 schema checks, 13 signature checks
+- [ ] Sign-in UI and a purchase page (no UI framework in place yet)
+- [ ] Signed download URLs from the approved asset bucket
+
 ## In progress
 - [ ] Replace placeholder content seed with prioritized aviation-specific opportunity database
 - [ ] Supabase Auth sessions in the UI (writes are token-gated in the interim)
