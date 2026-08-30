@@ -25,6 +25,16 @@ Last updated: 2026-08-30 (infrastructure state verified against the live service
 - [x] Agent-run audit trail, written on every explanation request
 - [x] Automated verification for the schema and the API routes, wired into CI
 
+## Phase 01 — generation core (complete)
+- [x] Provider-agnostic `GenerationProvider` boundary; OpenAI implementation
+- [x] Content-package JSON schema bound to structured outputs, re-validated on return
+- [x] Versioned prompts (`PROMPT_VERSION`) recorded against every run
+- [x] Token counts and cost recorded per run; cost only when prices are configured
+- [x] Generated packages persisted to `knowledge_units`, never as `verified`
+- [x] Safety gate runs on generated output, not on the request
+- [x] Graceful `scaffold` mode when no provider is configured
+- [x] 20 verification checks covering success and every provider failure mode
+
 ## In progress
 - [ ] Replace placeholder content seed with prioritized aviation-specific opportunity database
 - [ ] Supabase Auth sessions in the UI (writes are token-gated in the interim)

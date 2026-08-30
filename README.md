@@ -54,11 +54,44 @@ return 503 naming the missing variables until they are provided. See
 | `/api/topics` | POST | bearer token | create a topic |
 | `/api/sources` | GET | none | list authoritative sources |
 | `/api/content-assets` | GET | none | list generated assets |
-| `/api/explain` | POST | none | Aviation Explanation Engine, with QA gate and audit trail |
+| `/api/explain` | POST | none | Aviation Explanation Engine — generates a content package, gates it, persists it |
+| `/api/explain` | GET | none | whether generation is available, and on which model |
+| `/api/knowledge-units` | GET | none | the generated knowledge base and the review queue |
 
 Write routes use the Supabase secret key, which bypasses Row Level Security, so
 they require `AVIATION_CLARITY_API_TOKEN` as a bearer token and fail closed when
 it is unset.
+
+## The Explanation Engine
+
+`POST /api/explain` turns one aviation concept into a structured content
+package: plain-language explanation, technical frame, a bounded analogy, a
+visual model, a scenario, a memory hook, retrieval questions, misconceptions,
+and an instructor prompt.
+
+```bash
+curl -sX POST https://<host>/api/explain \
+  -H 'content-type: application/json' \
+  -d '{"topic":"Why airplanes stall","sensitivity":"safety"}'
+```
+
+Two modes, and the response always says which one produced it:
+
+- **`ai`** — real generation, when a provider is configured. Persisted to
+  `knowledge_units` and recorded in `agent_runs` with prompt version, token
+  counts and cost.
+- **`scaffold`** — the deterministic outline, when no provider is configured.
+  Never persisted, because it is a brief for a writer rather than teaching
+  content.
+
+Generated content is never stored as `verified`. Anything the QA gate flags —
+regulatory, operational or medical claims, plus anything the model itself flags
+— is stored as `review` and waits for a qualified human. That gate is the
+difference between a sellable product and a liability.
+
+Providers sit behind `GenerationProvider` in `lib/ai/`, so swapping vendors
+does not touch product code. Adding one means implementing the interface and
+registering it in `lib/ai/index.ts`.
 
 ## Verification
 

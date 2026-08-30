@@ -48,6 +48,7 @@ const tables = {
   ],
   content_assets: [],
   agent_runs: [],
+  knowledge_units: [],
 };
 
 /** Records what each request presented, so the harness can assert on it. */

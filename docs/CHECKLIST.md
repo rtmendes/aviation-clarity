@@ -29,12 +29,14 @@ Last updated: 2026-08-30
 - [ ] Authentication (Supabase Auth sessions; writes token-gated in the interim)
 - [ ] CRUD for products; update/delete for topics and assets
 - [ ] Agent execution API beyond the explanation engine
-- [ ] OpenAI production integration
+- [x] Generation core — provider adapter, structured outputs, versioned
+      prompts, token/cost accounting (Phase 01)
 - [x] Research/source registry (schema plus read API)
 - [x] QA/approval gate (enforced in the database, not only in code)
 - [ ] RAG knowledge base
 - [ ] Explanation Engine UI
-- [ ] Content package generator
+- [x] Content package generator (single-concept; batch run is Phase 05)
+- [ ] Content package generator across the topic backlog
 - [ ] Assessment engine
 - [ ] Book production generator
 - [ ] Product checkout

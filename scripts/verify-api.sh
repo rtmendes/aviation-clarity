@@ -9,6 +9,7 @@
 set -euo pipefail
 
 STUB_PORT=54321
+AI_PORT=54322
 APP_PORT=3112
 TOKEN='test-operator-token'
 pass=0
@@ -19,7 +20,7 @@ fail=0
 # the whole group is signalled, otherwise a stale server from a previous run
 # answers the next one and the results are meaningless.
 cleanup() {
-  for pid in "${STUB_PID:-}" "${APP_PID:-}"; do
+  for pid in "${STUB_PID:-}" "${AI_PID:-}" "${APP_PID:-}"; do
     [[ -n "$pid" ]] && kill -- "-$pid" 2>/dev/null || true
   done
 }
@@ -34,6 +35,7 @@ require_free_port() {
 }
 
 require_free_port "$STUB_PORT"
+require_free_port "$AI_PORT"
 require_free_port "$APP_PORT"
 
 check() {
@@ -48,6 +50,9 @@ check() {
 
 setsid node scripts/postgrest-stub.mjs "$STUB_PORT" >/dev/null 2>&1 &
 STUB_PID=$!
+
+setsid node scripts/openai-stub.mjs "$AI_PORT" >/dev/null 2>&1 &
+AI_PID=$!
 
 NEXT_PUBLIC_SUPABASE_URL="http://127.0.0.1:$STUB_PORT" \
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='stub-publishable-key' \
@@ -122,6 +127,103 @@ check 'explain flags safety-critical topics for review' \
   '"requiresHumanReview":true' \
   "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
      -d '{"topic":"engine failure on takeoff","sensitivity":"safety"}')"
+
+check 'without a provider the engine reports scaffold mode' \
+  '"mode":"scaffold"' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"Adverse yaw"}')"
+
+check 'scaffold output is not persisted as knowledge' \
+  'Scaffold output is not persisted' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"Adverse yaw"}')"
+
+check 'engine status reports generation unavailable' \
+  '"available":false' "$(curl -s "$BASE/api/explain")"
+
+# ---------------------------------------------------------------------------
+# Generation core: restart the app WITH an AI provider configured.
+# ---------------------------------------------------------------------------
+
+kill -- "-$APP_PID" 2>/dev/null || true
+sleep 2
+
+NEXT_PUBLIC_SUPABASE_URL="http://127.0.0.1:$STUB_PORT" \
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='stub-publishable-key' \
+SUPABASE_SECRET_KEY='stub-secret-key' \
+AVIATION_CLARITY_API_TOKEN="$TOKEN" \
+OPENAI_API_KEY='stub-openai-key' \
+OPENAI_BASE_URL="http://127.0.0.1:$AI_PORT" \
+OPENAI_MODEL='stub-model' \
+OPENAI_INPUT_COST_PER_MTOK='2.50' \
+OPENAI_OUTPUT_COST_PER_MTOK='10.00' \
+  setsid npx next start -p "$APP_PORT" >/tmp/aviation-clarity-verify-ai.log 2>&1 &
+APP_PID=$!
+
+for _ in $(seq 1 60); do
+  curl -sS -o /dev/null "$BASE/api/health" 2>/dev/null && break
+  sleep 0.5
+done
+
+echo
+echo 'Verifying the generation core:'
+
+GEN=$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+  -d '{"topic":"Why airplanes stall","sensitivity":"safety"}')
+
+check 'engine status reports generation available' \
+  '"available":true' "$(curl -s "$BASE/api/explain")"
+
+check 'generation runs in ai mode' '"mode":"ai"' "$GEN"
+
+check 'generated content replaces the template' 'Angle, not airspeed' "$GEN"
+
+check 'prompt version is recorded' '"promptVersion":"2026-08-30.1"' "$GEN"
+
+check 'token usage is recorded' '"inputTokens":812' "$GEN"
+
+check 'cost is computed from configured prices' '"costUsd":0.0065' "$GEN"
+
+check 'generated content is persisted' '"stored":true' "$GEN"
+
+check 'safety-critical generation is flagged for review' '"requiresHumanReview":true' "$GEN"
+
+check 'model-flagged claims are surfaced' 'claimsRequiringVerification' "$GEN"
+
+check 'persisted unit is queued for review, never verified' \
+  '"status":"review"' "$(curl -s "$BASE/api/knowledge-units")"
+
+check 'scaffold mode can still be forced' '"mode":"scaffold"' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"Adverse yaw","mode":"scaffold"}')"
+
+# Failure modes: each must degrade to a clear status, never a 500.
+
+check 'provider error returns 502' '502' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/explain" \
+     -H 'content-type: application/json' -d '{"topic":"TRIGGER_UPSTREAM_ERROR"}')"
+
+check 'model refusal returns 422' '422' \
+  "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/explain" \
+     -H 'content-type: application/json' -d '{"topic":"TRIGGER_REFUSAL"}')"
+
+check 'non-JSON output returns 422' 'not valid JSON' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"TRIGGER_BAD_JSON"}')"
+
+check 'off-contract output is rejected by validation' 'did not match the content contract' \
+  "$(curl -s -X POST "$BASE/api/explain" -H 'content-type: application/json' \
+     -d '{"topic":"TRIGGER_OFF_CONTRACT"}')"
+
+# Read the audit trail straight from the database stub: a generation that
+# failed must still leave a row, or cost and reliability become unknowable.
+check 'a failed generation is still audited' '"status":"failed"' \
+  "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
+     "http://127.0.0.1:$STUB_PORT/rest/v1/agent_runs")"
+
+check 'the failure reason is recorded on the run' 'upstream: Provider returned HTTP 500.' \
+  "$(curl -s -H 'apikey: stub-secret-key' -H 'authorization: Bearer stub-secret-key' \
+     "http://127.0.0.1:$STUB_PORT/rest/v1/agent_runs")"
 
 # A misconfigured deployment must degrade to a clear 503, never a 500.
 # Regression guard: a URL without a scheme made supabase-js throw out of the
