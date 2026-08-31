@@ -53,7 +53,11 @@ if [[ -n "$KEY" ]]; then
   # With a valid key PostgREST answers 200; 404 means the schema is not applied.
   probe 'REST gateway' "$SUPABASE_URL/rest/v1/"               '200 404'
   probe 'Auth gateway' "$SUPABASE_URL/auth/v1/settings"        '200'
-  probe 'topics table' "$SUPABASE_URL/rest/v1/topics?limit=1"  '200 401 404'
+  # ac_topics, not topics. This instance is shared, and an unprefixed probe
+  # both checks the wrong thing and would have passed on a 404 — reporting a
+  # healthy system while confirming nothing. 404 stays accepted because it is
+  # the honest answer before the schema is applied.
+  probe 'ac_topics table' "$SUPABASE_URL/rest/v1/ac_topics?limit=1"  '200 401 404'
 else
   probe 'REST gateway' "$SUPABASE_URL/rest/v1/"         '200 401'
   probe 'Auth gateway' "$SUPABASE_URL/auth/v1/settings" '200 401'

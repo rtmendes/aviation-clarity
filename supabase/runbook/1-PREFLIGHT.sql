@@ -8,6 +8,11 @@
 --   3. Is anything named in a way that would collide?
 --
 -- Copy the output somewhere. Step 3 compares against it.
+--
+-- The row counts go through query_to_xml rather than a plain `select count(*)`
+-- because a plain one names the table at parse time: on any instance where a
+-- neighbour table is absent the whole script would abort with "relation does
+-- not exist", and an operator has no way to tell that apart from a real fault.
 -- =============================================================================
 
 select 'Aviation Clarity objects already present (expect 0 on a first run)' as check,
@@ -31,15 +36,24 @@ union all
 -- The three names that collide. This schema no longer uses them, but knowing
 -- their row counts now is what lets you prove afterwards that nothing moved.
 select 'Row count: public.profiles (another app)',
-       (select count(*)::text from public.profiles)
+       case when to_regclass('public.profiles') is null then '(no such table here)'
+            else (xpath('/row/c/text()',
+                    query_to_xml('select count(*) as c from public.profiles',
+                                 false, true, '')))[1]::text end
 
 union all
 select 'Row count: public.products (another app)',
-       (select count(*)::text from public.products)
+       case when to_regclass('public.products') is null then '(no such table here)'
+            else (xpath('/row/c/text()',
+                    query_to_xml('select count(*) as c from public.products',
+                                 false, true, '')))[1]::text end
 
 union all
 select 'Row count: public.agent_runs (another app)',
-       (select count(*)::text from public.agent_runs)
+       case when to_regclass('public.agent_runs') is null then '(no such table here)'
+            else (xpath('/row/c/text()',
+                    query_to_xml('select count(*) as c from public.agent_runs',
+                                 false, true, '')))[1]::text end
 
 union all
 select 'Tables in public WITHOUT row level security',
