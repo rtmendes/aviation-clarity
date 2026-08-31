@@ -98,7 +98,7 @@ export async function recordRenderedAsset(
 ): Promise<Result<ContentAssetRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('content_assets')
+      .from('ac_content_assets')
       .upsert(
         {
           asset_type: input.assetType,
@@ -136,7 +136,7 @@ export async function recordRenderedAsset(
 export async function getContentAsset(id: string): Promise<Result<ContentAssetRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('content_assets')
+      .from('ac_content_assets')
       .select('*')
       .eq('id', id)
       .maybeSingle();

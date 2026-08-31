@@ -63,7 +63,7 @@ export async function listLiveProducts(): Promise<Result<ProductRow[]>> {
   }
   try {
     const { data, error } = await result.client
-      .from('products')
+      .from('ac_products')
       .select('*')
       .eq('status', 'live')
       .order('price_cents');
@@ -78,7 +78,7 @@ export async function listLiveProducts(): Promise<Result<ProductRow[]>> {
 export async function getProductBySlug(slug: string): Promise<Result<ProductRow>> {
   return withAdmin(async (client) => {
     const { data, error } = await client
-      .from('products')
+      .from('ac_products')
       .select('*')
       .eq('slug', slug)
       .maybeSingle();
@@ -103,7 +103,7 @@ export async function createPendingOrder(input: {
 }): Promise<Result<OrderRow>> {
   return withAdmin(async (client) => {
     const { data, error } = await client
-      .from('orders')
+      .from('ac_orders')
       .insert({
         product_id: input.productId,
         email: input.email.toLowerCase(),
@@ -140,7 +140,7 @@ export async function recordStripeEvent(input: {
   payload: unknown;
 }): Promise<Result<LedgerOutcome>> {
   return withAdmin(async (client) => {
-    const { error } = await client.from('stripe_events').insert({
+    const { error } = await client.from('ac_stripe_events').insert({
       id: input.id,
       type: input.type,
       payload: input.payload as Record<string, never>,
@@ -161,7 +161,7 @@ export async function markStripeEventProcessed(id: string, error?: string): Prom
   if (!result.ok) return;
   try {
     await result.client
-      .from('stripe_events')
+      .from('ac_stripe_events')
       .update({ processed_at: new Date().toISOString(), error: error ?? null })
       .eq('id', id);
   } catch {
@@ -192,7 +192,7 @@ export async function fulfilPurchase(input: {
   // and narrow `alreadyGranted` to a literal.
   return withAdmin<{ orderId: string; productId: string; alreadyGranted: boolean }>(async (client) => {
     const { data: order, error: orderError } = await client
-      .from('orders')
+      .from('ac_orders')
       .update({ status: 'paid', stripe_payment_intent: input.paymentIntent })
       .eq('stripe_session_id', input.sessionId)
       .select()
@@ -202,7 +202,7 @@ export async function fulfilPurchase(input: {
     if (!order) return err('not_found', 'No order matches that checkout session.');
     if (!order.product_id) return err('invalid', 'That order has no product attached.');
 
-    const { error: grantError } = await client.from('entitlements').insert({
+    const { error: grantError } = await client.from('ac_entitlements').insert({
       email,
       product_id: order.product_id,
       order_id: order.id,
@@ -230,7 +230,7 @@ export async function fulfilPurchase(input: {
 export async function revokeForRefund(paymentIntent: string): Promise<Result<number>> {
   return withAdmin(async (client) => {
     const { data: orders, error } = await client
-      .from('orders')
+      .from('ac_orders')
       .update({ status: 'refunded' })
       .eq('stripe_payment_intent', paymentIntent)
       .select();
@@ -239,7 +239,7 @@ export async function revokeForRefund(paymentIntent: string): Promise<Result<num
     if (!orders || orders.length === 0) return { ok: true, data: 0 };
 
     const { error: revokeError } = await client
-      .from('entitlements')
+      .from('ac_entitlements')
       .update({ revoked_at: new Date().toISOString(), revoked_reason: 'refund' })
       .in('order_id', orders.map((o) => o.id))
       .is('revoked_at', null);
@@ -257,7 +257,7 @@ export async function revokeForRefund(paymentIntent: string): Promise<Result<num
 export async function listEntitlements(email: string): Promise<Result<EntitlementRow[]>> {
   return withAdmin(async (client) => {
     const { data, error } = await client
-      .from('entitlements')
+      .from('ac_entitlements')
       .select('*')
       .eq('email', email.toLowerCase())
       .is('revoked_at', null);

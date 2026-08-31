@@ -31,7 +31,7 @@ begin
     return;
   end if;
 
-  update storage.buckets set public = false where id in ('assets-draft', 'assets-approved');
+  update storage.buckets set public = false where id in ('aviation-assets-draft', 'aviation-assets-approved');
 end;
 $$;
 
@@ -41,17 +41,17 @@ begin
     return;
   end if;
 
-  execute 'drop policy if exists assets_draft_read_authenticated on storage.objects';
-  execute 'drop policy if exists assets_approved_read_public on storage.objects';
-  execute 'drop policy if exists assets_read_staff on storage.objects';
+  execute 'drop policy if exists ac_assets_draft_read_authenticated on storage.objects';
+  execute 'drop policy if exists ac_assets_approved_read_public on storage.objects';
+  execute 'drop policy if exists ac_assets_read_staff on storage.objects';
 
   -- Staff read either bucket directly, for review. Everyone else — including a
   -- paying customer — receives a signed URL instead, which the storage service
   -- honours without consulting these policies.
   execute $p$
-    create policy assets_read_staff on storage.objects
+    create policy ac_assets_read_staff on storage.objects
       for select to authenticated
-      using (bucket_id in ('assets-draft', 'assets-approved') and public.is_staff())
+      using (bucket_id in ('aviation-assets-draft', 'aviation-assets-approved') and public.ac_is_staff())
   $p$;
 end;
 $$;
@@ -68,7 +68,7 @@ $$;
 -- Deferred, like the review triggers in 0003, so that a transaction may write
 -- the asset and approve the unit in either order and be judged on its result.
 
-create or replace function public.assert_asset_not_overclaiming()
+create or replace function public.ac_assert_asset_not_overclaiming()
 returns trigger
 language plpgsql
 as $$
@@ -84,7 +84,7 @@ begin
   end if;
 
   select status into unit_status
-    from public.knowledge_units
+    from public.ac_knowledge_units
    where id = new.knowledge_unit_id;
 
   if unit_status is distinct from 'approved' then
@@ -97,11 +97,11 @@ begin
 end;
 $$;
 
-drop trigger if exists assets_not_overclaiming on public.content_assets;
-create constraint trigger assets_not_overclaiming
-  after insert or update on public.content_assets
+drop trigger if exists ac_assets_not_overclaiming on public.ac_content_assets;
+create constraint trigger ac_assets_not_overclaiming
+  after insert or update on public.ac_content_assets
   deferrable initially deferred
-  for each row execute function public.assert_asset_not_overclaiming();
+  for each row execute function public.ac_assert_asset_not_overclaiming();
 
 -- ---------------------------------------------------------------------------
 -- Reproducibility
@@ -112,6 +112,6 @@ create constraint trigger assets_not_overclaiming
 -- Named here so it can be targeted by an upsert's on-conflict clause, which a
 -- partial index cannot be.
 
-drop index if exists public.content_assets_storage_key;
-create unique index if not exists content_assets_storage_key
-  on public.content_assets (storage_bucket, storage_path);
+drop index if exists public.ac_content_assets_storage_key;
+create unique index if not exists ac_content_assets_storage_key
+  on public.ac_content_assets (storage_bucket, storage_path);

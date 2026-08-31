@@ -24,7 +24,7 @@
 -- not which account was logged in. Phase 04 links the two via profile_id
 -- without disturbing anything recorded before it.
 
-create table if not exists public.reviewers (
+create table if not exists public.ac_reviewers (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text,
@@ -33,43 +33,43 @@ create table if not exists public.reviewers (
     check (credential in ('CFI', 'CFII', 'MEI', 'ATP', 'DPE', 'AME', 'A&P', 'IA', 'editorial')),
   /* Certificate number or equivalent, so an approval is traceable off-system. */
   credential_ref text,
-  profile_id uuid references public.profiles(id) on delete set null,
+  profile_id uuid references public.ac_profiles(id) on delete set null,
   active boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
-create index if not exists reviewers_active_idx on public.reviewers (active, credential);
+create index if not exists ac_reviewers_active_idx on public.ac_reviewers (active, credential);
 
 -- ---------------------------------------------------------------------------
 -- sources: one row per document
 -- ---------------------------------------------------------------------------
 -- A citation registry that holds the same document twice cites it two ways.
 
-create unique index if not exists sources_url_key on public.sources (url);
+create unique index if not exists ac_sources_url_key on public.ac_sources (url);
 
 -- ---------------------------------------------------------------------------
 -- claims: attach to the unit they came from, and to a credentialed reviewer
 -- ---------------------------------------------------------------------------
 
-alter table public.claims
+alter table public.ac_claims
   add column if not exists knowledge_unit_id uuid
-    references public.knowledge_units(id) on delete cascade;
+    references public.ac_knowledge_units(id) on delete cascade;
 
-alter table public.claims
+alter table public.ac_claims
   add column if not exists reviewer_id uuid
-    references public.reviewers(id) on delete restrict;
+    references public.ac_reviewers(id) on delete restrict;
 
-alter table public.claims
+alter table public.ac_claims
   add column if not exists review_note text;
 
-create index if not exists claims_unit_idx on public.claims (knowledge_unit_id);
-create index if not exists claims_unverified_idx on public.claims (verified, risk desc);
+create index if not exists ac_claims_unit_idx on public.ac_claims (knowledge_unit_id);
+create index if not exists ac_claims_unverified_idx on public.ac_claims (verified, risk desc);
 
 -- Attribution may now come from a reviewer as well as a profile; 0001 knew
 -- only about profiles.
-alter table public.claims drop constraint if exists claims_verification_is_attributable;
-alter table public.claims add constraint claims_verification_is_attributable
+alter table public.ac_claims drop constraint if exists ac_claims_verification_is_attributable;
+alter table public.ac_claims add constraint ac_claims_verification_is_attributable
   check (
     verified = false
     or (verified_at is not null and (verified_by is not null or reviewer_id is not null))
@@ -84,13 +84,13 @@ alter table public.claims add constraint claims_verification_is_attributable
 -- transaction insert the claim_sources rows and flip `verified` in either
 -- order — only the state at commit has to be sound.
 
-create or replace function public.claim_requires_citation()
+create or replace function public.ac_claim_requires_citation()
 returns trigger
 language plpgsql
 as $$
 begin
   if new.verified = true
-     and not exists (select 1 from public.claim_sources cs where cs.claim_id = new.id)
+     and not exists (select 1 from public.ac_claim_sources cs where cs.claim_id = new.id)
   then
     raise exception
       'claim % cannot be verified without at least one cited source', new.id
@@ -100,28 +100,28 @@ begin
 end;
 $$;
 
-drop trigger if exists claims_require_citation on public.claims;
-create constraint trigger claims_require_citation
-  after insert or update on public.claims
+drop trigger if exists ac_claims_require_citation on public.ac_claims;
+create constraint trigger ac_claims_require_citation
+  after insert or update on public.ac_claims
   deferrable initially deferred
-  for each row execute function public.claim_requires_citation();
+  for each row execute function public.ac_claim_requires_citation();
 
 -- ---------------------------------------------------------------------------
 -- knowledge_units: approval, gated on its claims
 -- ---------------------------------------------------------------------------
 
-alter table public.knowledge_units
+alter table public.ac_knowledge_units
   add column if not exists approved_by uuid
-    references public.reviewers(id) on delete restrict;
+    references public.ac_reviewers(id) on delete restrict;
 
-alter table public.knowledge_units
+alter table public.ac_knowledge_units
   add column if not exists approved_at timestamptz;
 
-alter table public.knowledge_units drop constraint if exists knowledge_units_approval_is_attributable;
-alter table public.knowledge_units add constraint knowledge_units_approval_is_attributable
+alter table public.ac_knowledge_units drop constraint if exists ac_knowledge_units_approval_is_attributable;
+alter table public.ac_knowledge_units add constraint ac_knowledge_units_approval_is_attributable
   check (status <> 'approved' or (approved_by is not null and approved_at is not null));
 
-create or replace function public.unit_requires_verified_claims()
+create or replace function public.ac_unit_requires_verified_claims()
 returns trigger
 language plpgsql
 as $$
@@ -130,7 +130,7 @@ declare
 begin
   if new.status = 'approved' then
     select count(*) into unverified
-      from public.claims c
+      from public.ac_claims c
      where c.knowledge_unit_id = new.id
        and c.verified = false;
 
@@ -144,11 +144,11 @@ begin
 end;
 $$;
 
-drop trigger if exists knowledge_units_require_verified_claims on public.knowledge_units;
-create constraint trigger knowledge_units_require_verified_claims
-  after insert or update on public.knowledge_units
+drop trigger if exists ac_knowledge_units_require_verified_claims on public.ac_knowledge_units;
+create constraint trigger ac_knowledge_units_require_verified_claims
+  after insert or update on public.ac_knowledge_units
   deferrable initially deferred
-  for each row execute function public.unit_requires_verified_claims();
+  for each row execute function public.ac_unit_requires_verified_claims();
 
 -- ---------------------------------------------------------------------------
 -- review_events — an append-only record of human decisions
@@ -158,9 +158,9 @@ create constraint trigger knowledge_units_require_verified_claims
 -- safety-critical domain the sequence of decisions is itself evidence, and
 -- state columns are overwritten by the next decision.
 
-create table if not exists public.review_events (
+create table if not exists public.ac_review_events (
   id uuid primary key default gen_random_uuid(),
-  reviewer_id uuid references public.reviewers(id) on delete set null,
+  reviewer_id uuid references public.ac_reviewers(id) on delete set null,
   entity_type text not null check (entity_type in ('claim', 'knowledge_unit', 'content_asset')),
   entity_id uuid not null,
   action text not null check (action in ('verified', 'rejected', 'approved', 'reopened')),
@@ -169,12 +169,12 @@ create table if not exists public.review_events (
   created_at timestamptz not null default now()
 );
 
-create index if not exists review_events_entity_idx
-  on public.review_events (entity_type, entity_id, created_at desc);
+create index if not exists ac_review_events_entity_idx
+  on public.ac_review_events (entity_type, entity_id, created_at desc);
 
-drop trigger if exists set_updated_at on public.reviewers;
-create trigger set_updated_at before update on public.reviewers
-  for each row execute function public.set_updated_at();
+drop trigger if exists ac_set_updated_at on public.ac_reviewers;
+create trigger ac_set_updated_at before update on public.ac_reviewers
+  for each row execute function public.ac_set_updated_at();
 
 -- ---------------------------------------------------------------------------
 -- Row Level Security for the new tables
@@ -183,17 +183,17 @@ create trigger set_updated_at before update on public.reviewers
 -- Review state is internal. Anonymous callers get nothing here; the review
 -- endpoints run server-side with the secret key.
 
-alter table public.reviewers     enable row level security;
-alter table public.review_events enable row level security;
+alter table public.ac_reviewers     enable row level security;
+alter table public.ac_review_events enable row level security;
 
-grant select on public.reviewers, public.review_events to authenticated;
+grant select on public.ac_reviewers, public.ac_review_events to authenticated;
 
-drop policy if exists reviewers_select_authenticated on public.reviewers;
-create policy reviewers_select_authenticated on public.reviewers
+drop policy if exists ac_reviewers_select_authenticated on public.ac_reviewers;
+create policy ac_reviewers_select_authenticated on public.ac_reviewers
   for select to authenticated
   using (true);
 
-drop policy if exists review_events_select_authenticated on public.review_events;
-create policy review_events_select_authenticated on public.review_events
+drop policy if exists ac_review_events_select_authenticated on public.ac_review_events;
+create policy ac_review_events_select_authenticated on public.ac_review_events
   for select to authenticated
   using (true);

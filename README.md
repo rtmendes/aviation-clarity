@@ -81,7 +81,7 @@ curl -sX POST https://<host>/api/explain \
 Two modes, and the response always says which one produced it:
 
 - **`ai`** — real generation, when a provider is configured. Persisted to
-  `knowledge_units` and recorded in `agent_runs` with prompt version, token
+  `ac_knowledge_units` and recorded in `ac_agent_runs` with prompt version, token
   counts and cost.
 - **`scaffold`** — the deterministic outline, when no provider is configured.
   Never persisted, because it is a brief for a writer rather than teaching
@@ -146,8 +146,8 @@ for both the site and the artwork; `npm run verify:tokens` fails CI if
 `globals.css` drifts from them.
 
 `POST /api/assets/{kind}` renders and keeps the result. Assets go to two
-Supabase buckets rather than one with a flag — `assets-draft` and
-`assets-approved` — and the review state picks the bucket, so moving an object
+Supabase buckets rather than one with a flag — `aviation-assets-draft` and
+`aviation-assets-approved` — and the review state picks the bucket, so moving an object
 between them *is* the publish step. Both buckets are private; every read is a
 signed URL. Nothing can be stored without recording the template version, the
 inputs and a checksum — a database constraint, so an asset that cannot be
@@ -203,13 +203,43 @@ npm run verify:signature   # forgery, tampering, replay, secret rotation
 
 **Access is enforced in Row Level Security**, not in a route. A signed-in buyer
 reads a paid asset only while a live entitlement matches the verified email on
-their token. `authenticated` is split by `public.is_staff()`: staff read the
+their token. `authenticated` is split by `public.ac_is_staff()`: staff read the
 working set, everyone signed in reads what is published plus what they paid
 for.
 
 Neither Stripe nor the model provider uses a vendor SDK. Both surfaces are a
 couple of HTTP endpoints, and this project's builds were broken once already by
 a dependency resolving a new major at deploy time.
+
+## The database is shared
+
+`supabase.insightprofit.live` hosts several InsightProfit applications — 626
+tables in `public` — so every object this project creates is namespaced `ac_`:
+tables, indexes, constraints, triggers, functions and policies alike, since
+those all share one namespace per schema. Storage buckets are
+`aviation-assets-*`, bucket ids being global to the instance.
+
+This is not tidiness. Three names collided outright: `profiles` belongs to a
+billing app, `products` to a funnel builder, `agent_runs` to a different agent
+framework. Unprefixed, `create table if not exists` would have skipped those
+three and left this application reading another product's tables, while the
+RLS statements would have enabled row-level security on live tables belonging
+to those apps — which hides every row from an application whose policies do not
+match.
+
+Grants are issued table by table for the same reason. `grant select on all
+tables in schema public` reaches all 626, and RLS does not save the other
+applications' rows because it only filters tables that have it enabled and
+theirs do not — so the grant alone let the publishable key read another
+product's customer billing records.
+
+`supabase/APPLY-ALL.sql` is the whole schema in one file, for the Supabase SQL
+editor. `scripts/verify-schema.sh` applies it beside stand-ins for those three
+foreign tables and asserts their rows, columns, RLS state, policies, triggers
+and grants all come through unchanged — including a read attempted as `anon`
+that must be refused.
+
+See `docs/GO-LIVE.md` for the three remaining deployment steps.
 
 ## Verification and review
 
@@ -225,7 +255,7 @@ anything holding the Supabase secret key can bypass application code:
 
 The flow:
 
-1. Generation writes each `claimsRequiringVerification` entry into `claims`,
+1. Generation writes each `claimsRequiringVerification` entry into `ac_claims`,
    linked to the unit it came from. Regulatory, safety and medical topics are
    recorded as high risk.
 2. `GET /api/review/queue` lists what is waiting, ordered by unverified risk so
@@ -235,11 +265,11 @@ The flow:
 4. `POST /api/review/units` approves the unit — refused until every claim is
    verified.
 
-Every decision is appended to `review_events`, because in a safety-critical
+Every decision is appended to `ac_review_events`, because in a safety-critical
 domain the sequence of decisions is itself evidence and state columns get
 overwritten by the next one.
 
-Reviewers live in their own table rather than `profiles`, which is keyed to
+Reviewers live in their own table rather than `ac_profiles`, which is keyed to
 `auth.users` and so cannot be populated until Phase 04. It is also the better
 model: what matters on an approval is which credentialed person signed it
 (`CFI`, `CFII`, `AME`, `DPE`…) and their certificate number, not which account

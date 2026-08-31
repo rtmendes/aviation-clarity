@@ -174,6 +174,21 @@ export type KnowledgeUnitRow = {
   updated_at: string;
 };
 
+/**
+ * A staff or customer account, keyed to auth.users.
+ *
+ * `role` is what `ac_is_staff()` reads, so it decides which half of the
+ * staff/customer RLS split a signed-in person falls on.
+ */
+export type ProfileRow = {
+  id: string;
+  email: string | null;
+  display_name: string | null;
+  role: 'member' | 'instructor' | 'reviewer' | 'admin';
+  created_at: string;
+  updated_at: string;
+};
+
 export type ContentAssetRow = {
   id: string;
   topic_id: string | null;
@@ -327,6 +342,13 @@ export type KnowledgeUnitInsert = {
   approved_at?: string | null;
 };
 
+export type ProfileInsert = {
+  id: string;
+  email?: string | null;
+  display_name?: string | null;
+  role?: ProfileRow['role'];
+};
+
 export type ContentAssetInsert = {
   asset_type: AssetType;
   topic_id?: string | null;
@@ -378,19 +400,20 @@ type Table<Row extends Record<string, unknown>, Insert extends Record<string, un
 export interface Database {
   public: {
     Tables: {
-      topics: Table<TopicRow, TopicInsert>;
-      sources: Table<SourceRow, SourceInsert>;
-      claims: Table<ClaimRow, ClaimInsert>;
-      knowledge_units: Table<KnowledgeUnitRow, KnowledgeUnitInsert>;
-      content_assets: Table<ContentAssetRow, ContentAssetInsert>;
-      agent_runs: Table<AgentRunRow, AgentRunInsert>;
-      products: Table<ProductRow, ProductInsert>;
-      reviewers: Table<ReviewerRow, ReviewerInsert>;
-      review_events: Table<ReviewEventRow, ReviewEventInsert>;
-      claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
-      orders: Table<OrderRow, OrderInsert>;
-      entitlements: Table<EntitlementRow, EntitlementInsert>;
-      stripe_events: Table<StripeEventRow, StripeEventInsert>;
+      ac_profiles: Table<ProfileRow, ProfileInsert>;
+      ac_topics: Table<TopicRow, TopicInsert>;
+      ac_sources: Table<SourceRow, SourceInsert>;
+      ac_claims: Table<ClaimRow, ClaimInsert>;
+      ac_knowledge_units: Table<KnowledgeUnitRow, KnowledgeUnitInsert>;
+      ac_content_assets: Table<ContentAssetRow, ContentAssetInsert>;
+      ac_agent_runs: Table<AgentRunRow, AgentRunInsert>;
+      ac_products: Table<ProductRow, ProductInsert>;
+      ac_reviewers: Table<ReviewerRow, ReviewerInsert>;
+      ac_review_events: Table<ReviewEventRow, ReviewEventInsert>;
+      ac_claim_sources: Table<ClaimSourceRow, ClaimSourceInsert>;
+      ac_orders: Table<OrderRow, OrderInsert>;
+      ac_entitlements: Table<EntitlementRow, EntitlementInsert>;
+      ac_stripe_events: Table<StripeEventRow, StripeEventInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

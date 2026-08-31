@@ -23,47 +23,72 @@
 -- or authenticated except the one on assessment_attempts.
 
 grant usage on schema public to anon, authenticated;
-grant select on all tables in schema public to anon, authenticated;
-grant insert on public.assessment_attempts to authenticated;
-grant update (display_name) on public.profiles to authenticated;
 
-alter table public.profiles           enable row level security;
-alter table public.topics             enable row level security;
-alter table public.sources            enable row level security;
-alter table public.claims             enable row level security;
-alter table public.claim_sources      enable row level security;
-alter table public.knowledge_units    enable row level security;
-alter table public.workflows          enable row level security;
-alter table public.content_assets     enable row level security;
-alter table public.products           enable row level security;
-alter table public.product_events     enable row level security;
-alter table public.assessments        enable row level security;
-alter table public.assessment_attempts enable row level security;
-alter table public.agent_runs         enable row level security;
-alter table public.analytics_events   enable row level security;
+-- Granted table by table, never `on all tables in schema public`.
+--
+-- This database is shared: `public` holds 626 tables belonging to other
+-- InsightProfit applications, and a blanket grant reaches every one of them.
+-- Row Level Security would not save them, because RLS only filters tables that
+-- have it enabled and those tables do not — so the grant alone would let the
+-- publishable key, which ships in the browser, read another product's customer
+-- billing records outright. Listing the tables is the whole defence.
+grant select on
+  public.ac_profiles,
+  public.ac_topics,
+  public.ac_sources,
+  public.ac_claims,
+  public.ac_claim_sources,
+  public.ac_knowledge_units,
+  public.ac_workflows,
+  public.ac_content_assets,
+  public.ac_products,
+  public.ac_product_events,
+  public.ac_assessments,
+  public.ac_assessment_attempts,
+  public.ac_agent_runs,
+  public.ac_analytics_events
+to anon, authenticated;
+
+grant insert on public.ac_assessment_attempts to authenticated;
+grant update (display_name) on public.ac_profiles to authenticated;
+
+alter table public.ac_profiles           enable row level security;
+alter table public.ac_topics             enable row level security;
+alter table public.ac_sources            enable row level security;
+alter table public.ac_claims             enable row level security;
+alter table public.ac_claim_sources      enable row level security;
+alter table public.ac_knowledge_units    enable row level security;
+alter table public.ac_workflows          enable row level security;
+alter table public.ac_content_assets     enable row level security;
+alter table public.ac_products           enable row level security;
+alter table public.ac_product_events     enable row level security;
+alter table public.ac_assessments        enable row level security;
+alter table public.ac_assessment_attempts enable row level security;
+alter table public.ac_agent_runs         enable row level security;
+alter table public.ac_analytics_events   enable row level security;
 
 -- profiles ------------------------------------------------------------------
 
-drop policy if exists profiles_select_own on public.profiles;
-create policy profiles_select_own on public.profiles
+drop policy if exists ac_profiles_select_own on public.ac_profiles;
+create policy ac_profiles_select_own on public.ac_profiles
   for select to authenticated
   using (id = (select auth.uid()));
 
-drop policy if exists profiles_update_own on public.profiles;
-create policy profiles_update_own on public.profiles
+drop policy if exists ac_profiles_update_own on public.ac_profiles;
+create policy ac_profiles_update_own on public.ac_profiles
   for update to authenticated
   using (id = (select auth.uid()))
   with check (id = (select auth.uid()));
 
 -- topics --------------------------------------------------------------------
 
-drop policy if exists topics_select_published on public.topics;
-create policy topics_select_published on public.topics
+drop policy if exists ac_topics_select_published on public.ac_topics;
+create policy ac_topics_select_published on public.ac_topics
   for select to anon
   using (status = 'published');
 
-drop policy if exists topics_select_authenticated on public.topics;
-create policy topics_select_authenticated on public.topics
+drop policy if exists ac_topics_select_authenticated on public.ac_topics;
+create policy ac_topics_select_authenticated on public.ac_topics
   for select to authenticated
   using (true);
 
@@ -72,98 +97,98 @@ create policy topics_select_authenticated on public.topics
 -- readable anonymously. Claims are not: an unverified claim must never be
 -- reachable by a public client.
 
-drop policy if exists sources_select_all on public.sources;
-create policy sources_select_all on public.sources
+drop policy if exists ac_sources_select_all on public.ac_sources;
+create policy ac_sources_select_all on public.ac_sources
   for select to anon, authenticated
   using (true);
 
-drop policy if exists claims_select_verified on public.claims;
-create policy claims_select_verified on public.claims
+drop policy if exists ac_claims_select_verified on public.ac_claims;
+create policy ac_claims_select_verified on public.ac_claims
   for select to anon
   using (verified = true);
 
-drop policy if exists claims_select_authenticated on public.claims;
-create policy claims_select_authenticated on public.claims
+drop policy if exists ac_claims_select_authenticated on public.ac_claims;
+create policy ac_claims_select_authenticated on public.ac_claims
   for select to authenticated
   using (true);
 
-drop policy if exists claim_sources_select on public.claim_sources;
-create policy claim_sources_select on public.claim_sources
+drop policy if exists ac_claim_sources_select on public.ac_claim_sources;
+create policy ac_claim_sources_select on public.ac_claim_sources
   for select to anon, authenticated
   using (
     exists (
-      select 1 from public.claims c
-      where c.id = claim_sources.claim_id
+      select 1 from public.ac_claims c
+      where c.id = ac_claim_sources.claim_id
         and (c.verified = true or (select auth.role()) = 'authenticated')
     )
   );
 
 -- knowledge_units -----------------------------------------------------------
 
-drop policy if exists knowledge_units_select_approved on public.knowledge_units;
-create policy knowledge_units_select_approved on public.knowledge_units
+drop policy if exists ac_knowledge_units_select_approved on public.ac_knowledge_units;
+create policy ac_knowledge_units_select_approved on public.ac_knowledge_units
   for select to anon
   using (status = 'approved');
 
-drop policy if exists knowledge_units_select_authenticated on public.knowledge_units;
-create policy knowledge_units_select_authenticated on public.knowledge_units
+drop policy if exists ac_knowledge_units_select_authenticated on public.ac_knowledge_units;
+create policy ac_knowledge_units_select_authenticated on public.ac_knowledge_units
   for select to authenticated
   using (true);
 
 -- workflows -----------------------------------------------------------------
 -- Internal production state. No anonymous access.
 
-drop policy if exists workflows_select_authenticated on public.workflows;
-create policy workflows_select_authenticated on public.workflows
+drop policy if exists ac_workflows_select_authenticated on public.ac_workflows;
+create policy ac_workflows_select_authenticated on public.ac_workflows
   for select to authenticated
   using (true);
 
 -- content_assets ------------------------------------------------------------
 
-drop policy if exists content_assets_select_published on public.content_assets;
-create policy content_assets_select_published on public.content_assets
+drop policy if exists ac_content_assets_select_published on public.ac_content_assets;
+create policy ac_content_assets_select_published on public.ac_content_assets
   for select to anon
   using (status = 'published');
 
-drop policy if exists content_assets_select_authenticated on public.content_assets;
-create policy content_assets_select_authenticated on public.content_assets
+drop policy if exists ac_content_assets_select_authenticated on public.ac_content_assets;
+create policy ac_content_assets_select_authenticated on public.ac_content_assets
   for select to authenticated
   using (true);
 
 -- products ------------------------------------------------------------------
 
-drop policy if exists products_select_live on public.products;
-create policy products_select_live on public.products
+drop policy if exists ac_products_select_live on public.ac_products;
+create policy ac_products_select_live on public.ac_products
   for select to anon
   using (status = 'live');
 
-drop policy if exists products_select_authenticated on public.products;
-create policy products_select_authenticated on public.products
+drop policy if exists ac_products_select_authenticated on public.ac_products;
+create policy ac_products_select_authenticated on public.ac_products
   for select to authenticated
   using (true);
 
 -- product_events ------------------------------------------------------------
 -- Revenue data. Readable only for one's own events; written server-side.
 
-drop policy if exists product_events_select_own on public.product_events;
-create policy product_events_select_own on public.product_events
+drop policy if exists ac_product_events_select_own on public.ac_product_events;
+create policy ac_product_events_select_own on public.ac_product_events
   for select to authenticated
   using (profile_id = (select auth.uid()));
 
 -- assessments / attempts ----------------------------------------------------
 
-drop policy if exists assessments_select_all on public.assessments;
-create policy assessments_select_all on public.assessments
+drop policy if exists ac_assessments_select_all on public.ac_assessments;
+create policy ac_assessments_select_all on public.ac_assessments
   for select to anon, authenticated
   using (true);
 
-drop policy if exists assessment_attempts_select_own on public.assessment_attempts;
-create policy assessment_attempts_select_own on public.assessment_attempts
+drop policy if exists ac_assessment_attempts_select_own on public.ac_assessment_attempts;
+create policy ac_assessment_attempts_select_own on public.ac_assessment_attempts
   for select to authenticated
   using (profile_id = (select auth.uid()));
 
-drop policy if exists assessment_attempts_insert_own on public.assessment_attempts;
-create policy assessment_attempts_insert_own on public.assessment_attempts
+drop policy if exists ac_assessment_attempts_insert_own on public.ac_assessment_attempts;
+create policy ac_assessment_attempts_insert_own on public.ac_assessment_attempts
   for insert to authenticated
   with check (profile_id = (select auth.uid()));
 
@@ -171,7 +196,7 @@ create policy assessment_attempts_insert_own on public.assessment_attempts
 -- Operational audit trail. Server-side (service_role) writes only; no policy
 -- is granted to anon or authenticated, so RLS denies all client access.
 
-drop policy if exists agent_runs_select_authenticated on public.agent_runs;
-create policy agent_runs_select_authenticated on public.agent_runs
+drop policy if exists ac_agent_runs_select_authenticated on public.ac_agent_runs;
+create policy ac_agent_runs_select_authenticated on public.ac_agent_runs
   for select to authenticated
   using (true);

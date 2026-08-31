@@ -92,7 +92,7 @@ function explainWriteFailure(message: string): Result<never> {
 export async function listReviewers(): Promise<Result<ReviewerRow[]>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('reviewers')
+      .from('ac_reviewers')
       .select('*')
       .eq('active', true)
       .order('name');
@@ -103,7 +103,7 @@ export async function listReviewers(): Promise<Result<ReviewerRow[]>> {
 
 export async function getReviewer(id: string): Promise<Result<ReviewerRow>> {
   return withClient(true, async (client) => {
-    const { data, error } = await client.from('reviewers').select('*').eq('id', id).maybeSingle();
+    const { data, error } = await client.from('ac_reviewers').select('*').eq('id', id).maybeSingle();
     if (error) return err('unavailable', error.message);
     if (!data) return err('not_found', 'No such reviewer.');
     if (!data.active) return err('invalid', 'That reviewer is no longer active.');
@@ -128,7 +128,7 @@ export async function createClaims(claims: NewClaim[]): Promise<Result<ClaimRow[
 
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('claims')
+      .from('ac_claims')
       .insert(
         claims.map((c) => ({
           body: c.body,
@@ -164,7 +164,7 @@ export async function listReviewQueue(limit = 25): Promise<Result<ReviewQueueEnt
 
   return withClient(true, async (client) => {
     const { data: units, error: unitError } = await client
-      .from('knowledge_units')
+      .from('ac_knowledge_units')
       .select('*')
       .in('status', ['review', 'draft'])
       .order('created_at', { ascending: false })
@@ -174,7 +174,7 @@ export async function listReviewQueue(limit = 25): Promise<Result<ReviewQueueEnt
     if (!units || units.length === 0) return { ok: true, data: [] };
 
     const { data: claims, error: claimError } = await client
-      .from('claims')
+      .from('ac_claims')
       .select('*')
       .in('knowledge_unit_id', units.map((u) => u.id));
 
@@ -235,7 +235,7 @@ export async function verifyClaim(input: VerifyClaimInput): Promise<Result<Claim
 
   return withClient(true, async (client) => {
     const { data: sources, error: sourceError } = await client
-      .from('sources')
+      .from('ac_sources')
       .select('id')
       .in('id', input.sourceIds);
 
@@ -245,13 +245,13 @@ export async function verifyClaim(input: VerifyClaimInput): Promise<Result<Claim
     }
 
     const { error: linkError } = await client
-      .from('claim_sources')
+      .from('ac_claim_sources')
       .upsert(input.sourceIds.map((source_id) => ({ claim_id: input.claimId, source_id })));
 
     if (linkError) return err('unavailable', linkError.message);
 
     const { data, error } = await client
-      .from('claims')
+      .from('ac_claims')
       .update({
         verified: true,
         verified_at: new Date().toISOString(),
@@ -265,7 +265,7 @@ export async function verifyClaim(input: VerifyClaimInput): Promise<Result<Claim
     if (error) return explainWriteFailure(error.message);
     if (!data) return err('not_found', 'No such claim.');
 
-    await client.from('review_events').insert({
+    await client.from('ac_review_events').insert({
       reviewer_id: input.reviewerId,
       entity_type: 'claim',
       entity_id: input.claimId,
@@ -293,7 +293,7 @@ export async function approveKnowledgeUnit(
 ): Promise<Result<KnowledgeUnitRow>> {
   return withClient(true, async (client) => {
     const { data, error } = await client
-      .from('knowledge_units')
+      .from('ac_knowledge_units')
       .update({
         status: 'approved',
         approved_by: input.reviewerId,
@@ -306,7 +306,7 @@ export async function approveKnowledgeUnit(
     if (error) return explainWriteFailure(error.message);
     if (!data) return err('not_found', 'No such knowledge unit.');
 
-    await client.from('review_events').insert({
+    await client.from('ac_review_events').insert({
       reviewer_id: input.reviewerId,
       entity_type: 'knowledge_unit',
       entity_id: input.unitId,
@@ -338,7 +338,7 @@ export async function createSource(input: NewSource): Promise<Result<SourceRow>>
         : 0.7;
 
     const { data, error } = await client
-      .from('sources')
+      .from('ac_sources')
       .insert({
         title: input.title,
         url: input.url,

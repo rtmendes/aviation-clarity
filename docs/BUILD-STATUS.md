@@ -100,6 +100,19 @@ phase's own tests could not see.
 - [ ] Content-package generation pipeline
 - [ ] Book-production pipeline
 
+## Phase 06 — namespaced for the shared database (complete)
+- [x] Discovered `supabase.insightprofit.live` is shared: 626 tables in `public`
+      from other InsightProfit apps, three colliding by name with this project's
+- [x] Every object namespaced `ac_` — tables, indexes, constraints, triggers,
+      functions, policies — and buckets to `aviation-assets-*`
+- [x] The `set_updated_at` trigger loop built its table names as strings, so the
+      rename could not reach it; left as it was it would have attached this
+      project's trigger to the billing app's `profiles`
+- [x] `supabase/APPLY-ALL.sql`: the whole schema in one file for the SQL editor
+- [x] Verified by applying it beside stand-ins for the three foreign tables and
+      asserting their rows, columns, RLS, policies and triggers are unchanged
+- [x] `docs/GO-LIVE.md` records the three steps that need dashboard access
+
 ## External provisioning
 - [x] GitHub repository
 - [x] Vercel project linked to repository — `prj_QZt1qE4ayYfAvhEnXskU8AcoFEqW`,
