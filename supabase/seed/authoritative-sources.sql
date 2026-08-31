@@ -11,8 +11,16 @@
 -- `npm run verify:sources` — federal handbook URLs move.
 --
 -- Idempotent: re-running updates titles and metadata without duplicating rows.
+--
+-- Targets `ac_sources`, not `sources`. This file lives outside
+-- supabase/migrations/, so the rename that namespaced everything else for the
+-- shared instance did not reach it — it still said `public.sources` after that
+-- change. No table of that name exists on the instance today, so it would have
+-- errored rather than written into another application's table, but only by
+-- luck: had a neighbour owned a `sources` table, this would have inserted
+-- fourteen rows into it.
 
-insert into public.sources (title, url, source_type, authority_score, notes) values
+insert into public.ac_sources (title, url, source_type, authority_score, notes) values
 
 -- Regulation. The primary text; nothing outranks it.
 ('14 CFR Part 61 — Certification: Pilots, Flight Instructors, and Ground Instructors',
