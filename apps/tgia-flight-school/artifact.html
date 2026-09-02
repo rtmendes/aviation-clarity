@@ -1,0 +1,1148 @@
+<title>PPL School Selector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ---------------------------------------------------------------
+   Palette borrowed from a VFR sectional chart: chart paper, the
+   magenta of a non-towered airport symbol, airspace blue, terrain
+   green. Semantic colours (fits / tight / over) are separate.
+   --------------------------------------------------------------- */
+:root {
+  --paper: #eae7dd;
+  --surface: #fbfaf7;
+  --surface-2: #f2f0e9;
+  --sunken: #e3e0d6;
+  --line: #d3cfc2;
+  --line-soft: #e2dfd4;
+  --ink: #16191c;
+  --ink-2: #4b5158;
+  --ink-3: #7a8087;
+  --magenta: #b0246b;
+  --magenta-ink: #8d1a55;
+  --magenta-wash: #f6e3ed;
+  --blue: #1e4e8c;
+  --blue-wash: #e2eaf5;
+  --go: #2e6b41;
+  --go-wash: #e0eee4;
+  --warn: #8f5a12;
+  --warn-wash: #f6ead6;
+  --stop: #9d2222;
+  --stop-wash: #f7e2e0;
+  --shadow-1: 0 1px 2px rgba(30, 26, 18, .07);
+  --shadow-2: 0 10px 28px -12px rgba(30, 26, 18, .28);
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #101418;
+    --surface: #191e24;
+    --surface-2: #212830;
+    --sunken: #0b0e11;
+    --line: #313a44;
+    --line-soft: #262e37;
+    --ink: #e8e9e5;
+    --ink-2: #a8afb7;
+    --ink-3: #78808a;
+    --magenta: #f274ac;
+    --magenta-ink: #ffa3c9;
+    --magenta-wash: #3a1327;
+    --blue: #86b6ef;
+    --blue-wash: #14263c;
+    --go: #6dc286;
+    --go-wash: #12301d;
+    --warn: #d9a154;
+    --warn-wash: #33260f;
+    --stop: #ee7a72;
+    --stop-wash: #381816;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, .5);
+    --shadow-2: 0 10px 28px -12px rgba(0, 0, 0, .7);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #101418;
+  --surface: #191e24;
+  --surface-2: #212830;
+  --sunken: #0b0e11;
+  --line: #313a44;
+  --line-soft: #262e37;
+  --ink: #e8e9e5;
+  --ink-2: #a8afb7;
+  --ink-3: #78808a;
+  --magenta: #f274ac;
+  --magenta-ink: #ffa3c9;
+  --magenta-wash: #3a1327;
+  --blue: #86b6ef;
+  --blue-wash: #14263c;
+  --go: #6dc286;
+  --go-wash: #12301d;
+  --warn: #d9a154;
+  --warn-wash: #33260f;
+  --stop: #ee7a72;
+  --stop-wash: #381816;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .5);
+  --shadow-2: 0 10px 28px -12px rgba(0, 0, 0, .7);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.1; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--blue); text-underline-offset: 2px; }
+a:hover { color: var(--magenta-ink); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; border-radius: 3px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.eyebrow {
+  font-family: var(--display); font-size: .8rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 10px 22px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.mark {
+  width: 34px; height: 34px; flex: none; display: grid; place-items: center;
+  border: 1.5px solid var(--magenta); border-radius: 50%; color: var(--magenta);
+}
+.mark svg { width: 19px; height: 19px; }
+.masthead h1 { font-size: 1.32rem; letter-spacing: .01em; }
+.masthead .sub { font-size: .76rem; color: var(--ink-3); font-family: var(--mono); }
+.masthead .spacer { flex: 1 1 auto; }
+.ghost {
+  background: none; border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 11px; font-size: .8rem; cursor: pointer; color: var(--ink-2);
+}
+.ghost:hover { border-color: var(--magenta); color: var(--magenta-ink); }
+
+/* ---------- deck ---------- */
+.deck { display: grid; grid-template-columns: 1fr; gap: 22px; padding: 22px; max-width: 1560px; margin: 0 auto; }
+@media (min-width: 1120px) {
+  .deck { grid-template-columns: 300px minmax(0, 1fr); align-items: start; }
+  .rail { position: sticky; top: 66px; max-height: calc(100dvh - 84px); overflow-y: auto; padding-right: 4px; }
+}
+
+/* ---------- input rail ---------- */
+.rail { display: flex; flex-direction: column; gap: 14px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow-1); }
+.panel > header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  padding: 11px 14px; border-bottom: 1px solid var(--line-soft);
+}
+.panel > header h3 { font-size: 1.02rem; letter-spacing: .01em; }
+.panel > header .note { font-size: .72rem; color: var(--ink-3); }
+.panel-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 13px; }
+.group-title {
+  font-family: var(--display); font-size: .74rem; font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--magenta-ink); padding-top: 4px;
+  border-top: 1px dashed var(--line); margin-top: 2px;
+}
+.group-title:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.field { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; }
+.field label { font-size: .82rem; color: var(--ink-2); }
+.field .val {
+  width: 76px; text-align: right; padding: 3px 6px; font-family: var(--mono); font-size: .8rem;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px;
+}
+.field input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--magenta); height: 18px; }
+.field .tip { grid-column: 1 / -1; font-size: .71rem; color: var(--ink-3); margin-top: -3px; }
+.rail .actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 14px 14px; }
+
+/* ---------- verdict tiles ---------- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 12px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 13px 15px 14px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow-1);
+}
+.tile.lead { border-color: var(--magenta); box-shadow: var(--shadow-2); }
+.tile .k { font-family: var(--display); font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.tile .v { font-family: var(--mono); font-size: 1.62rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+.tile.lead .v { color: var(--magenta-ink); }
+.tile .who { font-weight: 600; font-size: .92rem; }
+.tile .why { font-size: .74rem; color: var(--ink-3); }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin: 20px 0 14px; flex-wrap: wrap; }
+.tab {
+  background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer;
+  padding: 8px 13px; font-family: var(--display); font-size: 1rem; font-weight: 600;
+  letter-spacing: .03em; color: var(--ink-3);
+}
+.tab[aria-selected="true"] { color: var(--magenta-ink); border-bottom-color: var(--magenta); }
+.tab:hover { color: var(--ink); }
+.tab .n { font-family: var(--mono); font-size: .74rem; color: var(--ink-3); margin-left: 5px; }
+
+/* ---------- filters ---------- */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.search { position: relative; flex: 1 1 220px; min-width: 180px; }
+.search input { width: 100%; padding: 7px 10px 7px 30px; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; font-size: .85rem; }
+.search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--ink-3); }
+.seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 7px; padding: 2px; }
+.seg button {
+  background: none; border: none; cursor: pointer; border-radius: 5px;
+  padding: 4px 9px; font-size: .78rem; color: var(--ink-2);
+}
+.seg button[aria-pressed="true"] { background: var(--magenta); color: #fff; }
+.mini { display: flex; align-items: center; gap: 7px; font-size: .78rem; color: var(--ink-2); white-space: nowrap; }
+.mini input[type="range"] { width: 110px; accent-color: var(--magenta); }
+.count { font-family: var(--mono); font-size: .76rem; color: var(--ink-3); margin-left: auto; }
+
+/* ---------- table ---------- */
+.table-wrap { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow-1); }
+.scroll-x { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 880px; }
+thead th {
+  position: sticky; top: 0; z-index: 2; background: var(--surface-2);
+  font-family: var(--display); font-size: .8rem; font-weight: 600; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--ink-2); text-align: left;
+  padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+thead th.s { cursor: pointer; user-select: none; }
+thead th.s:hover { color: var(--magenta-ink); }
+thead th[aria-sort]:not([aria-sort="none"]) { color: var(--magenta-ink); }
+thead th .arrow { font-size: .6rem; margin-left: 3px; opacity: .8; }
+tbody td { padding: 8px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; font-size: .84rem; }
+tbody tr.row { cursor: pointer; }
+tbody tr.row:hover td { background: var(--surface-2); }
+tbody tr.row.open td { background: var(--magenta-wash); }
+tbody tr.row.out td { opacity: .45; }
+tbody tr.row.out .nm { text-decoration: line-through; }
+td.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.school { display: flex; flex-direction: column; gap: 1px; min-width: 168px; max-width: 230px; }
+.school .nm { font-weight: 600; font-size: .88rem; }
+.school .ap { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); }
+.star {
+  background: none; border: none; cursor: pointer; font-size: 1.05rem; line-height: 1;
+  padding: 2px 4px; color: var(--ink-3);
+}
+.star[data-on="1"] { color: var(--magenta); }
+.chip {
+  display: inline-flex; align-items: center; gap: 3px; border-radius: 20px;
+  padding: 2px 8px; font-size: .7rem; font-weight: 600; white-space: nowrap;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.chip.yes { background: var(--go-wash); color: var(--go); }
+.chip.partial { background: var(--warn-wash); color: var(--warn); }
+.chip.no { background: var(--sunken); color: var(--ink-3); }
+.chip.fit { background: var(--go-wash); color: var(--go); }
+.chip.tight { background: var(--warn-wash); color: var(--warn); }
+.chip.over { background: var(--stop-wash); color: var(--stop); }
+.chip.flag { background: var(--blue-wash); color: var(--blue); font-weight: 500; }
+.chip.mine { background: var(--magenta-wash); color: var(--magenta-ink); }
+.tag-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 3px; }
+.np { color: var(--ink-3); font-size: .78rem; font-style: italic; }
+.cost { font-family: var(--mono); font-weight: 600; font-size: .9rem; }
+.cost.modelled { color: var(--ink-2); }
+.bar { display: flex; align-items: center; gap: 6px; }
+.bar .track { width: 46px; height: 5px; border-radius: 3px; background: var(--sunken); overflow: hidden; }
+.bar .fill { height: 100%; background: var(--magenta); border-radius: 3px; }
+.bar .num { font-family: var(--mono); font-size: .78rem; }
+
+/* ---------- expanded detail ---------- */
+.detail td { padding: 0; background: var(--surface-2); }
+.detail-in { padding: 16px 16px 20px; display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); overflow-wrap: anywhere; }
+.detail-in h4 { font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; color: var(--magenta-ink); margin-bottom: 6px; }
+.detail-in p { font-size: .8rem; color: var(--ink-2); }
+.detail-in .src { font-size: .72rem; color: var(--ink-3); margin-top: 5px; }
+.breakdown { display: flex; flex-direction: column; font-family: var(--mono); font-size: .78rem; }
+.breakdown .r { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; border-bottom: 1px dotted var(--line); }
+.breakdown .r span:last-child { white-space: nowrap; }
+.breakdown .r.tot { border-bottom: none; border-top: 1.5px solid var(--ink-3); margin-top: 3px; padding-top: 5px; font-weight: 600; }
+.ov { display: grid; grid-template-columns: minmax(0, 1fr) 88px; gap: 6px 8px; align-items: center; }
+.ov label { font-size: .78rem; color: var(--ink-2); }
+.ov input {
+  padding: 4px 7px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 5px; font-family: var(--mono); font-size: .78rem; width: 100%;
+}
+.ov input.set { border-color: var(--magenta); background: var(--magenta-wash); }
+.status-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+textarea.notes {
+  width: 100%; min-height: 62px; padding: 7px 9px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; font-size: .8rem; resize: vertical;
+}
+
+/* ---------- shortlist ---------- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; align-items: start; }
+.sl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow-1); }
+.sl > header { padding: 13px 15px; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+.sl h3 { font-size: 1.08rem; }
+.sl .ap { font-family: var(--mono); font-size: .72rem; color: var(--ink-3); }
+.sl-body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 12px; }
+.kv { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.kv > div { background: var(--surface-2); border-radius: 7px; padding: 7px 9px; }
+.kv .k { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-family: var(--display); font-weight: 600; }
+.kv .v { font-family: var(--mono); font-size: 1.02rem; font-weight: 600; }
+.check { display: flex; flex-direction: column; gap: 5px; }
+.check label { display: flex; gap: 8px; align-items: start; font-size: .79rem; color: var(--ink-2); cursor: pointer; }
+.check input { margin-top: 3px; accent-color: var(--magenta); flex: none; }
+.check input:checked + span { color: var(--ink-3); text-decoration: line-through; }
+.empty { padding: 34px 20px; text-align: center; color: var(--ink-3); font-size: .88rem; }
+
+/* ---------- method ---------- */
+.prose { max-width: 68ch; display: flex; flex-direction: column; gap: 13px; }
+.prose h3 { font-size: 1.2rem; margin-top: 8px; }
+.prose p, .prose li { font-size: .87rem; color: var(--ink-2); }
+.prose ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.prose strong { color: var(--ink); }
+.callout { border-left: 3px solid var(--magenta); background: var(--surface); padding: 11px 14px; border-radius: 0 8px 8px 0; }
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  background: var(--ink); color: var(--paper); padding: 9px 16px; border-radius: 20px;
+  font-size: .82rem; box-shadow: var(--shadow-2); z-index: 90;
+}
+.toast[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="masthead">
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
+  </div>
+  <div>
+    <h1>Private pilot school selector</h1>
+    <div class="sub">18 schools &middot; 12 airports &middot; from ZIP 10030, Harlem NY</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="ghost" id="copyCsv" type="button">Copy table (CSV)</button>
+  <button class="ghost" id="themeBtn" type="button" aria-label="Switch colour theme">Theme</button>
+</header>
+
+<div class="deck">
+  <!-- ======================= INPUT RAIL ======================= -->
+  <aside class="rail">
+    <section class="panel">
+      <header>
+        <h3>Your scenario</h3>
+        <span class="note">everything recalculates live</span>
+      </header>
+      <div class="panel-body" id="scenarioFields"></div>
+      <div class="actions">
+        <button class="ghost" id="resetScenario" type="button">Reset scenario</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h3>What matters to you</h3>
+        <span class="note">drives the Match column</span>
+      </header>
+      <div class="panel-body" id="weightFields"></div>
+      <div class="actions">
+        <button class="ghost" id="resetWeights" type="button">Reset weights</button>
+        <button class="ghost" id="clearEdits" type="button">Clear my edits</button>
+      </div>
+    </section>
+  </aside>
+
+  <!-- ======================= RESULTS ======================= -->
+  <main>
+    <div class="tiles" id="tiles"></div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-compare" data-tab="compare" aria-selected="true">Compare</button>
+      <button class="tab" role="tab" id="tab-shortlist" data-tab="shortlist" aria-selected="false">Shortlist<span class="n" id="slCount">0</span></button>
+      <button class="tab" role="tab" id="tab-method" data-tab="method" aria-selected="false">How the numbers work</button>
+    </div>
+
+    <section id="pane-compare" role="tabpanel" aria-labelledby="tab-compare">
+      <div class="filters">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="q" placeholder="Search school, airport, aircraft, feature&hellip;" />
+        </div>
+        <div class="seg" id="eaSeg" role="group" aria-label="Filter by examining authority">
+          <button type="button" data-val="all" aria-pressed="true">All</button>
+          <button type="button" data-val="Yes" aria-pressed="false">Examining auth.</button>
+          <button type="button" data-val="Partial" aria-pressed="false">Part&nbsp;141</button>
+        </div>
+        <label class="mini">Within
+          <input type="range" id="distRange" min="10" max="1000" step="10" value="1000" />
+          <span class="mono" id="distVal">1000&nbsp;mi</span>
+        </label>
+        <label class="mini"><input type="checkbox" id="hideOut" checked /> Hide ruled out</label>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="table-wrap">
+        <div class="scroll-x">
+          <table>
+            <thead><tr id="thead"></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="src" style="margin-top:10px;font-size:.75rem;color:var(--ink-3)">Click a row to open sources, the full cost breakdown, and the fields where you can type in the numbers a school gives you on the phone.</p>
+    </section>
+
+    <section id="pane-shortlist" role="tabpanel" aria-labelledby="tab-shortlist" hidden>
+      <div class="filters">
+        <button class="ghost" id="copySummary" type="button">Copy shortlist summary</button>
+      </div>
+      <div class="cards" id="slCards"></div>
+    </section>
+
+    <section id="pane-method" role="tabpanel" aria-labelledby="tab-method" hidden>
+      <div class="prose">
+        <div class="callout">
+          <p><strong>Total modeled cost</strong> = (aircraft $/hr &times; flight hours, less any simulator hours) + (instructor $/hr &times; dual&nbsp;+&nbsp;ground hours) + simulator time + FAA knowledge test + examiner fee + (weeks waiting for a checkride &times; your weekly delay cost) + commute or housing + one-off gear. Every term is an input on the left, and every input moves the table.</p>
+        </div>
+        <h3>Where the estimate is soft</h3>
+        <ul>
+          <li><strong>Unpublished rates.</strong> Six schools publish no hourly rate. They are modeled at your two &ldquo;assumed&rdquo; rates and tagged <span class="chip mine">modeled</span> &mdash; they never win the &ldquo;cheapest published&rdquo; tile. Phone them, then type the real rate into the row and the tag turns into <span class="chip mine">your quote</span>.</li>
+          <li><strong>Examiner fees and waits.</strong> Only two fees here are real: Richmor holds FAA Part&nbsp;141 examining authority so its checkride carries no outside DPE fee, and Luke Weathers confirmed $600. Every other school uses your &ldquo;examiner fee&rdquo; input. The wait weeks are estimates derived from each school&rsquo;s checkride signals &mdash; on-site DPE, Part&nbsp;141 status &mdash; not quotes. Override both per school.</li>
+          <li><strong>Distance is straight-line</strong> from the 10030 centroid (40.8184, &minus;73.9423) to the airport, so it understates real driving in the NYC metro. That is what the commute multiplier is for &mdash; or type your actual drive miles into the row.</li>
+          <li><strong>Package schools</strong> (ATP $410/hr, LuvsFlying $400/hr) bundle instructor time into the hourly rate, so their instructor cost is set to $0 and they are tagged <span class="chip flag">package</span>. Not directly comparable to &agrave;-la-carte pricing.</li>
+          <li><strong>Dry rates.</strong> Three Wing is modeled at its $210/hr all-in figure ($130 dry + ~$80 fuel). Richmor&rsquo;s $205 excludes a fuel surcharge, so its total reads low &mdash; tagged <span class="chip flag">excl. fuel</span>.</li>
+        </ul>
+        <h3>Simulator credit</h3>
+        <p>Only time in an FAA-approved BATD/AATD flown with an instructor counts toward the certificate, capped at 2.5 hours under <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-D/part-61/subpart-E/section-61.109" target="_blank" rel="noopener">14&nbsp;CFR&nbsp;61.109(k)</a> for Part&nbsp;61. Home flight simulators do not count. The slider only applies to schools with a qualified device and a known hourly rate: Luke Weathers $35, Airborne Elite $40, Long Island Aviators $70, Air Fleet $80, Global $85, Richmor $165.</p>
+        <h3>Deadline fit</h3>
+        <p>Projected days = (training weeks &times; (1 + your cancellation buffer) + examiner wait weeks) &times; 7, compared against your deadline input. Weather, maintenance and aircraft scheduling in the New York area routinely eat 20&ndash;25% of planned lessons, which is what the buffer models.</p>
+        <h3>Before you commit</h3>
+        <p>Data was compiled 21 August 2026 from school websites, <a href="https://airnav.com/" target="_blank" rel="noopener">AirNav</a>, <a href="https://flightschools.fyi/" target="_blank" rel="noopener">flightschools.fyi</a>, <a href="https://checkrides.io/" target="_blank" rel="noopener">checkrides.io</a>, <a href="https://pilotbound.app/" target="_blank" rel="noopener">pilotbound</a>, <a href="https://www.aviator.nyc/" target="_blank" rel="noopener">aviator.nyc</a>, Google Maps and Yelp. Rates move; Aero Safety Training is flagged permanently closed on Google. Every figure in a row links to the page it came from &mdash; open the row and check it before you send anyone a deposit. This is a decision aid, not a quote.</p>
+        <p style="font-size:.78rem;color:var(--ink-3)">Your edits, notes and shortlist are stored in this browser only. Nothing is uploaded.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+
+  const SCHOOLS = [{"id":"long-island-aviators","name":"Long Island Aviators","airport":"KFRG — Republic Airport","address":"8350 Republic Airport, Farmingdale, NY 11735","distance":28.4,"aircraftRate":155,"wet":true,"aircraftNote":"WET, no fuel surcharge. C152 $155 ($145 block), C172N $190, C172SP $209, C182T $265.","instructorRate":80,"sim":{"rate":70,"qualified":true,"note":"Redbird AATD $70/hr (logbook-credit eligible)."},"part141":false,"ea":"No","ratio":null,"ratioNote":"~16 aircraft on rate sheet; instructor count not published.","availability":"Fleet 16 / DPE onsite","google":4.7,"googleReviews":null,"yelp":5,"checkride":"'DPE Onsite', '#1 in New York'. KFRG can see 30–45 min taxi delays at peak.","dpeWait":3,"dpeFee":null,"website":"https://longislandaviators.com/","confidence":"high","sources":{"distance":"https://airnav.com/airport/FRG","rate":"https://longislandaviators.com/rates/","ea":"https://flightschools.fyi/flight-schools/long-island-aviators-kfrg/","checkride":"https://flightschools.fyi/flight-schools/long-island-aviators-kfrg/","rating":"https://www.google.com/maps/search/Long+Island+Aviators+Farmingdale+NY"},"dpeFeeSource":"modeled"},{"id":"academy-of-aviation","name":"Academy of Aviation","airport":"KFRG + KHPN campus","address":"7150 Republic Airport #101, Farmingdale, NY; KHPN 67 Tower Rd, White Plains","distance":28.4,"distanceNote":"KHPN campus is 21.1 mi from 10030.","aircraftRate":null,"wet":null,"aircraftNote":"Rates not published. Fleet: C152, C172S G1000, DA42, Redbird sim.","instructorRate":null,"part141":true,"ea":"No","ratio":null,"ratioNote":"3 aircraft at KFRG + Redbird sim; instructor count not published.","availability":"Part 141 / no in-house DPE","google":4.5,"googleReviews":null,"yelp":null,"checkride":"Part 141 but 'does not have a DPE on staff — students book an independent DPE.' KHPN campus may have less scheduling competition.","dpeWait":8,"dpeFee":null,"website":"https://www.academyofaviation.com/","confidence":"medium","sources":{"distance":"https://airnav.com/airport/FRG","rate":"https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/","ea":"https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/","checkride":"https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/","rating":"https://www.google.com/maps/search/Academy+of+Aviation+Republic+Airport+Farmingdale+NY"},"dpeFeeSource":"modeled"},{"id":"heritage-flight-academy","name":"Heritage Flight Academy","airport":"KISP — Long Island MacArthur","address":"2075 Smithtown Ave, Ronkonkoma, NY 11779","distance":44.1,"aircraftRate":195,"wet":true,"aircraftNote":"Rates NOT published on official site (only 'pricing varies'). Figures from a 2024 student account: Cessna 172 (steam gauge) ~$195/hr; CFI $85/hr; $5.10 landing fee at KISP. flightschools.fyi states no fuel surcharge (published rate = actual), though a student reported a $16/hr surcharge. Piper Archer II (G5/GNS430W) $189/hr ($184 10hr block / $179 20hr block). Vaughn College PPL partnership package $16,960 (50 flight hrs).","instructorRate":85,"sim":{"rate":null,"qualified":true,"note":"Redbird simulator available (per Vaughn College partnership); PPL sim-credit eligibility and hourly rate not published — sim slider does not apply to Heritage until a rate is entered."},"part141":true,"ea":"Partial","ratio":null,"ratioNote":"Fleet & instructor counts not published.","availability":"Part 141 / CFI $85","google":null,"googleReviews":null,"yelp":null,"checkride":"DPE fee not published (default $900 modeled). Part 141 program with stage checks.","dpeWait":6,"dpeFee":null,"website":"https://heritageflightacademy.com/","confidence":"medium","sources":{"distance":"https://en.wikipedia.org/wiki/Long_Island_MacArthur_Airport","rate":"https://www.reddit.com/r/flying/comments/1dzhd1q/the_good_bad_and_ugly_of_heritage_flight_academy/","ea":"https://checkrides.io/flight-schools/heritage-flight-academy-ronkonkoma-ny","checkride":"https://flightschools.fyi/flight-schools/heritage-flight-academy-llc-kisp/","rating":"https://www.bestaviation.net/school/heritage_flight_academy/"},"dpeFeeSource":"modeled"},{"id":"luke-weathers-flight-academy","name":"Luke Weathers Flight Academy (LWFA)","airport":"KOLV — Olive Branch (Memphis metro, MS)","address":"11299 Airport Rd, Olive Branch, MS 38654","distance":976,"distanceNote":"Great-circle from 10030 to Olive Branch, MS. RELOCATION school — you would live in Memphis, so the model replaces NYC commute with housing cost (see Housing input).","aircraftRate":195,"wet":null,"aircraftNote":"Rates user-confirmed Aug 2026 (not published publicly). Cessna 150 $145/hr; Cessna 172 $195/hr — modeled at the C172 rate since the C150's ~322–365 lb useful load with two people aboard makes the C172 the practical primary trainer. Wet/dry not stated. OBAP nonprofit; member-students get ~10% off flight training (per Flying magazine) — not auto-applied.","instructorRate":50,"sim":{"rate":35,"qualified":true,"typicalHours":20,"note":"Simulator $35/hr (+$50/hr instructor). Program typically runs ~20 sim hrs before flying the airplane — only up to 2.5 hrs count toward the PPL logbook under FAR 61.109(k)(1), so home sim practice (MSFS/VATSIM) can replace the non-credit prep."},"relocate":true,"part141":true,"ea":"Partial","ratio":null,"ratioNote":"Fleet & instructor counts not published. Director: Capt. Albert Glenn.","availability":"Part 141 & 61 / OBAP nonprofit / relocate","google":null,"googleReviews":null,"yelp":null,"checkride":"DPE fee $600 (user-confirmed). Part 141 structured; examining authority not documented.","dpeWait":4,"dpeFee":600,"website":"https://obap.org/lwfa/","confidence":"medium","sources":{"distance":"https://obap.org/lwfa/","rate":"https://pilotbound.app/aviation-academies/mississippi/luke-weathers-flight-academy","ea":"https://obap.org/lwfa/","checkride":"https://www.flyingmag.com/american-airlines-donates-1-5-million-to-obap-youth-training-academy/","rating":"https://www.pilotcenter.net/flight-schools/luke-weathers-flight-academy"},"dpeFeeSource":"confirmed"},{"id":"richmor-aviation","name":"Richmor Aviation","airport":"20N Kingston-Ulster (+1B1, KSCH)","address":"1161 Flatbush Rd, Kingston, NY 12401","distance":80.6,"aircraftRate":205,"wet":false,"exclFuel":true,"aircraftNote":"Base rates EXCLUDE a fuel surcharge, so modeled cost understates actual. C152 dual $205, solo $135; C172 dual $240; C172RG $280; Redbird $165. Intro from $129. (Note: 'dual' rate may bundle instructor — if so, adding instructor separately overstates cost.)","instructorRate":70,"sim":{"rate":165,"qualified":true,"note":"Redbird AATD $165/hr (logbook-credit eligible)."},"part141":true,"ea":"Yes","ratio":null,"ratioNote":"20+ aircraft (C152/C172). Schenectady base trains ~125 students/yr.","availability":"Part 141 / Examining Authority","google":4,"googleReviews":null,"yelp":4.5,"checkride":"'Part 141 flight school with FAA Examining Authority.' Part 141 since 1967. Ops manual lists 'examining authority fees.'","dpeWait":1,"dpeFee":0,"website":"https://richmorflightschool.com/","confidence":"high","sources":{"distance":"https://en.wikipedia.org/wiki/Kingston-Ulster_Airport","rate":"https://richmorflightschool.com/wp-content/uploads/2025/02/Ops-Manual-Nov-2024-1.pdf","ea":"https://checkrides.io/flight-schools/richmor-aviation-inc-hudson-ny","checkride":"https://checkrides.io/flight-schools/richmor-aviation-inc-hudson-ny","rating":"https://www.google.com/maps/search/Richmor+Aviation+Kingston+Ulster+Airport"},"dpeFeeSource":"examining-authority"},{"id":"century-air","name":"Century Air","airport":"KCDW — Essex County","address":"19 Wright Way, Fairfield, NJ 07004","distance":18.2,"aircraftRate":null,"wet":null,"aircraftNote":"Fleet types listed (C172N/P/SP/NAV III, C172RG, SR20, SR22, PA-30) but no prices published.","instructorRate":null,"part141":true,"ea":"Partial","ratio":null,"ratioNote":"8 aircraft types listed without counts; instructor count not published.","availability":"Part 141 / founder is DPE","google":4.7,"googleReviews":null,"yelp":null,"checkride":"Founder is a former American Airlines captain now an FAA DPE. Part 141 program with stage checks. KCDW takeoff delays 5–15 min.","dpeWait":3,"dpeFee":null,"website":"https://centuryair.com/","confidence":"medium","sources":{"distance":"https://airnav.com/airport/KCDW","rate":"https://centuryair.com/aircraft-rental/","ea":"https://centuryair.com/","checkride":"https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/","rating":"https://www.google.com/maps/search/Century+Air+Caldwell+NJ+flight+school"},"dpeFeeSource":"modeled"},{"id":"air-fleet-training-systems","name":"Air Fleet Training Systems","airport":"KCDW — Essex County","address":"35 Wright Way, Fairfield, NJ 07004","distance":18.2,"aircraftRate":195,"wet":true,"aircraftNote":"Rates user-provided (prior session). DUAL rates (aircraft + CFI): Pipistrel Alpha $280/hr; Cessna 172 $335/hr. Split out: Pipistrel aircraft-only ~$195/hr, C172 aircraft-only ~$250/hr, CFI $85/hr (covers dual flight + ground). Wet. Sims: Redbird TD (BATD) $80/hr, Redbird FMX (AATD) $90/hr. Fleet 17 aircraft / 14 instructors. Billing method (Hobbs vs tach) not specified — KCDW is low-congestion so ground-time waste is minimal regardless.","pipistrel":true,"instructorRate":85,"sim":{"rate":80,"qualified":true,"note":"Redbird TD (BATD) $80/hr; Redbird FMX (AATD) $90/hr — logbook-credit eligible (up to 2.5 hrs toward PPL)."},"part141":true,"ea":"Partial","ratio":null,"ratioNote":"17 aircraft / 14 instructors (user-provided); true student:instructor ratio not published.","availability":"Part 141 / 17 a/c / 14 CFI / Pipistrel","google":4.9,"googleReviews":212,"yelp":4.4,"checkride":"FAA Part 141. 'The only Cessna Pilot Center & FAR Part 141 School within easy public transportation reach of NYC.' UNVERIFIED: flightschoolcost.com claims 'in-house examining authority for approved courses' (would avoid external DPE fee + cut wait) — confirm directly with the school.","dpeWait":3,"dpeFee":null,"website":"https://www.airfleettraining.com/","confidence":"high","sources":{"distance":"https://airnav.com/airport/KCDW","rate":"https://www.airfleettraining.com/our-aircraft/","ea":"https://www.airnav.com/airport/KCDW","checkride":"https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/","rating":"https://www.yelp.com/biz/air-fleet-training-systems-fairfield"},"dpeFeeSource":"modeled"},{"id":"aero-safety-training","name":"Aero Safety Training","airport":"N07 — Lincoln Park","address":"425 Beaverbrook Rd, Lincoln Park, NJ 07035","distance":21.4,"aircraftRate":null,"wet":null,"aircraftNote":"No rates published. WARNING: Google Maps lists this business as 'Permanently closed'.","instructorRate":null,"part141":true,"ea":"No","ratio":null,"ratioNote":"Adding 2 Pipistrel Alpha Trainers + Redbird sim; counts not published. Part 141 approved 2000.","availability":"Likely closed — verify by phone","google":5,"googleReviews":null,"yelp":5,"checkride":"LIKELY CLOSED: Google 'Permanently closed'; a 2026 guide says no Part 141 program remains at N07.","dpeWait":6,"dpeFee":null,"website":"https://lpawings.com/","confidence":"low","sources":{"distance":"https://en.wikipedia.org/wiki/Lincoln_Park_Airport","rate":"https://lpawings.com/","ea":"https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/","checkride":"https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/","rating":"https://www.google.com/maps/search/Aero+Safety+Training+Lincoln+Park+NJ"},"dpeFeeSource":"modeled"},{"id":"aero-flight-school-n07","name":"Aero Flight School @ N07","airport":"N07 — Lincoln Park","address":"425 Beaverbrook Rd, Lincoln Park, NJ 07035","distance":21.4,"aircraftRate":215,"wet":null,"aircraftNote":"Wet vs dry NOT stated; rates plus tax. C172S $220, Piper Archer III $215, C172M $215.","instructorRate":85,"part141":false,"ea":"No","ratio":null,"ratioNote":"3 aircraft (2× C172 + 1 Archer III); instructor count not published.","availability":"Part 61 / 3 aircraft","google":5,"googleReviews":5,"yelp":null,"checkride":"Part 61 only; no Part 141 program at N07 as of 2026.","dpeWait":7,"dpeFee":null,"website":"https://n07lincolnparkairport.com/flight-school/","confidence":"medium","sources":{"distance":"https://en.wikipedia.org/wiki/Lincoln_Park_Airport","rate":"https://n07lincolnparkairport.com/flight-school/","ea":"https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/","checkride":"https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/","rating":"https://www.google.com/maps/search/Aero+Flight+School+Lincoln+Park+Airport+425+Beaverbrook+Rd"},"dpeFeeSource":"modeled"},{"id":"atp-morristown","name":"ATP Flight School — Morristown","airport":"KMMU — Morristown Municipal","address":"1 Airport Rd, Suite 212, Morristown, NJ 07960","distance":24.7,"aircraftRate":null,"wet":null,"allInRate":410,"package":true,"aircraftNote":"PACKAGE / all-inclusive rate: $400–425/hr (Flex Commercial) bundles aircraft + instructor — modeled at $410/hr with instructor cost set to $0. AATD $180–185/hr. National fleet of 658 aircraft. Not directly comparable to à-la-carte schools.","instructorRate":0,"part141":false,"ea":"No","ratio":null,"ratioNote":"658-aircraft national fleet; local counts not published.","availability":"Part 61 (structured) / national fleet","google":4.2,"googleReviews":null,"yelp":1,"checkride":"ATP offers to pay up to 6 checkride fees (~$12,000 value). Examiner fees + knowledge tests ~$10,500–12,000 beyond program price.","dpeWait":5,"dpeFee":null,"website":"https://atpflightschool.com/locations/new-jersey/morristown-flight-school-mmu.html","confidence":"medium","sources":{"distance":"https://airnav.com/airport/KMMU","rate":"https://atpflightschool.com/locations/new-jersey/morristown-flight-school-mmu.html","ea":"https://www.aviator.nyc/blog/flight-schools-morristown-airport-kmmu/","checkride":"https://www.aviator.nyc/blog/flight-schools-morristown-airport-kmmu/","rating":"https://www.google.com/maps/search/ATP+Flight+School+Morristown+NJ"},"dpeFeeSource":"modeled"},{"id":"learn2flynj","name":"Learn2FlyNJ","airport":"KLDJ — Linden","address":"1101 West Edgar Rd, Linden, NJ 07036","distance":21.1,"aircraftRate":null,"wet":null,"aircraftNote":"No rates published. Trains in Piper Cherokee PA-28.","instructorRate":null,"part141":null,"ea":"No","ratio":null,"ratioNote":"Fleet & instructor counts not published.","availability":"Piper PA-28","google":null,"googleReviews":null,"yelp":null,"checkride":"n.a.","dpeWait":6,"dpeFee":null,"website":"https://www.learn2flynj.com/","confidence":"low","sources":{"distance":"https://airnav.com/airport/KLDJ","rate":"https://www.learn2flynj.com/private-pilot-training/","ea":"https://www.learn2flynj.com/private-pilot-training/","checkride":"https://www.learn2flynj.com/private-pilot-training/","rating":null},"dpeFeeSource":"modeled"},{"id":"luvsflying","name":"LuvsFlying Flight Training","airport":"KLDJ — Linden","address":"1101 W Edgar Rd, Hangar 406, Linden, NJ 07036","distance":21.1,"aircraftRate":null,"wet":false,"allInRate":400,"package":true,"aircraftNote":"PACKAGE rate: 'Flight Training $400/hr' (Intro $300, Endorsements $450) appears to bundle aircraft + instructor — modeled at $400/hr with instructor cost $0. '+$50/person fuel surcharge' applies. Not directly comparable to à-la-carte schools.","instructorRate":0,"part141":null,"ea":"No","ratio":null,"ratioNote":"Counts not published. Phone 347-424-7677.","availability":"Premium / by appointment","google":null,"googleReviews":null,"yelp":null,"checkride":"n.a.","dpeWait":6,"dpeFee":null,"website":"https://luvsflying.com/","confidence":"low","sources":{"distance":"https://airnav.com/airport/KLDJ","rate":"https://luvsflying.com/","ea":"https://luvsflying.com/","checkride":"https://luvsflying.com/","rating":null},"dpeFeeSource":"modeled"},{"id":"arrow-aviation","name":"Arrow Aviation","airport":"KDXR — Danbury Municipal","address":"53 Miry Brook Rd, Danbury, CT 06810","distance":45.1,"aircraftRate":147,"wet":null,"aircraftNote":"Wet vs dry NOT stated. $147/hr (C152) and $196/hr listed. Fleet: C152s, C172s, Piper Warriors, Arrow.","instructorRate":80,"part141":false,"ea":"No","ratio":null,"ratioNote":"Described as largest CT fleet among listed schools; exact counts not published.","availability":"Practical test on site","google":4.5,"googleReviews":45,"yelp":null,"checkride":"'If your training is complete, we offer the FAA Practical Test right here'; all FAA written tests administered on site.","dpeWait":3,"dpeFee":null,"website":"http://www.arrowaviationllc.com/","confidence":"high","sources":{"distance":"https://en.wikipedia.org/wiki/Danbury_Municipal_Airport","rate":"http://www.arrowaviationllc.com/Our-Aircraft/","ea":"https://pilotbound.app/flight-schools/connecticut","checkride":"http://www.arrowaviationllc.com/","rating":"https://www.google.com/maps/search/Arrow+Aviation+Danbury+CT+flight+school"},"dpeFeeSource":"modeled"},{"id":"three-wing","name":"Three Wing Aviation Group","airport":"KBDR — Sikorsky Memorial","address":"600 Great Meadow Rd, Stratford, CT 06615","distance":48.8,"aircraftRate":210,"wet":true,"aircraftNote":"Headline $130/hr DRY (Warrior II); fuel adds ~$80/hr → ~$210/hr all-in, which is the rate modeled here. Archer II $130–165, Arrow $175 all-in. Excludes CT 6.35% tax + 2% airport fee. $90/mo club fee (waived for students until solo).","instructorRate":80,"part141":false,"ea":"No","ratio":null,"ratioNote":"7 aircraft (all Pipers) + 1 simulator; instructor count not published.","availability":"DPE onsite / 7 aircraft","google":4.7,"googleReviews":null,"yelp":null,"checkride":"Listed as 'DPE Onsite'.","dpeWait":3,"dpeFee":null,"website":"https://www.threewing.com/","confidence":"high","sources":{"distance":"https://airnav.com/airport/KBDR","rate":"https://www.threewing.com/wp-content/uploads/2025/07/Flying-club-packet-2025.pdf","ea":"https://www.threewing.com/part-61-flight-school/","checkride":"https://flightschools.fyi/flight-schools/three-wing-aviation-group-llc-kbdr/","rating":"https://www.google.com/maps/search/Three+Wing+Aviation+Stratford+CT"},"dpeFeeSource":"modeled"},{"id":"meriden-aviation","name":"Meriden / New Haven Aviation Ctr","airport":"KMMK Meriden (+KHVN Tweed)","address":"213 Evansville Ave, 2nd Floor, Meriden, CT 06451","distance":75,"aircraftRate":198,"wet":true,"aircraftNote":"WET — incl. fuel. 10-hr pre-pay discount. Same operation as New Haven Aviation Center.","instructorRate":75,"part141":null,"ea":"No","ratio":null,"ratioNote":"Three Piper Warrior II PA28-161 + Piper Arrow; instructor count not published.","availability":"3 Warriors / wet rates","google":4.9,"googleReviews":null,"yelp":null,"checkride":"10-hr pre-pay discounts; no DPE/wait info published.","dpeWait":6,"dpeFee":null,"website":"https://www.meridenaviationcenter.com/","confidence":"high","sources":{"distance":"https://airnav.com/airport/KMMK","rate":"https://www.meridenaviationcenter.com/flight-training/","ea":"https://www.meridenaviationcenter.com/flight-training/","checkride":"https://www.meridenaviationcenter.com/flight-training/","rating":"https://www.google.com/maps/search/Meriden+Aviation+Center+Meriden+CT"},"dpeFeeSource":"modeled"},{"id":"interstate-aviation","name":"Interstate Aviation","airport":"KOXC Waterbury-Oxford (+4B8)","address":"288 Christian St, Oxford, CT 06478","distance":62,"aircraftRate":null,"wet":null,"aircraftNote":"Rates not published: 'PLEASE CALL OR EMAIL FOR CURRENT PRICING.'","instructorRate":null,"part141":false,"ea":"No","ratio":null,"ratioNote":"4 aircraft: 2× C172, PA-28-161, PA-28-181; instructor count not published.","availability":"4 aircraft / call for rates","google":3,"googleReviews":null,"yelp":null,"checkride":"n.a.","dpeWait":6,"dpeFee":null,"website":"https://interstateaviation.com/","confidence":"medium","sources":{"distance":"https://airnav.com/airport/KOXC","rate":"https://interstateaviation.com/wp-content/uploads/2019/12/WEBSITE-AIRCRAFT-RENTAL.pdf","ea":"https://pilotbound.app/flight-schools/connecticut","checkride":"https://interstateaviation.com/","rating":"https://www.google.com/maps/search/Interstate+Aviation+Oxford+CT+Waterbury+Oxford+Airport"},"dpeFeeSource":"modeled"},{"id":"global-aviation-center","name":"Global Aviation Center","airport":"KFRG — Republic Airport","address":"Atlantic Aviation Bldg, 9100 Republic Airport #106, Farmingdale, NY 11735","distance":28.4,"aircraftRate":179,"wet":null,"aircraftNote":"Wet vs dry NOT stated on site. Warrior II $179 cash/$184 cc; TAA $184/$189; Warrior III glass $194/$199; Duchess $350. Sims $85/$99. Rentals to enrolled students only. Tracker lists ~$192/hr wet.","instructorRate":89,"sim":{"rate":85,"qualified":true,"note":"Sims $85 (PI135/G430) & $99 (G1000) with instructor (logbook-credit eligible)."},"part141":true,"ea":"Partial","ratio":null,"ratioNote":"Ten Piper Warrior IIs + two simulators; instructor count not published.","availability":"Part 61 & 141 / in-house DPE / PSI test center","google":4.7,"googleReviews":null,"yelp":null,"checkride":"Strongest checkride signal: in-house FAA DPE on staff, checkrides 'in days, not months', 'minimal wait times', in-house PSI testing center. 35-hr PPL under 141.","dpeWait":2,"dpeFee":null,"website":"https://www.globalaviationcenter.com/","confidence":"high","sources":{"distance":"https://airnav.com/airport/FRG","rate":"https://www.globalaviationcenter.com/rental-rates","ea":"https://www.globalaviationcenter.com/","checkride":"https://www.globalaviationcenter.com/","rating":"https://www.google.com/maps/search/Global+Aviation+Center+Farmingdale+NY"},"dpeFeeSource":"modeled"},{"id":"airborne-elite","name":"Airborne Elite","airport":"KFRG — Republic Airport","address":"208 NY-109 #206, Farmingdale, NY 11735","distance":28.4,"aircraftRate":170,"wet":true,"billing":"Tach","aircraftNote":"Official fleet page (flyforreal.com/fleet/). Bills by TACH time (favorable at congested KFRG — taxi/idle accumulates ~10-25% slower than Hobbs). Fleet (4 a/c + 1 sim): Piper Warrior wet $190 tach; Piper Archer wet $195 tach; Bristell LSA wet $170 tach (or dry $135 tach + fuel); ELITE-RC1 AATD sim $40/hr. Open 24 hrs; phone (631) 393-0830.","instructorRate":80,"sim":{"rate":40,"qualified":true,"note":"ELITE-RC1 AATD $40/hr (logbook-credit eligible, up to 2.5 hrs toward PPL)."},"part141":null,"ea":"No","ratio":null,"ratioNote":"4 aircraft + 1 simulator; instructor count not published. Smallest fleet in dataset — scheduling risk for a tight timeline.","availability":"4 a/c / tach billing / 24 hrs","google":5,"googleReviews":null,"yelp":null,"checkride":"n.a. Listing open 24 hours. Phone (631) 393-0830.","dpeWait":6,"dpeFee":null,"website":"https://flyforreal.com/","confidence":"medium","sources":{"distance":"https://airnav.com/airport/FRG","rate":"https://flyforreal.com/fleet/","ea":"https://pilotbound.app/flight-schools/new-york","checkride":"https://www.google.com/maps/search/Airborne+Elite+Flight+Training+Farmingdale+NY","rating":"https://www.google.com/maps/search/Airborne+Elite+Flight+Training+Farmingdale+NY"},"dpeFeeSource":"modeled"}];
+
+  /* ---------------- scenario definition ---------------- */
+  const GROUPS = [
+    { title: "Training plan", fields: [
+      { k: "flightHours",   label: "Target flight hours",     min: 35,  max: 120,  step: 1,    unit: "h",
+        tip: "40 h is the Part 61 minimum; most people finish nearer 60–75." },
+      { k: "dualFrac",      label: "Share flown with a CFI",  min: 0.4, max: 1,    step: 0.05, pct: true },
+      { k: "groundHours",   label: "Ground instruction",      min: 0,   max: 40,   step: 1,    unit: "h" },
+      { k: "lessonsPerWeek",label: "Lessons per week",        min: 1,   max: 7,    step: 1 },
+      { k: "hoursPerLesson",label: "Hours per lesson",        min: 1,   max: 3,    step: 0.25, unit: "h" },
+      { k: "buffer",        label: "Weather / cancellation buffer", min: 0, max: 0.6, step: 0.05, pct: true,
+        tip: "NYC-area weather and maintenance kill 20–25% of booked lessons." },
+      { k: "simHours",      label: "Simulator hours logged",  min: 0,   max: 5,    step: 0.5,  unit: "h",
+        tip: "Only 2.5 h of approved-device time counts toward Part 61." },
+    ]},
+    { title: "Money", fields: [
+      { k: "knowledgeTest",     label: "FAA knowledge test",          min: 0,   max: 400,  step: 5,  money: true },
+      { k: "dpeFee",            label: "Examiner fee (where unpublished)", min: 400, max: 1600, step: 25, money: true },
+      { k: "weeklyDelay",       label: "Cost of each week waiting",   min: 0,   max: 500,  step: 25, money: true,
+        tip: "Rental car, rescheduling, currency flights — what a week of delay actually costs you." },
+      { k: "extras",            label: "Headset, medical, books",     min: 0,   max: 4000, step: 50, money: true },
+      { k: "assumedAircraft",   label: "Assumed aircraft $/hr",       min: 100, max: 300,  step: 5,  money: true,
+        tip: "Used for the six schools that publish no rate." },
+      { k: "assumedInstructor", label: "Assumed instructor $/hr",     min: 50,  max: 140,  step: 5,  money: true },
+    ]},
+    { title: "Travel and deadline", fields: [
+      { k: "days",       label: "Days until your deadline", min: 14, max: 365, step: 1, unit: "d" },
+      { k: "mileage",    label: "Cost per mile driven",     min: 0.3, max: 1.2, step: 0.05, money: true, dp: 2 },
+      { k: "commuteMult",label: "Road miles vs straight line", min: 1, max: 2.4, step: 0.1, mult: true },
+      { k: "housing",    label: "Housing $/mo if you relocate", min: 0, max: 2500, step: 50, money: true,
+        tip: "Applies only to Luke Weathers (Memphis)." },
+    ]},
+  ];
+  const FIELDS = GROUPS.flatMap(g => g.fields);
+  const DEFAULTS = {
+    flightHours: 60, dualFrac: 0.75, groundHours: 15, lessonsPerWeek: 6, hoursPerLesson: 1.5,
+    buffer: 0.25, simHours: 2.5, knowledgeTest: 175, dpeFee: 900, weeklyDelay: 150, extras: 0,
+    assumedAircraft: 165, assumedInstructor: 80, days: 59, mileage: 0.7, commuteMult: 1.4, housing: 900,
+  };
+  const WEIGHTS = [
+    { k: "cost",    label: "Lowest total cost" },
+    { k: "speed",   label: "Finishing fast" },
+    { k: "margin",  label: "Room against the deadline" },
+    { k: "rating",  label: "Reviews" },
+    { k: "dist",    label: "Being close to home" },
+    { k: "ea",      label: "In-house examining authority" },
+    { k: "conf",    label: "Trustworthy published data" },
+  ];
+  const W_DEFAULTS = { cost: 4, speed: 3, margin: 4, rating: 2, dist: 2, ea: 3, conf: 2 };
+  const CALLS = [
+    "Is the hourly rate wet or dry — and is there a fuel surcharge on top?",
+    "How far ahead do I book an aircraft, and how often do lessons get bumped?",
+    "Who does my checkride — an examiner on staff, or an outside DPE? What is the wait right now?",
+    "What does the checkride cost, and does the school charge its own fees on top?",
+    "Are my instructors career CFIs or time-building for the airlines?",
+    "Club, insurance, or membership fees? Minimum billing per flight?",
+    "Is ground school included, and can I take the written test on site?",
+    "Cancellation policy — what happens if weather scrubs the lesson?",
+  ];
+  const OV_FIELDS = [
+    { k: "aircraftRate",   label: "Aircraft $/hr" },
+    { k: "instructorRate", label: "Instructor $/hr" },
+    { k: "simRate",        label: "Simulator $/hr" },
+    { k: "dpeFee",         label: "Examiner fee $" },
+    { k: "dpeWait",        label: "Checkride wait (weeks)" },
+    { k: "distance",       label: "Drive distance (mi)" },
+  ];
+  const STATUSES = [
+    { k: "none",     label: "Not decided" },
+    { k: "shortlist",label: "Shortlisted" },
+    { k: "called",   label: "Called them" },
+    { k: "out",      label: "Ruled out" },
+  ];
+
+  /* ---------------- state ---------------- */
+  const KEY = "ppl-selector-v1";
+  const state = {
+    A: { ...DEFAULTS },
+    W: { ...W_DEFAULTS },
+    ov: {},        /* per-school numeric overrides */
+    st: {},        /* per-school status */
+    notes: {},     /* per-school free text */
+    checks: {},    /* per-school call-checklist ticks */
+    ui: { sort: "match", dir: -1, q: "", ea: "all", maxDist: 1000, hideOut: true, tab: "compare", open: null },
+  };
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (d.A) Object.assign(state.A, d.A);
+      if (d.W) Object.assign(state.W, d.W);
+      state.ov = d.ov || {}; state.st = d.st || {}; state.notes = d.notes || {}; state.checks = d.checks || {};
+      if (d.theme) document.documentElement.setAttribute("data-theme", d.theme);
+    } catch (e) { /* private mode, blocked storage — run with defaults */ }
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        A: state.A, W: state.W, ov: state.ov, st: state.st, notes: state.notes, checks: state.checks,
+        theme: document.documentElement.getAttribute("data-theme") || "",
+      }));
+    } catch (e) { /* nothing to do — the page still works, it just forgets */ }
+  }
+
+  /* ---------------- helpers ---------------- */
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const money = (n) => n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US");
+  const num = (v) => (v === "" || v == null || Number.isNaN(Number(v))) ? null : Number(v);
+  const fieldOut = (f, v) =>
+    f.pct ? Math.round(v * 100) + "%" :
+    f.mult ? "×" + v.toFixed(1) :
+    f.money ? "$" + (f.dp ? v.toFixed(f.dp) : Math.round(v).toLocaleString("en-US")) :
+    v + (f.unit || "");
+
+  function toast(msg) {
+    const t = $("#toast");
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { t.hidden = true; }, 2200);
+  }
+  function copy(text, msg) {
+    const done = () => toast(msg);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => toast("Copy blocked by the browser"));
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { toast("Copy blocked by the browser"); }
+      ta.remove();
+    }
+  }
+
+  /* ---------------- the model ---------------- */
+  function eff(s) {
+    const o = state.ov[s.id] || {};
+    const pick = (k, base) => { const v = num(o[k]); return v == null ? base : v; };
+    return {
+      aircraftRate: pick("aircraftRate", s.aircraftRate),
+      instructorRate: pick("instructorRate", s.instructorRate),
+      simRate: pick("simRate", s.sim ? s.sim.rate : null),
+      dpeFee: pick("dpeFee", s.dpeFee),
+      dpeWait: pick("dpeWait", s.dpeWait),
+      distance: pick("distance", s.distance),
+      mine: OV_FIELDS.some(f => num(o[f.k]) != null),
+      minSet: (k) => num(o[k]) != null,
+    };
+  }
+
+  function calc(s) {
+    const A = state.A, e = eff(s);
+    const isPackage = s.allInRate != null;
+    const ar = isPackage ? s.allInRate : (e.aircraftRate == null ? A.assumedAircraft : e.aircraftRate);
+    const ir = isPackage ? 0 : (e.instructorRate == null ? A.assumedInstructor : e.instructorRate);
+    const published = isPackage || (e.aircraftRate != null && e.instructorRate != null);
+
+    const dualFlight = A.flightHours * A.dualFrac;
+    const instructorHours = dualFlight + A.groundHours;
+    const lessons = Math.ceil(A.flightHours / A.hoursPerLesson);
+    const trainingWeeks = Math.ceil(lessons / A.lessonsPerWeek);
+    const bufferedWeeks = Math.ceil(trainingWeeks * (1 + A.buffer));
+    const wait = e.dpeWait == null ? 0 : e.dpeWait;
+    const totalWeeks = bufferedWeeks + wait;
+    const projectedDays = totalWeeks * 7;
+    const margin = Math.round(A.days - projectedDays);
+
+    /* 14 CFR 61.109(k): at most 2.5 h of approved-device time counts under Part 61 */
+    const simHrs = (s.sim && s.sim.qualified && e.simRate != null && A.simHours > 0)
+      ? Math.min(A.simHours, 2.5, A.flightHours) : 0;
+    const flownHours = A.flightHours - simHrs;
+
+    const aircraftCost = ar * flownHours;
+    const instructorCost = ir * instructorHours;
+    const simCost = simHrs * ((e.simRate || 0) + ir);
+    const fee = e.dpeFee == null ? A.dpeFee : e.dpeFee;
+    const waitCost = wait * A.weeklyDelay;
+    const relocate = !!s.relocate;
+    const months = Math.ceil(totalWeeks / 4.345);
+    const commuteMiles = relocate ? 0 : 2 * e.distance * A.commuteMult * lessons;
+    const commuteCost = commuteMiles * A.mileage;
+    const housingCost = relocate ? A.housing * months : 0;
+    const total = aircraftCost + instructorCost + simCost + A.knowledgeTest + A.extras
+      + fee + waitCost + commuteCost + housingCost;
+
+    return { e, isPackage, published, ar, ir, instructorHours, lessons, trainingWeeks, bufferedWeeks,
+      wait, totalWeeks, projectedDays, margin, fits: margin >= 0, simHrs, flownHours, aircraftCost,
+      instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost, housingCost, total };
+  }
+
+  const CONF = { high: 1, medium: 0.55, low: 0.15 };
+  const EA_N = { Yes: 1, Partial: 0.5, No: 0 };
+
+  function scoreAll(rows) {
+    if (!rows.length) return;
+    const span = (vals) => {
+      const ok = vals.filter(v => v != null && isFinite(v));
+      return { lo: Math.min.apply(null, ok), hi: Math.max.apply(null, ok) };
+    };
+    const norm = (v, sp, invert) => {
+      if (v == null || !isFinite(v)) return 0.5;
+      if (sp.hi === sp.lo) return 1;
+      const t = (v - sp.lo) / (sp.hi - sp.lo);
+      return invert ? 1 - t : t;
+    };
+    const cost = span(rows.map(r => r.c.total));
+    const weeks = span(rows.map(r => r.c.totalWeeks));
+    const marg = span(rows.map(r => r.c.margin));
+    const dist = span(rows.map(r => r.c.e.distance));
+    const rate = span(rows.map(r => r.s.google != null ? r.s.google : r.s.yelp));
+    const W = state.W;
+    const sum = WEIGHTS.reduce((a, w) => a + (W[w.k] || 0), 0) || 1;
+    rows.forEach(r => {
+      const parts = {
+        cost: norm(r.c.total, cost, true),
+        speed: norm(r.c.totalWeeks, weeks, true),
+        margin: norm(r.c.margin, marg, false),
+        rating: norm(r.s.google != null ? r.s.google : r.s.yelp, rate, false),
+        dist: norm(r.c.e.distance, dist, true),
+        ea: EA_N[r.s.ea] == null ? 0 : EA_N[r.s.ea],
+        conf: CONF[r.s.confidence] == null ? 0.5 : CONF[r.s.confidence],
+      };
+      r.parts = parts;
+      r.score = Math.round(100 * WEIGHTS.reduce((a, w) => a + (W[w.k] || 0) * parts[w.k], 0) / sum);
+    });
+  }
+
+  /* live rows: everything except schools you ruled out */
+  function liveRows() {
+    return SCHOOLS.filter(s => state.st[s.id] !== "out").map(s => ({ s, c: calc(s) }));
+  }
+
+  /* ---------------- input rail ---------------- */
+  function renderRail() {
+    $("#scenarioFields").innerHTML = GROUPS.map(g => `
+      <div class="group-title">${esc(g.title)}</div>
+      ${g.fields.map(f => `
+        <div class="field">
+          <label for="f-${f.k}">${esc(f.label)}</label>
+          <input class="val mono" id="v-${f.k}" type="number" min="${f.min}" max="${f.max}" step="${f.step}"
+                 value="${state.A[f.k]}" aria-label="${esc(f.label)} value" />
+          <input type="range" id="f-${f.k}" min="${f.min}" max="${f.max}" step="${f.step}"
+                 value="${state.A[f.k]}" aria-label="${esc(f.label)}" />
+          ${f.tip ? `<span class="tip">${esc(f.tip)}</span>` : ""}
+        </div>`).join("")}
+    `).join("");
+
+    FIELDS.forEach(f => {
+      const slider = document.getElementById("f-" + f.k);
+      const box = document.getElementById("v-" + f.k);
+      const apply = (v, from) => {
+        let n = Number(v);
+        if (!isFinite(n)) return;
+        n = Math.min(f.max, Math.max(f.min, n));
+        state.A[f.k] = n;
+        if (from !== "slider") slider.value = n;
+        if (from !== "box") box.value = f.dp ? n.toFixed(f.dp) : n;
+        save(); renderAll();
+      };
+      slider.addEventListener("input", () => apply(slider.value, "slider"));
+      box.addEventListener("change", () => apply(box.value, "box"));
+    });
+
+    $("#weightFields").innerHTML = WEIGHTS.map(w => `
+      <div class="field">
+        <label for="w-${w.k}">${esc(w.label)}</label>
+        <span class="val mono" id="wv-${w.k}">${state.W[w.k]}</span>
+        <input type="range" id="w-${w.k}" min="0" max="5" step="1" value="${state.W[w.k]}" aria-label="${esc(w.label)} importance" />
+      </div>`).join("");
+    WEIGHTS.forEach(w => {
+      const el = document.getElementById("w-" + w.k);
+      el.addEventListener("input", () => {
+        state.W[w.k] = Number(el.value);
+        document.getElementById("wv-" + w.k).textContent = el.value;
+        save(); renderAll();
+      });
+    });
+  }
+  function syncRail() {
+    FIELDS.forEach(f => {
+      const slider = document.getElementById("f-" + f.k);
+      const box = document.getElementById("v-" + f.k);
+      if (slider) slider.value = state.A[f.k];
+      if (box) box.value = f.dp ? Number(state.A[f.k]).toFixed(f.dp) : state.A[f.k];
+    });
+    WEIGHTS.forEach(w => {
+      const el = document.getElementById("w-" + w.k);
+      if (el) el.value = state.W[w.k];
+      const out = document.getElementById("wv-" + w.k);
+      if (out) out.textContent = state.W[w.k];
+    });
+  }
+
+  /* ---------------- verdict tiles ---------------- */
+  function renderTiles() {
+    const rows = liveRows();
+    scoreAll(rows);
+    const byCost = rows.slice().sort((a, b) => a.c.total - b.c.total);
+    const cheapest = byCost.find(r => r.c.published && !r.c.isPackage);
+    const fastest = rows.slice().sort((a, b) => a.c.totalWeeks - b.c.totalWeeks || a.c.total - b.c.total)[0];
+    const fit = byCost.find(r => r.c.fits);
+    const best = rows.slice().sort((a, b) => b.score - a.score)[0];
+    const tile = (cls, k, v, who, why) => `
+      <div class="tile ${cls}">
+        <span class="k">${esc(k)}</span>
+        <span class="v">${esc(v)}</span>
+        <span class="who">${esc(who)}</span>
+        <span class="why">${esc(why)}</span>
+      </div>`;
+    $("#tiles").innerHTML = [
+      best ? tile("lead", "Best match for you", best.score + "/100", best.s.name,
+        `${money(best.c.total)} · ${best.c.totalWeeks} weeks · ${best.s.airport.split(" ")[0]}`) : "",
+      cheapest ? tile("", "Cheapest published rates", money(cheapest.c.total), cheapest.s.name,
+        `$${cheapest.c.ar}/hr aircraft + $${cheapest.c.ir}/hr instructor`) : "",
+      fastest ? tile("", "Fastest to checkride", fastest.c.totalWeeks + " wk", fastest.s.name,
+        `${fastest.c.bufferedWeeks} wk training + ${fastest.c.wait} wk examiner wait`) : "",
+      fit ? tile("", "Cheapest inside your deadline", money(fit.c.total), fit.s.name,
+        `${fit.c.projectedDays} days projected — ${fit.c.margin} to spare`)
+          : tile("", "Cheapest inside your deadline", "none", "No school fits " + state.A.days + " days",
+            "Raise lessons per week, or move the deadline"),
+    ].join("");
+  }
+
+  /* ---------------- comparison table ---------------- */
+  const COLS = [
+    { k: "star",   label: "", sort: false },
+    { k: "name",   label: "School", sort: true },
+    { k: "dist",   label: "Miles", sort: true, n: true },
+    { k: "ac",     label: "Aircraft $/hr", sort: true },
+    { k: "instr",  label: "Instr $/hr", sort: true },
+    { k: "ea",     label: "Exam auth", sort: true },
+    { k: "rating", label: "Rating", sort: true },
+    { k: "cost",   label: "Modeled cost", sort: true, n: true },
+    { k: "weeks",  label: "Weeks", sort: true, n: true },
+    { k: "fit",    label: "Deadline", sort: true },
+    { k: "match",  label: "Match", sort: true },
+  ];
+  const sortVal = (r, k) => ({
+    name: r.s.name.toLowerCase(), dist: r.c.e.distance, ac: r.c.ar, instr: r.c.ir,
+    ea: ({ Yes: 0, Partial: 1, No: 2 })[r.s.ea], rating: r.s.google != null ? r.s.google : (r.s.yelp != null ? r.s.yelp : -1),
+    cost: r.c.total, weeks: r.c.totalWeeks, fit: r.c.margin, match: r.score,
+  })[k];
+
+  function visibleRows() {
+    const u = state.ui;
+    let rows = SCHOOLS.map(s => ({ s, c: calc(s) }));
+    scoreAll(rows.filter(r => state.st[r.s.id] !== "out"));
+    rows.forEach(r => { if (r.score == null) r.score = 0; });
+    rows = rows.filter(r => {
+      if (u.hideOut && state.st[r.s.id] === "out") return false;
+      if (r.c.e.distance > u.maxDist) return false;
+      if (u.ea === "Yes" && r.s.ea !== "Yes") return false;
+      if (u.ea === "Partial" && !(r.s.ea === "Partial" || r.s.part141 === true)) return false;
+      if (u.q) {
+        const hay = [r.s.name, r.s.airport, r.s.address, r.s.availability, r.s.aircraftNote, r.s.checkride]
+          .join(" ").toLowerCase();
+        if (!hay.includes(u.q.toLowerCase())) return false;
+      }
+      return true;
+    });
+    rows.sort((a, b) => {
+      const va = sortVal(a, u.sort), vb = sortVal(b, u.sort);
+      if (va < vb) return -u.dir;
+      if (va > vb) return u.dir;
+      return a.s.name.localeCompare(b.s.name);
+    });
+    return rows;
+  }
+
+  function ratingCell(s) {
+    const r = s.google != null ? s.google : s.yelp;
+    if (r == null) return '<span class="np">none found</span>';
+    const src = s.google != null ? "Google" : "Yelp";
+    const n = s.googleReviews != null ? "&nbsp;" + s.googleReviews : "";
+    return `<span class="mono" style="white-space:nowrap">${r.toFixed(1)} <span style="font-size:.66rem;color:var(--ink-3)">${src[0]}${n}</span></span>`;
+  }
+  function fitChip(c) {
+    if (!c.fits) return `<span class="chip over">${-c.margin}d over</span>`;
+    if (c.margin < 10) return `<span class="chip tight">+${c.margin}d tight</span>`;
+    return `<span class="chip fit">+${c.margin}d</span>`;
+  }
+  function rateCell(s, c, kind) {
+    const isAc = kind === "ac";
+    if (c.isPackage) return isAc
+      ? `<span class="mono">$${s.allInRate}</span> <span class="chip flag">package</span>`
+      : `<span class="np">bundled</span>`;
+    const own = isAc ? c.e.minSet("aircraftRate") : c.e.minSet("instructorRate");
+    const base = isAc ? c.e.aircraftRate : c.e.instructorRate;
+    if (base == null) return `<span class="mono" style="color:var(--ink-3)">$${isAc ? c.ar : c.ir}</span> <span class="chip mine">modeled</span>`;
+    return `<span class="mono">$${base}</span>${own ? ' <span class="chip mine">yours</span>' : ""}`;
+  }
+
+  function renderTable() {
+    const u = state.ui, rows = visibleRows();
+    $("#thead").innerHTML = COLS.map(c => {
+      const active = u.sort === c.k;
+      const aria = c.sort ? (active ? (u.dir === 1 ? "ascending" : "descending") : "none") : null;
+      return `<th ${c.sort ? `class="s" data-k="${c.k}"` : ""} ${aria ? `aria-sort="${aria}"` : ""} ${c.n ? 'style="text-align:right"' : ""}>${esc(c.label)}${active ? `<span class="arrow">${u.dir === 1 ? "▲" : "▼"}</span>` : ""}</th>`;
+    }).join("");
+
+    if (!rows.length) {
+      $("#tbody").innerHTML = `<tr><td colspan="${COLS.length}"><div class="empty">Nothing matches those filters.</div></td></tr>`;
+    } else {
+      $("#tbody").innerHTML = rows.map(r => rowHTML(r) + (u.open === r.s.id ? detailHTML(r) : "")).join("");
+    }
+    $("#count").textContent = rows.length + " of " + SCHOOLS.length + " schools";
+    $("#slCount").textContent = SCHOOLS.filter(s => state.st[s.id] === "shortlist" || state.st[s.id] === "called").length;
+  }
+
+  function rowHTML(r) {
+    const s = r.s, c = r.c;
+    const st = state.st[s.id] || "none";
+    const starred = st === "shortlist" || st === "called";
+    const tags = [];
+    if (s.exclFuel) tags.push('<span class="chip flag">excl. fuel</span>');
+    if (s.relocate) tags.push('<span class="chip flag">relocate</span>');
+    if (s.confidence === "low") tags.push('<span class="chip over">thin data</span>');
+    if (st === "called") tags.push('<span class="chip mine">called</span>');
+    return `
+      <tr class="row ${state.ui.open === s.id ? "open" : ""} ${st === "out" ? "out" : ""}" data-id="${s.id}">
+        <td><button class="star" type="button" data-star="${s.id}" data-on="${starred ? 1 : 0}"
+            aria-label="${starred ? "Remove from" : "Add to"} shortlist" title="Shortlist">${starred ? "★" : "☆"}</button></td>
+        <td>
+          <div class="school">
+            <span class="nm">${esc(s.name)}</span>
+            <span class="ap">${esc(s.airport)}</span>
+            <span style="font-size:.72rem;color:var(--ink-3)">${esc(s.availability)}</span>
+            ${tags.length ? `<span class="tag-row">${tags.join("")}</span>` : ""}
+          </div>
+        </td>
+        <td class="n">${c.e.distance.toFixed(1)}${c.e.minSet("distance") ? ' <span class="chip mine">yours</span>' : ""}</td>
+        <td>${rateCell(s, c, "ac")}${s.wet === true ? ' <span class="chip flag">wet</span>' : s.wet === false ? ' <span class="chip flag">dry</span>' : ""}</td>
+        <td>${rateCell(s, c, "instr")}</td>
+        <td><span class="chip ${s.ea === "Yes" ? "yes" : s.ea === "Partial" ? "partial" : "no"}">${esc(s.ea === "Yes" ? "in-house" : s.ea === "Partial" ? "part 141" : "outside DPE")}</span></td>
+        <td>${ratingCell(s)}</td>
+        <td class="n"><span class="cost ${c.published ? "" : "modelled"}">${money(c.total)}</span></td>
+        <td class="n">${c.totalWeeks}</td>
+        <td>${fitChip(c)}</td>
+        <td><span class="bar"><span class="track"><span class="fill" style="width:${Math.max(2, r.score)}%"></span></span><span class="num">${r.score}</span></span></td>
+      </tr>`;
+  }
+
+  function srcLink(u, label) {
+    return u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(label)} ↗</a>` : `<span class="np">${esc(label)}: no source</span>`;
+  }
+
+  function detailHTML(r) {
+    const s = r.s, c = r.c, src = s.sources || {};
+    const o = state.ov[s.id] || {};
+    const st = state.st[s.id] || "none";
+    const line = (label, val) => `<div class="r"><span>${label}</span><span>${val}</span></div>`;
+    return `
+      <tr class="detail"><td colspan="${COLS.length}">
+        <div class="detail-in">
+          <div>
+            <h4>Your numbers for this school</h4>
+            <p style="margin-bottom:8px">Type in what they quote you on the phone. Blank means the researched figure stays.</p>
+            <div class="ov">
+              ${OV_FIELDS.map(f => `
+                <label for="ov-${s.id}-${f.k}">${esc(f.label)}</label>
+                <input id="ov-${s.id}-${f.k}" class="${num(o[f.k]) != null ? "set" : ""}" type="number" step="any"
+                       data-ov="${s.id}" data-k="${f.k}" value="${o[f.k] == null ? "" : esc(o[f.k])}"
+                       placeholder="${esc(placeholderFor(s, f.k))}" />`).join("")}
+            </div>
+            <div class="status-row">
+              ${STATUSES.map(x => `<button type="button" class="ghost" data-status="${s.id}" data-v="${x.k}"
+                 style="${st === x.k ? "border-color:var(--magenta);color:var(--magenta-ink)" : ""}">${esc(x.label)}</button>`).join("")}
+            </div>
+            <h4 style="margin-top:14px">Your notes</h4>
+            <textarea class="notes" data-note="${s.id}" placeholder="Who you spoke to, what they said, next step…">${esc(state.notes[s.id] || "")}</textarea>
+          </div>
+
+          <div>
+            <h4>Cost breakdown</h4>
+            <div class="breakdown">
+              ${line(`Aircraft &mdash; ${c.flownHours.toFixed(1)}h &times; $${c.ar}`, money(c.aircraftCost))}
+              ${line(c.isPackage ? "Instructor &mdash; bundled" : `Instructor &mdash; ${c.instructorHours.toFixed(0)}h &times; $${c.ir}`, c.isPackage ? "incl." : money(c.instructorCost))}
+              ${c.simHrs > 0 ? line(`Simulator &mdash; ${c.simHrs}h &times; $${(c.e.simRate || 0) + c.ir}`, money(c.simCost)) : ""}
+              ${line("FAA knowledge test", money(state.A.knowledgeTest))}
+              ${line(c.fee === 0 ? "Examiner &mdash; in-house authority" : "Examiner fee", money(c.fee))}
+              ${line(`Waiting &mdash; ${c.wait} wk &times; $${state.A.weeklyDelay}`, money(c.waitCost))}
+              ${c.relocate
+                ? line(`Housing &mdash; ${c.months} mo &times; $${state.A.housing}`, money(c.housingCost))
+                : line(`Driving &mdash; ${Math.round(c.commuteMiles)} mi &times; $${state.A.mileage}`, money(c.commuteCost))}
+              ${state.A.extras > 0 ? line("Headset, medical, books", money(state.A.extras)) : ""}
+              ${line("<strong>Total</strong>", "<strong>" + money(c.total) + "</strong>").replace('class="r"', 'class="r tot"')}
+            </div>
+            <p class="src">${c.trainingWeeks} wk of lessons &times; ${Math.round(state.A.buffer * 100)}% buffer = ${c.bufferedWeeks} wk, plus ${c.wait} wk waiting for a checkride = <strong>${c.totalWeeks} wk (${c.projectedDays} days)</strong> &mdash; ${c.fits ? `${c.margin} days inside your deadline` : `${-c.margin} days past it`}.</p>
+          </div>
+
+          <div>
+            <h4>Aircraft and rates</h4>
+            <p>${esc(s.aircraftNote)}</p>
+            ${s.sim ? `<p style="margin-top:7px"><strong>Simulator:</strong> ${esc(s.sim.note || "")}</p>` : ""}
+            <p class="src">${srcLink(src.rate, "Rate source")}</p>
+            <h4 style="margin-top:13px">Checkride access</h4>
+            <p>${esc(s.checkride)}</p>
+            <p class="src">${srcLink(src.checkride, "Checkride source")}</p>
+          </div>
+
+          <div>
+            <h4>Where it is</h4>
+            <p>${esc(s.address)}</p>
+            ${s.distanceNote ? `<p class="src">${esc(s.distanceNote)}</p>` : ""}
+            <p class="src">${s.website ? `<a href="${esc(s.website)}" target="_blank" rel="noopener">${esc(s.website.replace(/^https?:\/\//, "").replace(/\/$/, ""))} ↗</a>` : "no website"} &middot; ${srcLink(src.distance, "Airport data")}</p>
+            <h4 style="margin-top:13px">Examining authority</h4>
+            <p>${esc(s.ea)} &mdash; ${s.part141 === true ? "Part 141" : s.part141 === false ? "Part 61" : "Part 61/141 not documented"}. ${esc(s.dpeFeeSource === "modeled" ? "Examiner fee not published; your scenario fee is used." : s.dpeFeeSource === "examining-authority" ? "Checkrides run in house, so no outside examiner fee." : "Examiner fee confirmed.")}</p>
+            <p class="src">${srcLink(src.ea, "Authority source")}</p>
+            <h4 style="margin-top:13px">Students per instructor</h4>
+            <p>${esc(s.ratioNote)}</p>
+            <p class="src">Rating: ${srcLink(src.rating, "profile")} &middot; data confidence: ${esc(s.confidence)}</p>
+          </div>
+        </div>
+      </td></tr>`;
+  }
+
+  function placeholderFor(s, k) {
+    if (k === "aircraftRate") return s.allInRate != null ? "package " + s.allInRate : (s.aircraftRate == null ? "not published" : String(s.aircraftRate));
+    if (k === "instructorRate") return s.allInRate != null ? "bundled" : (s.instructorRate == null ? "not published" : String(s.instructorRate));
+    if (k === "simRate") return s.sim && s.sim.rate != null ? String(s.sim.rate) : "no rate published";
+    if (k === "dpeFee") return s.dpeFee == null ? "uses your $" + state.A.dpeFee : String(s.dpeFee);
+    if (k === "dpeWait") return String(s.dpeWait);
+    if (k === "distance") return String(s.distance);
+    return "";
+  }
+
+  /* ---------------- shortlist ---------------- */
+  function renderShortlist() {
+    const scored = liveRows();
+    scoreAll(scored);
+    const rows = scored.filter(r => ["shortlist", "called"].indexOf(state.st[r.s.id]) > -1);
+    const scoreOf = (id) => { const m = scored.find(x => x.s.id === id); return m ? m.score : 0; };
+    if (!rows.length) {
+      $("#slCards").innerHTML = `<div class="empty">Star a school in the Compare table and it lands here with a call checklist, your notes, and the numbers side by side.</div>`;
+      return;
+    }
+    rows.sort((a, b) => scoreOf(b.s.id) - scoreOf(a.s.id));
+    $("#slCards").innerHTML = rows.map(r => {
+      const s = r.s, c = r.c, ticks = state.checks[s.id] || {};
+      return `
+        <article class="sl">
+          <header>
+            <div>
+              <h3>${esc(s.name)}</h3>
+              <div class="ap">${esc(s.airport)}</div>
+            </div>
+            <button class="star" type="button" data-star="${s.id}" data-on="1" aria-label="Remove from shortlist">★</button>
+          </header>
+          <div class="sl-body">
+            <div class="kv">
+              <div><div class="k">Modeled cost</div><div class="v">${money(c.total)}</div></div>
+              <div><div class="k">Match</div><div class="v">${scoreOf(s.id)}<span style="font-size:.7rem;color:var(--ink-3)">/100</span></div></div>
+              <div><div class="k">Weeks</div><div class="v">${c.totalWeeks}</div></div>
+              <div><div class="k">Deadline</div><div class="v" style="font-size:.86rem">${fitChip(c)}</div></div>
+            </div>
+            <div>
+              <div class="k" style="font-family:var(--display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px">Ask them</div>
+              <div class="check">
+                ${CALLS.map((q, i) => `
+                  <label><input type="checkbox" data-check="${s.id}" data-i="${i}" ${ticks[i] ? "checked" : ""} /><span>${esc(q)}</span></label>`).join("")}
+              </div>
+            </div>
+            <textarea class="notes" data-note="${s.id}" placeholder="Call notes…">${esc(state.notes[s.id] || "")}</textarea>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${s.website ? `<a class="ghost" style="text-decoration:none" href="${esc(s.website)}" target="_blank" rel="noopener">Website ↗</a>` : ""}
+              <button class="ghost" type="button" data-status="${s.id}" data-v="${state.st[s.id] === "called" ? "shortlist" : "called"}">${state.st[s.id] === "called" ? "Mark not yet called" : "Mark called"}</button>
+              <button class="ghost" type="button" data-status="${s.id}" data-v="out">Rule out</button>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+  }
+
+  /* ---------------- exports ---------------- */
+  function csv() {
+    const rows = visibleRows();
+    const head = ["School", "Airport", "Miles", "Aircraft $/hr", "Instructor $/hr", "Examining authority",
+      "Rating", "Modeled cost", "Weeks", "Days vs deadline", "Match", "Status", "Website"];
+    const cell = (v) => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+    const body = rows.map(r => [r.s.name, r.s.airport, r.c.e.distance.toFixed(1), r.c.ar, r.c.isPackage ? 0 : r.c.ir,
+      r.s.ea, r.s.google != null ? r.s.google : (r.s.yelp != null ? r.s.yelp : ""), Math.round(r.c.total),
+      r.c.totalWeeks, r.c.margin, r.score, state.st[r.s.id] || "none", r.s.website].map(cell).join(","));
+    return [head.map(cell).join(",")].concat(body).join("\n");
+  }
+  function summary() {
+    const rows = liveRows().filter(r => ["shortlist", "called"].indexOf(state.st[r.s.id]) > -1);
+    scoreAll(rows);
+    const A = state.A;
+    const out = ["PPL school shortlist — " + new Date().toISOString().slice(0, 10),
+      `Scenario: ${A.flightHours} flight hours, ${A.lessonsPerWeek} lessons/wk, ${Math.round(A.buffer * 100)}% weather buffer, ${A.days}-day deadline.`, ""];
+    rows.sort((a, b) => b.score - a.score).forEach(r => {
+      out.push(`${r.s.name} — ${r.s.airport}`);
+      out.push(`  ${money(r.c.total)} modeled · ${r.c.totalWeeks} weeks · ${r.c.fits ? r.c.margin + " days spare" : -r.c.margin + " days over"} · match ${r.score}/100`);
+      out.push(`  Aircraft $${r.c.ar}/hr · instructor ${r.c.isPackage ? "bundled" : "$" + r.c.ir + "/hr"} · examiner ${r.c.fee === 0 ? "in house" : money(r.c.fee) + " after " + r.c.wait + " wk"}`);
+      out.push("  " + (r.s.website || ""));
+      if (state.notes[r.s.id]) out.push("  Notes: " + state.notes[r.s.id].replace(/\n/g, " "));
+      out.push("");
+    });
+    if (rows.length === 0) out.push("(nothing shortlisted yet)");
+    return out.join("\n");
+  }
+
+  /* ---------------- wiring ---------------- */
+  function renderAll() { renderTiles(); renderTable(); renderShortlist(); }
+
+  function setTab(name) {
+    state.ui.tab = name;
+    ["compare", "shortlist", "method"].forEach(t => {
+      document.getElementById("tab-" + t).setAttribute("aria-selected", String(t === name));
+      document.getElementById("pane-" + t).hidden = t !== name;
+    });
+  }
+
+  function bind() {
+    document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+
+    $("#q").addEventListener("input", (e) => { state.ui.q = e.target.value.trim(); renderTable(); });
+    $("#distRange").addEventListener("input", (e) => {
+      state.ui.maxDist = Number(e.target.value);
+      $("#distVal").innerHTML = state.ui.maxDist + "&nbsp;mi";
+      renderTable();
+    });
+    $("#hideOut").addEventListener("change", (e) => { state.ui.hideOut = e.target.checked; renderTable(); });
+    document.querySelectorAll("#eaSeg button").forEach(b => b.addEventListener("click", () => {
+      state.ui.ea = b.dataset.val;
+      document.querySelectorAll("#eaSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      renderTable();
+    }));
+
+    $("#thead").addEventListener("click", (e) => {
+      const th = e.target.closest("th.s");
+      if (!th) return;
+      const k = th.dataset.k;
+      if (state.ui.sort === k) state.ui.dir *= -1;
+      else { state.ui.sort = k; state.ui.dir = (k === "name") ? 1 : (k === "match" || k === "rating" || k === "fit") ? -1 : 1; }
+      renderTable();
+    });
+
+    /* one delegated handler for everything inside the results pane */
+    document.addEventListener("click", (e) => {
+      const star = e.target.closest("[data-star]");
+      if (star) {
+        const id = star.dataset.star;
+        const on = state.st[id] === "shortlist" || state.st[id] === "called";
+        state.st[id] = on ? "none" : "shortlist";
+        save(); renderAll();
+        return;
+      }
+      const status = e.target.closest("[data-status]");
+      if (status) {
+        state.st[status.dataset.status] = status.dataset.v;
+        save(); renderAll();
+        return;
+      }
+      const row = e.target.closest("tr.row");
+      if (row && !e.target.closest("a, input, textarea, button, label")) {
+        state.ui.open = state.ui.open === row.dataset.id ? null : row.dataset.id;
+        renderTable();
+      }
+    });
+
+    document.addEventListener("change", (e) => {
+      const ov = e.target.closest("[data-ov]");
+      if (ov) {
+        const id = ov.dataset.ov, k = ov.dataset.k;
+        state.ov[id] = state.ov[id] || {};
+        const v = num(ov.value);
+        if (v == null || ov.value === "") delete state.ov[id][k]; else state.ov[id][k] = v;
+        save(); renderAll();
+        return;
+      }
+      const chk = e.target.closest("[data-check]");
+      if (chk) {
+        const id = chk.dataset.check;
+        state.checks[id] = state.checks[id] || {};
+        state.checks[id][chk.dataset.i] = chk.checked;
+        save();
+      }
+    });
+
+    document.addEventListener("input", (e) => {
+      const note = e.target.closest("[data-note]");
+      if (note) {
+        state.notes[note.dataset.note] = note.value;
+        clearTimeout(bind._n);
+        bind._n = setTimeout(save, 400);
+      }
+    });
+
+    $("#themeBtn").addEventListener("click", () => {
+      const cur = document.documentElement.getAttribute("data-theme")
+        || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+      save();
+    });
+    $("#copyCsv").addEventListener("click", () => copy(csv(), "Table copied as CSV"));
+    $("#copySummary").addEventListener("click", () => copy(summary(), "Shortlist copied"));
+    $("#resetScenario").addEventListener("click", () => {
+      Object.assign(state.A, DEFAULTS); syncRail(); save(); renderAll(); toast("Scenario back to defaults");
+    });
+    $("#resetWeights").addEventListener("click", () => {
+      Object.assign(state.W, W_DEFAULTS); syncRail(); save(); renderAll(); toast("Priorities back to defaults");
+    });
+    $("#clearEdits").addEventListener("click", () => {
+      if (!confirm("Clear your typed-in rates, notes, checklists and shortlist? The scenario sliders stay.")) return;
+      state.ov = {}; state.st = {}; state.notes = {}; state.checks = {};
+      save(); renderAll(); toast("Your edits are cleared");
+    });
+  }
+
+  load();
+  renderRail();
+  bind();
+  $("#distVal").innerHTML = state.ui.maxDist + "&nbsp;mi";
+  renderAll();
+})();
+</script>
