@@ -316,7 +316,7 @@ textarea.notes {
   </div>
   <div>
     <h1>Private pilot school selector</h1>
-    <div class="sub">18 schools &middot; 12 airports &middot; from ZIP 10030, Harlem NY</div>
+    <div class="sub" id="mastSub"></div>
   </div>
   <div class="spacer"></div>
   <button class="ghost" id="copyCsv" type="button">Copy table (CSV)</button>
@@ -435,7 +435,8 @@ textarea.notes {
       { k: "flightHours",   label: "Target flight hours",     min: 35,  max: 120,  step: 1,    unit: "h",
         tip: "40 h is the Part 61 minimum; most people finish nearer 60–75." },
       { k: "dualFrac",      label: "Share flown with a CFI",  min: 0.4, max: 1,    step: 0.05, pct: true },
-      { k: "groundHours",   label: "Ground instruction",      min: 0,   max: 40,   step: 1,    unit: "h" },
+      { k: "groundHours",   label: "CFI ground instruction",  min: 0,   max: 40,   step: 1,    unit: "h",
+        tip: "0 because you are doing Sporty's yourself. Pre/post-flight briefings are often billed on top." },
       { k: "lessonsPerWeek",label: "Lessons per week",        min: 1,   max: 7,    step: 1 },
       { k: "hoursPerLesson",label: "Hours per lesson",        min: 1,   max: 3,    step: 0.25, unit: "h" },
       { k: "buffer",        label: "Weather / cancellation buffer", min: 0, max: 0.6, step: 0.05, pct: true,
@@ -444,7 +445,8 @@ textarea.notes {
         tip: "Only 2.5 h of approved-device time counts toward Part 61." },
     ]},
     { title: "Money", fields: [
-      { k: "knowledgeTest",     label: "FAA knowledge test",          min: 0,   max: 400,  step: 5,  money: true },
+      { k: "knowledgeTest",     label: "FAA knowledge test",          min: 0,   max: 400,  step: 5,  money: true,
+        tip: "0 because it is already handled." },
       { k: "dpeFee",            label: "Examiner fee (where unpublished)", min: 400, max: 1600, step: 25, money: true },
       { k: "weeklyDelay",       label: "Cost of each week waiting",   min: 0,   max: 500,  step: 25, money: true,
         tip: "Rental car, rescheduling, currency flights — what a week of delay actually costs you." },
@@ -458,13 +460,13 @@ textarea.notes {
       { k: "mileage",    label: "Cost per mile driven",     min: 0.3, max: 1.2, step: 0.05, money: true, dp: 2 },
       { k: "commuteMult",label: "Road miles vs straight line", min: 1, max: 2.4, step: 0.1, mult: true },
       { k: "housing",    label: "Housing $/mo if you relocate", min: 0, max: 2500, step: 50, money: true,
-        tip: "Applies only to Luke Weathers (Memphis)." },
+        tip: "Used for relocation schools with no published rate. Lookup publishes $1,200/mo, so its row uses that." },
     ]},
   ];
   const FIELDS = GROUPS.flatMap(g => g.fields);
   const DEFAULTS = {
-    flightHours: 60, dualFrac: 0.75, groundHours: 15, lessonsPerWeek: 6, hoursPerLesson: 1.5,
-    buffer: 0.25, simHours: 2.5, knowledgeTest: 175, dpeFee: 900, weeklyDelay: 150, extras: 0,
+    flightHours: 60, dualFrac: 0.75, groundHours: 0, lessonsPerWeek: 6, hoursPerLesson: 1.5,
+    buffer: 0.25, simHours: 2.5, knowledgeTest: 0, dpeFee: 900, weeklyDelay: 150, extras: 0,
     assumedAircraft: 165, assumedInstructor: 80, days: 59, mileage: 0.7, commuteMult: 1.4, housing: 900,
   };
   const WEIGHTS = [
@@ -610,13 +612,14 @@ textarea.notes {
     const months = Math.ceil(totalWeeks / 4.345);
     const commuteMiles = relocate ? 0 : 2 * e.distance * A.commuteMult * lessons;
     const commuteCost = commuteMiles * A.mileage;
-    const housingCost = relocate ? A.housing * months : 0;
+    const monthlyHousing = s.housingMonthly != null ? s.housingMonthly : A.housing;
+    const housingCost = relocate ? monthlyHousing * months : 0;
     const total = aircraftCost + instructorCost + simCost + A.knowledgeTest + A.extras
       + fee + waitCost + commuteCost + housingCost;
 
     return { e, isPackage, published, ar, ir, instructorHours, lessons, trainingWeeks, bufferedWeeks,
       wait, totalWeeks, projectedDays, margin, fits: margin >= 0, simHrs, flownHours, aircraftCost,
-      instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost, housingCost, total };
+      instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost, housingCost, monthlyHousing, total };
   }
 
   const CONF = { high: 1, medium: 0.55, low: 0.15 };
@@ -911,7 +914,7 @@ textarea.notes {
               ${line(c.fee === 0 ? "Examiner &mdash; in-house authority" : "Examiner fee", money(c.fee))}
               ${line(`Waiting &mdash; ${c.wait} wk &times; $${state.A.weeklyDelay}`, money(c.waitCost))}
               ${c.relocate
-                ? line(`Housing &mdash; ${c.months} mo &times; $${state.A.housing}`, money(c.housingCost))
+                ? line(`Housing &mdash; ${c.months} mo &times; $${c.monthlyHousing}${s.housingMonthly != null ? " (their published rate)" : ""}`, money(c.housingCost))
                 : line(`Driving &mdash; ${Math.round(c.commuteMiles)} mi &times; $${state.A.mileage}`, money(c.commuteCost))}
               ${state.A.extras > 0 ? line("Headset, medical, books", money(state.A.extras)) : ""}
               ${line("<strong>Total</strong>", "<strong>" + money(c.total) + "</strong>").replace('class="r"', 'class="r tot"')}
@@ -1140,6 +1143,11 @@ textarea.notes {
   }
 
   load();
+  // derive the masthead count from the data so it cannot go stale
+  {
+    const ports = new Set(SCHOOLS.map(s => s.airport.split(/[\s—-]/)[0]));
+    $("#mastSub").textContent = SCHOOLS.length + " options · " + ports.size + " airports · from ZIP 10030, Harlem NY";
+  }
   renderRail();
   bind();
   $("#distVal").innerHTML = state.ui.maxDist + "&nbsp;mi";
