@@ -23,7 +23,6 @@
   "googleReviews": null,
   "yelp": 5,
   "checkride": "'DPE Onsite', '#1 in New York'. KFRG can see 30–45 min taxi delays at peak.",
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "https://longislandaviators.com/",
   "confidence": "high",
@@ -46,7 +45,8 @@
   "blockNote": "C152 block rate $145/hr vs $155 walk-up.",
   "state": "NY",
   "freeLodging": true,
-  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is."
+  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is.",
+  "dpeWaitResearched": 3
  },
  {
   "id": "academy-of-aviation",
@@ -68,7 +68,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "Part 141 but 'does not have a DPE on staff — students book an independent DPE.' KHPN campus may have less scheduling competition.",
-  "dpeWait": 8,
   "dpeFee": null,
   "website": "https://www.academyofaviation.com/",
   "confidence": "medium",
@@ -87,7 +86,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KHPN via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 0,
   "tollNote": "No toll — Major Deegan / Sprain Brook to Westchester.",
-  "state": "NY"
+  "state": "NY",
+  "dpeWaitResearched": 8
  },
  {
   "id": "heritage-flight-academy",
@@ -113,7 +113,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "DPE fee not published (default $900 modeled). Part 141 program with stage checks.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://heritageflightacademy.com/",
   "confidence": "medium",
@@ -136,7 +135,8 @@
   "blockNote": "Piper Archer II 20-hour block $179/hr vs $189 walk-up (10-hour block $184).",
   "state": "NY",
   "freeLodging": true,
-  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is."
+  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is.",
+  "dpeWaitResearched": 6
  },
  {
   "id": "luke-weathers-flight-academy",
@@ -165,7 +165,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "DPE fee $600 (user-confirmed). Part 141 structured; examining authority not documented.",
-  "dpeWait": 4,
   "dpeFee": 600,
   "website": "https://obap.org/lwfa/",
   "confidence": "medium",
@@ -186,7 +185,8 @@
   "tollNote": "Relocation — no per-lesson commute.",
   "discountPct": 10,
   "discountNote": "OBAP member-students get roughly 10% off flight training (per Flying magazine). Membership required; not automatic.",
-  "state": "MS"
+  "state": "MS",
+  "dpeWaitResearched": 4
  },
  {
   "id": "richmor-aviation",
@@ -213,7 +213,6 @@
   "googleReviews": null,
   "yelp": 4.5,
   "checkride": "'Part 141 flight school with FAA Examining Authority.' Part 141 since 1967. Ops manual lists 'examining authority fees.'",
-  "dpeWait": 1,
   "dpeFee": 0,
   "website": "https://richmorflightschool.com/",
   "confidence": "high",
@@ -234,7 +233,8 @@
   "tollNote": "NY Thruway toll from NYC to Kingston NOT VERIFIED — type your own into the row.",
   "soloRate": 135,
   "soloNote": "Published C152 solo $135 vs dual $205 — solo hours are billed at the lower rate.",
-  "state": "NY"
+  "state": "NY",
+  "dpeWaitResearched": 1
  },
  {
   "id": "century-air",
@@ -255,7 +255,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "Founder is a former American Airlines captain now an FAA DPE. Part 141 program with stage checks. KCDW takeoff delays 5–15 min.",
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "https://centuryair.com/",
   "confidence": "medium",
@@ -274,7 +273,48 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 3
+ },
+ {
+  "id": "century-air-dpe",
+  "name": "Century Air — if the founder examines",
+  "airport": "KCDW — Essex County",
+  "address": "19 Wright Way, Fairfield, NJ 07004",
+  "distance": 18.2,
+  "aircraftRate": null,
+  "wet": null,
+  "aircraftNote": "Fleet types listed (C172N/P/SP/NAV III, C172RG, SR20, SR22, PA-30) but no prices published.",
+  "instructorRate": null,
+  "part141": true,
+  "ea": "Yes",
+  "ratio": null,
+  "ratioNote": "8 aircraft types listed without counts; instructor count not published.",
+  "availability": "Part 141 / founder is a DPE — SCENARIO",
+  "google": 4.7,
+  "googleReviews": null,
+  "yelp": null,
+  "checkride": "SCENARIO, NOT CONFIRMED. Their site says the founder is a former American Airlines captain who is now an FAA DPE. This row assumes he examines Century students in house, so no outside examiner fee. Nobody has confirmed that he does — ask before believing this row. The plain Century Air row keeps the outside examiner fee.",
+  "dpeFee": 0,
+  "website": "https://centuryair.com/",
+  "confidence": "low",
+  "sources": {
+   "distance": "https://airnav.com/airport/KCDW",
+   "rate": "https://centuryair.com/aircraft-rental/",
+   "ea": "https://centuryair.com/",
+   "checkride": "https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/",
+   "rating": "https://www.google.com/maps/search/Century+Air+Caldwell+NJ+flight+school",
+   "drive": "https://router.project-osrm.org/"
+  },
+  "dpeFeeSource": "scenario",
+  "driveMiles": 25.5,
+  "driveMinutes": 37,
+  "driveTo": "KCDW",
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak.",
+  "state": "NJ",
+  "dpeWaitResearched": 3
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -286,7 +326,6 @@
   "google": 4.9,
   "googleReviews": 212,
   "yelp": 4.4,
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "https://www.airfleettraining.com/",
   "confidence": "high",
@@ -320,7 +359,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 3
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -332,7 +372,6 @@
   "google": 4.9,
   "googleReviews": 212,
   "yelp": 4.4,
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "https://www.airfleettraining.com/",
   "confidence": "high",
@@ -365,7 +404,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 3
  },
  {
   "id": "aero-safety-training",
@@ -386,7 +426,6 @@
   "googleReviews": null,
   "yelp": 5,
   "checkride": "LIKELY CLOSED: Google 'Permanently closed'; a 2026 guide says no Part 141 program remains at N07.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://lpawings.com/",
   "confidence": "low",
@@ -405,7 +444,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 6
  },
  {
   "id": "aero-flight-school-n07",
@@ -426,7 +466,6 @@
   "googleReviews": 5,
   "yelp": null,
   "checkride": "Part 61 only; no Part 141 program at N07 as of 2026.",
-  "dpeWait": 7,
   "dpeFee": null,
   "website": "https://n07lincolnparkairport.com/flight-school/",
   "confidence": "medium",
@@ -447,7 +486,8 @@
   "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass.",
   "taxPct": 6.625,
   "taxNote": "Their rate sheet says 'plus tax'; NJ sales tax is 6.625%.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 7
  },
  {
   "id": "atp-morristown",
@@ -470,7 +510,6 @@
   "googleReviews": null,
   "yelp": 1,
   "checkride": "ATP offers to pay up to 6 checkride fees (~$12,000 value). Examiner fees + knowledge tests ~$10,500–12,000 beyond program price.",
-  "dpeWait": 5,
   "dpeFee": null,
   "website": "https://atpflightschool.com/locations/new-jersey/morristown-flight-school-mmu.html",
   "confidence": "medium",
@@ -489,7 +528,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KMMU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 5
  },
  {
   "id": "learn2flynj",
@@ -510,7 +550,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "n.a.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://www.learn2flynj.com/",
   "confidence": "low",
@@ -529,7 +568,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass. A Staten Island / Goethals routing tolls the same.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 6
  },
  {
   "id": "luvsflying",
@@ -552,7 +592,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "n.a.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://luvsflying.com/",
   "confidence": "low",
@@ -571,7 +610,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 14.79,
   "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass. A Staten Island / Goethals routing tolls the same.",
-  "state": "NJ"
+  "state": "NJ",
+  "dpeWaitResearched": 6
  },
  {
   "id": "arrow-aviation",
@@ -592,7 +632,6 @@
   "googleReviews": 45,
   "yelp": null,
   "checkride": "'If your training is complete, we offer the FAA Practical Test right here'; all FAA written tests administered on site.",
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "http://www.arrowaviationllc.com/",
   "confidence": "high",
@@ -611,7 +650,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KDXR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 0,
   "tollNote": "No toll — Hutchinson River and Merritt Parkways are untolled in NY and CT.",
-  "state": "CT"
+  "state": "CT",
+  "dpeWaitResearched": 3
  },
  {
   "id": "three-wing",
@@ -632,7 +672,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "Listed as 'DPE Onsite'.",
-  "dpeWait": 3,
   "dpeFee": null,
   "website": "https://www.threewing.com/",
   "confidence": "high",
@@ -655,7 +694,8 @@
   "taxNote": "CT 6.35% sales tax + 2% airport fee, both excluded from the published rate.",
   "monthlyFee": 90,
   "feeNote": "$90/mo club fee, waived for students until solo — modelled from solo onward is not attempted, so this is the conservative full-course figure.",
-  "state": "CT"
+  "state": "CT",
+  "dpeWaitResearched": 3
  },
  {
   "id": "meriden-aviation",
@@ -676,7 +716,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "10-hr pre-pay discounts; no DPE/wait info published.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://www.meridenaviationcenter.com/",
   "confidence": "high",
@@ -695,7 +734,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KMMK via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 0,
   "tollNote": "No toll — I-95 / Merritt are untolled in Connecticut.",
-  "state": "CT"
+  "state": "CT",
+  "dpeWaitResearched": 6
  },
  {
   "id": "interstate-aviation",
@@ -716,7 +756,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "n.a.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://interstateaviation.com/",
   "confidence": "medium",
@@ -735,7 +774,8 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KOXC via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 0,
   "tollNote": "No toll — Hutchinson / Merritt / Route 8 are untolled.",
-  "state": "CT"
+  "state": "CT",
+  "dpeWaitResearched": 6
  },
  {
   "id": "global-aviation-center",
@@ -761,7 +801,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "Strongest checkride signal: in-house FAA DPE on staff, checkrides 'in days, not months', 'minimal wait times', in-house PSI testing center. 35-hr PPL under 141.",
-  "dpeWait": 2,
   "dpeFee": null,
   "website": "https://www.globalaviationcenter.com/",
   "confidence": "high",
@@ -784,7 +823,8 @@
   "blockNote": "Warrior II $179/hr paying cash vs $184 on a card — the row defaults to the card price and the toggle applies the cash discount.",
   "state": "NY",
   "freeLodging": true,
-  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is."
+  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is.",
+  "dpeWaitResearched": 2
  },
  {
   "id": "airborne-elite",
@@ -811,7 +851,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "n.a. Listing open 24 hours. Phone (631) 393-0830.",
-  "dpeWait": 6,
   "dpeFee": null,
   "website": "https://flyforreal.com/",
   "confidence": "medium",
@@ -832,7 +871,8 @@
   "tollNote": "Assumes one MTA crossing each way (RFK, Whitestone or Throgs Neck) at $7.46 E-ZPass. The Queensboro Bridge is free but slower and runs into the congestion zone.",
   "state": "NY",
   "freeLodging": true,
-  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is."
+  "lodgingNote": "You can stay in Queens for free, which covers the Long Island fields — no housing allowance is charged here however long the drive from Harlem is.",
+  "dpeWaitResearched": 6
  },
  {
   "id": "lookup-flight-academy",
@@ -858,7 +898,6 @@
   "googleReviews": null,
   "yelp": null,
   "checkride": "No DPE on staff and no examining authority documented anywhere — not on their site, not on checkrides.io. Wait modeled at 3 weeks like other Part 141 schools without a documented examiner; override it if they quote you one. THEIR OWN SITE CONTRADICTS THE PROMO: /private-pilot/ says '2 months' at 40 flight hours, /academy-flight-training/ says 'up to 80 hours', /flexible-pilot-course/ says 3–6 months. The Instagram post says under 30 days.",
-  "dpeWait": 3,
   "dpeFee": null,
   "dpeFeeSource": "modeled",
   "website": "https://lookupflightacademy.com/",
@@ -877,6 +916,7 @@
   "driveNote": "Road route from the ZIP 10030 centroid to KLZU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
   "tollRoundTrip": 0,
   "tollNote": "Relocation — no per-lesson commute.",
-  "state": "GA"
+  "state": "GA",
+  "dpeWaitResearched": 3
  }
 ]

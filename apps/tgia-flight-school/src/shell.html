@@ -459,6 +459,8 @@ textarea.notes {
       { k: "knowledgeTest",     label: "FAA knowledge test",          min: 0,   max: 400,  step: 5,  money: true,
         tip: "0 because it is already handled." },
       { k: "dpeFee",            label: "Examiner fee (where unpublished)", min: 400, max: 1600, step: 25, money: true },
+      { k: "checkrideWait",     label: "Checkride booked this far ahead", min: 0, max: 8, step: 0.5, unit: "wk",
+        tip: "One assumption for every school — you can book ahead roughly a week anywhere. Override a row if one quotes you worse." },
       { k: "weeklyDelay",       label: "Cost of each week waiting",   min: 0,   max: 500,  step: 25, money: true,
         tip: "Rental car, rescheduling, currency flights — what a week of delay actually costs you." },
       { k: "extras",            label: "Headset, medical, books",     min: 0,   max: 4000, step: 50, money: true },
@@ -485,7 +487,7 @@ textarea.notes {
   const FIELDS = GROUPS.flatMap(g => g.fields);
   const DEFAULTS = {
     flightHours: 60, dualFrac: 0.75, groundHours: 0, flyingDays: 5, flightsPerDay: 1.4, hoursPerLesson: 1.5,
-    buffer: 0.25, simHours: 2.5, knowledgeTest: 0, dpeFee: 900, weeklyDelay: 150, extras: 0,
+    buffer: 0.25, simHours: 2.5, knowledgeTest: 0, dpeFee: 900, checkrideWait: 1, weeklyDelay: 150, extras: 0,
     assumedAircraft: 165, assumedInstructor: 80, days: 57, mileage: 0.7, traffic: 1.3, timeValue: 0, stayTrigger: 1.5, stayHousing: 1000, housing: 900,
   };
   const WEIGHTS = [
@@ -513,7 +515,7 @@ textarea.notes {
     { k: "instructorRate", label: "Instructor $/hr" },
     { k: "simRate",        label: "Simulator $/hr" },
     { k: "dpeFee",         label: "Examiner fee $" },
-    { k: "dpeWait",        label: "Checkride wait (weeks)" },
+    { k: "dpeWait",        label: "Checkride wait (wk)" },
     { k: "soloRate",       label: "Solo aircraft $/hr" },
     { k: "toll",           label: "Tolls per round trip $" },
     { k: "driveMinutes",   label: "Drive time each way (min)" },
@@ -595,6 +597,7 @@ textarea.notes {
 
   /* ---------------- the model ---------------- */
   function eff(s) {
+    const A = state.A;
     const o = state.ov[s.id] || {};
     const pick = (k, base) => { const v = num(o[k]); return v == null ? base : v; };
     return {
@@ -602,7 +605,7 @@ textarea.notes {
       instructorRate: pick("instructorRate", s.instructorRate),
       simRate: pick("simRate", s.sim ? s.sim.rate : null),
       dpeFee: pick("dpeFee", s.dpeFee),
-      dpeWait: pick("dpeWait", s.dpeWait),
+      dpeWait: pick("dpeWait", A.checkrideWait),
       distance: pick("distance", s.distance),
       driveMiles: pick("driveMiles", s.driveMiles),
       driveMinutes: pick("driveMinutes", s.driveMinutes),
@@ -1033,7 +1036,9 @@ textarea.notes {
             <p>${esc(s.aircraftNote)}</p>
             ${s.sim ? `<p style="margin-top:7px"><strong>Simulator:</strong> ${esc(s.sim.note || "")}</p>` : ""}
             ${[["blockNote", s.blockNote], ["soloNote", s.soloNote], ["discountNote", s.discountNote],
-                ["taxNote", s.taxNote], ["feeNote", s.feeNote], ["tollNote", s.tollNote], ["lodgingNote", c.freeStay ? s.lodgingNote : null], ["driveNote", s.driveNote]]
+                ["taxNote", s.taxNote], ["feeNote", s.feeNote], ["waitNote", s.dpeWaitResearched != null
+                  ? `Checkride wait is modelled at ${state.A.checkrideWait} wk for every school. Research on this one suggested ${s.dpeWaitResearched} wk — kept for reference only.` : null],
+                ["tollNote", s.tollNote], ["lodgingNote", c.freeStay ? s.lodgingNote : null], ["driveNote", s.driveNote]]
                 .filter(x => x[1]).map(x => `<p class="src">${esc(x[1])}</p>`).join("")}
             <p class="src">${srcLink(src.rate, "Rate source")}</p>
             <h4 style="margin-top:13px">Checkride access</h4>
@@ -1062,7 +1067,7 @@ textarea.notes {
     if (k === "instructorRate") return s.allInRate != null ? "bundled" : (s.instructorRate == null ? "not published" : String(s.instructorRate));
     if (k === "simRate") return s.sim && s.sim.rate != null ? String(s.sim.rate) : "no rate published";
     if (k === "dpeFee") return s.dpeFee == null ? "uses your $" + state.A.dpeFee : String(s.dpeFee);
-    if (k === "dpeWait") return String(s.dpeWait);
+    if (k === "dpeWait") return String(state.A.checkrideWait) + " (all schools)";
     if (k === "driveMiles") return String(s.driveMiles);
     if (k === "driveMinutes") return String(s.driveMinutes);
     return "";
