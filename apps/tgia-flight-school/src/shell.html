@@ -471,9 +471,9 @@ textarea.notes {
       { k: "timeValue",  label: "What an hour of your time is worth", min: 0, max: 150, step: 5, money: true,
         tip: "0 leaves driving time out of the totals — it is still shown as hours in the car." },
       { k: "stayTrigger",label: "Stay over if the drive exceeds", min: 0.5, max: 4, step: 0.25, unit: "h",
-        tip: "Out-of-state schools past this drive get the housing allowance below. In-state schools never do." },
+        tip: "Any school past this drive gets the allowance below, unless you have marked it as somewhere you can stay free." },
       { k: "stayHousing",label: "Housing allowance $/mo", min: 0, max: 3000, step: 50, money: true,
-        tip: "Applied per month of training to out-of-state schools past the trigger." },
+        tip: "Applied per month of training to schools past the trigger with no free place to stay." },
       { k: "housing",    label: "Housing $/mo if you relocate", min: 0, max: 2500, step: 50, money: true,
         tip: "Used for relocation schools with no published rate. Lookup publishes $1,200/mo, so its row uses that." },
     ]},
@@ -531,6 +531,7 @@ textarea.notes {
     st: {},        /* per-school status */
     notes: {},     /* per-school free text */
     checks: {},    /* per-school call-checklist ticks */
+    freeStay: {},  /* per-school: somewhere free to sleep nearby */
     ui: { sort: "match", dir: -1, q: "", ea: "all", maxDist: 1200, hideOut: true, bestRates: true, stayReplacesDrive: false, tab: "compare", open: null },
   };
   function load() {
@@ -541,6 +542,7 @@ textarea.notes {
       if (d.A) Object.assign(state.A, d.A);
       if (d.W) Object.assign(state.W, d.W);
       state.ov = d.ov || {}; state.st = d.st || {}; state.notes = d.notes || {}; state.checks = d.checks || {};
+      state.freeStay = d.freeStay || {};
       if (typeof d.bestRates === "boolean") state.ui.bestRates = d.bestRates;
       if (typeof d.stayReplacesDrive === "boolean") state.ui.stayReplacesDrive = d.stayReplacesDrive;
       if (d.theme) document.documentElement.setAttribute("data-theme", d.theme);
@@ -550,6 +552,7 @@ textarea.notes {
     try {
       localStorage.setItem(KEY, JSON.stringify({
         A: state.A, W: state.W, ov: state.ov, st: state.st, notes: state.notes, checks: state.checks,
+        freeStay: state.freeStay,
         bestRates: state.ui.bestRates, stayReplacesDrive: state.ui.stayReplacesDrive,
         theme: document.documentElement.getAttribute("data-theme") || "",
       }));
@@ -649,10 +652,11 @@ textarea.notes {
     const waitCost = wait * A.weeklyDelay;
     const relocate = !!s.relocate;
     const months = Math.ceil(totalWeeks / 4.345);
-    // Out of state AND past the drive trigger -> you stay over there, so the model
-    // pays a housing allowance. In-state never triggers it, however long the drive.
+    // Past the drive trigger you stay over, wherever the school is - unless you
+    // already have somewhere free to sleep near it (Queens covers Long Island).
     const driveEach = e.driveMinutes * A.traffic;
-    const needsStay = !relocate && s.state !== "NY" && driveEach > A.stayTrigger * 60;
+    const freeStay = state.freeStay[s.id] !== undefined ? state.freeStay[s.id] : !!s.freeLodging;
+    const needsStay = !relocate && !freeStay && driveEach > A.stayTrigger * 60;
     const stayCost = needsStay ? A.stayHousing * Math.ceil(totalWeeks / 4.345) : 0;
     // If you are staying near the field you are not also driving 40 round trips —
     // but that is the user's call, so it is opt-in and off by default.
@@ -675,7 +679,7 @@ textarea.notes {
       instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost,
       driveHours, driveTimeCost, housingCost, monthlyHousing,
       discount, discountPct, tax, taxPct, clubFees, tolls, tollUnknown, usedBlock, soloFlown, dualFlown, soloAr,
-      needsStay, stayCost, stayReplacesDrive, driveEach, total };
+      needsStay, stayCost, stayReplacesDrive, driveEach, freeStay, total };
   }
 
   const CONF = { high: 1, medium: 0.55, low: 0.15 };
@@ -920,7 +924,8 @@ textarea.notes {
     if (c.discountPct) tags.push('<span class="chip fit">&minus;' + c.discountPct + '% member</span>');
     if (c.taxPct) tags.push('<span class="chip flag">+' + c.taxPct + '% tax</span>');
     if (c.tollUnknown) tags.push('<span class="chip over">toll unverified</span>');
-    if (c.needsStay) tags.push('<span class="chip flag">stay over &middot; ' + s.state + '</span>');
+    if (c.needsStay) tags.push('<span class="chip flag">stay over</span>');
+    if (c.freeStay && c.driveEach > state.A.stayTrigger * 60) tags.push('<span class="chip yes">free stay</span>');
     if (s.billing) tags.push('<span class="chip flag">' + esc(s.billing) + ' billing</span>');
     if (s.pipistrel) tags.push('<span class="chip flag">Pipistrel</span>');
     if (st === "called") tags.push('<span class="chip mine">called</span>');
@@ -970,6 +975,10 @@ textarea.notes {
                        data-ov="${s.id}" data-k="${f.k}" value="${o[f.k] == null ? "" : esc(o[f.k])}"
                        placeholder="${esc(placeholderFor(s, f.k))}" />`).join("")}
             </div>
+            <label class="mini" style="gap:8px;margin-top:10px;white-space:normal;align-items:flex-start">
+              <input type="checkbox" data-freestay="${s.id}" ${c.freeStay ? "checked" : ""} style="margin-top:2px;accent-color:var(--magenta)" />
+              <span>I can stay near here for free<span style="display:block;color:var(--ink-3);font-size:.72rem">Waives the housing allowance however long the drive.</span></span>
+            </label>
             <div class="status-row">
               ${STATUSES.map(x => `<button type="button" class="ghost" data-status="${s.id}" data-v="${x.k}"
                  style="${st === x.k ? "border-color:var(--magenta);color:var(--magenta-ink)" : ""}">${esc(x.label)}</button>`).join("")}
@@ -992,7 +1001,7 @@ textarea.notes {
               ${state.A.knowledgeTest > 0 ? line("FAA knowledge test", money(state.A.knowledgeTest)) : ""}
               ${line(c.fee === 0 ? "Examiner &mdash; in-house authority" : "Examiner fee", money(c.fee))}
               ${line(`Waiting &mdash; ${c.wait} wk &times; $${state.A.weeklyDelay}`, money(c.waitCost))}
-              ${c.needsStay ? line(`Housing allowance &mdash; ${c.months} mo &times; $${state.A.stayHousing} (${s.state}, ${hhmm(c.driveEach)} each way)`, money(c.stayCost)) : ""}
+              ${c.needsStay ? line(`Housing allowance &mdash; ${c.months} mo &times; $${state.A.stayHousing} (${hhmm(c.driveEach)} each way)`, money(c.stayCost)) : ""}
               ${c.relocate
                 ? line(`Housing &mdash; ${c.months} mo &times; $${c.monthlyHousing}${s.housingMonthly != null ? " (their published rate)" : ""}`, money(c.housingCost))
                 : line(`Driving &mdash; ${Math.round(c.commuteMiles)} mi &times; $${state.A.mileage}`, money(c.commuteCost))}
@@ -1013,7 +1022,7 @@ textarea.notes {
             <p>${esc(s.aircraftNote)}</p>
             ${s.sim ? `<p style="margin-top:7px"><strong>Simulator:</strong> ${esc(s.sim.note || "")}</p>` : ""}
             ${[["blockNote", s.blockNote], ["soloNote", s.soloNote], ["discountNote", s.discountNote],
-                ["taxNote", s.taxNote], ["feeNote", s.feeNote], ["tollNote", s.tollNote], ["driveNote", s.driveNote]]
+                ["taxNote", s.taxNote], ["feeNote", s.feeNote], ["tollNote", s.tollNote], ["lodgingNote", c.freeStay ? s.lodgingNote : null], ["driveNote", s.driveNote]]
                 .filter(x => x[1]).map(x => `<p class="src">${esc(x[1])}</p>`).join("")}
             <p class="src">${srcLink(src.rate, "Rate source")}</p>
             <h4 style="margin-top:13px">Checkride access</h4>
@@ -1193,6 +1202,12 @@ textarea.notes {
         state.ov[id] = state.ov[id] || {};
         const v = num(ov.value);
         if (v == null || ov.value === "") delete state.ov[id][k]; else state.ov[id][k] = v;
+        save(); renderAll();
+        return;
+      }
+      const fs = e.target.closest("[data-freestay]");
+      if (fs) {
+        state.freeStay[fs.dataset.freestay] = fs.checked;
         save(); renderAll();
         return;
       }
