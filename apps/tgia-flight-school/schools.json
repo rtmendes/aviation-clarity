@@ -32,9 +32,14 @@
    "rate": "https://longislandaviators.com/rates/",
    "ea": "https://flightschools.fyi/flight-schools/long-island-aviators-kfrg/",
    "checkride": "https://flightschools.fyi/flight-schools/long-island-aviators-kfrg/",
-   "rating": "https://www.google.com/maps/search/Long+Island+Aviators+Farmingdale+NY"
+   "rating": "https://www.google.com/maps/search/Long+Island+Aviators+Farmingdale+NY",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 38.9,
+  "driveMinutes": 59,
+  "driveTo": "KFRG",
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "academy-of-aviation",
@@ -65,9 +70,14 @@
    "rate": "https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/",
    "ea": "https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/",
    "checkride": "https://flightschools.fyi/flight-schools/academy-of-aviation-kfrg/",
-   "rating": "https://www.google.com/maps/search/Academy+of+Aviation+Republic+Airport+Farmingdale+NY"
+   "rating": "https://www.google.com/maps/search/Academy+of+Aviation+Republic+Airport+Farmingdale+NY",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 27.2,
+  "driveMinutes": 44,
+  "driveTo": "KHPN",
+  "driveNote": "Road route from the ZIP 10030 centroid to KHPN via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "heritage-flight-academy",
@@ -102,9 +112,14 @@
    "rate": "https://www.reddit.com/r/flying/comments/1dzhd1q/the_good_bad_and_ugly_of_heritage_flight_academy/",
    "ea": "https://checkrides.io/flight-schools/heritage-flight-academy-ronkonkoma-ny",
    "checkride": "https://flightschools.fyi/flight-schools/heritage-flight-academy-llc-kisp/",
-   "rating": "https://www.bestaviation.net/school/heritage_flight_academy/"
+   "rating": "https://www.bestaviation.net/school/heritage_flight_academy/",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 52.8,
+  "driveMinutes": 78,
+  "driveTo": "KISP",
+  "driveNote": "Road route from the ZIP 10030 centroid to KISP via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "luke-weathers-flight-academy",
@@ -142,9 +157,14 @@
    "rate": "https://pilotbound.app/aviation-academies/mississippi/luke-weathers-flight-academy",
    "ea": "https://obap.org/lwfa/",
    "checkride": "https://www.flyingmag.com/american-airlines-donates-1-5-million-to-obap-youth-training-academy/",
-   "rating": "https://www.pilotcenter.net/flight-schools/luke-weathers-flight-academy"
+   "rating": "https://www.pilotcenter.net/flight-schools/luke-weathers-flight-academy",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "confirmed"
+  "dpeFeeSource": "confirmed",
+  "driveMiles": 1111.7,
+  "driveMinutes": 1251,
+  "driveTo": "KOLV",
+  "driveNote": "Road route from the ZIP 10030 centroid to KOLV via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "richmor-aviation",
@@ -180,9 +200,14 @@
    "rate": "https://richmorflightschool.com/wp-content/uploads/2025/02/Ops-Manual-Nov-2024-1.pdf",
    "ea": "https://checkrides.io/flight-schools/richmor-aviation-inc-hudson-ny",
    "checkride": "https://checkrides.io/flight-schools/richmor-aviation-inc-hudson-ny",
-   "rating": "https://www.google.com/maps/search/Richmor+Aviation+Kingston+Ulster+Airport"
+   "rating": "https://www.google.com/maps/search/Richmor+Aviation+Kingston+Ulster+Airport",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "examining-authority"
+  "dpeFeeSource": "examining-authority",
+  "driveMiles": 95,
+  "driveMinutes": 122,
+  "driveTo": "20N",
+  "driveNote": "Road route from the ZIP 10030 centroid to 20N via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "century-air",
@@ -212,9 +237,14 @@
    "rate": "https://centuryair.com/aircraft-rental/",
    "ea": "https://centuryair.com/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/",
-   "rating": "https://www.google.com/maps/search/Century+Air+Caldwell+NJ+flight+school"
+   "rating": "https://www.google.com/maps/search/Century+Air+Caldwell+NJ+flight+school",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 25.5,
+  "driveMinutes": 37,
+  "driveTo": "KCDW",
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -243,7 +273,8 @@
    "rate": "https://www.airfleettraining.com/our-aircraft/",
    "ea": "https://www.airfleettraining.com/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/",
-   "rating": "https://www.yelp.com/biz/air-fleet-training-systems-fairfield"
+   "rating": "https://www.yelp.com/biz/air-fleet-training-systems-fairfield",
+   "drive": "https://router.project-osrm.org/"
   },
   "id": "air-fleet-pipistrel",
   "name": "Air Fleet — Pipistrel Alpha",
@@ -252,7 +283,11 @@
   "aircraftRate": 195,
   "instructorRate": 85,
   "availability": "Part 141 / only 3 Pipistrel / 14 CFI",
-  "aircraftNote": "Pipistrel Alpha Trainer, DUAL $280/hr = aircraft ~$195 + CFI $85. Wet. LIGHT SPORT AIRCRAFT: 80 hp Rotax, 1,212 lb max gross, 507 lb payload with full fuel, 3.6 gph — the cheap rate exists because it is an LSA, the same class as Lookup GA's Viper SD4. ONLY 3 AIRFRAMES on the line against 9 Cessnas, so confirm availability before planning 5–6 lessons a week at this rate. Rates user-provided; not published on the school site."
+  "aircraftNote": "Pipistrel Alpha Trainer, DUAL $280/hr = aircraft ~$195 + CFI $85. Wet. LIGHT SPORT AIRCRAFT: 80 hp Rotax, 1,212 lb max gross, 507 lb payload with full fuel, 3.6 gph — the cheap rate exists because it is an LSA, the same class as Lookup GA's Viper SD4. ONLY 3 AIRFRAMES on the line against 9 Cessnas, so confirm availability before planning 5–6 lessons a week at this rate. Rates user-provided; not published on the school site.",
+  "driveMiles": 25.5,
+  "driveMinutes": 37,
+  "driveTo": "KCDW",
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -281,7 +316,8 @@
    "rate": "https://www.airfleettraining.com/our-aircraft/",
    "ea": "https://www.airfleettraining.com/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-essex-county-airport-kcdw/",
-   "rating": "https://www.yelp.com/biz/air-fleet-training-systems-fairfield"
+   "rating": "https://www.yelp.com/biz/air-fleet-training-systems-fairfield",
+   "drive": "https://router.project-osrm.org/"
   },
   "id": "air-fleet-c172",
   "name": "Air Fleet — Cessna 172S",
@@ -289,7 +325,11 @@
   "aircraftRate": 250,
   "instructorRate": 85,
   "availability": "Part 141 / 9 C172S / 14 CFI",
-  "aircraftNote": "Cessna 172S, DUAL $335/hr = aircraft ~$250 + CFI $85. Wet. Standard-category 4-seat trainer — what you will actually rent after the checkride, so no LSA-to-172 checkout needed later. 9 airframes, the best availability at this school. Rates user-provided; not published on the school site."
+  "aircraftNote": "Cessna 172S, DUAL $335/hr = aircraft ~$250 + CFI $85. Wet. Standard-category 4-seat trainer — what you will actually rent after the checkride, so no LSA-to-172 checkout needed later. 9 airframes, the best availability at this school. Rates user-provided; not published on the school site.",
+  "driveMiles": 25.5,
+  "driveMinutes": 37,
+  "driveTo": "KCDW",
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "aero-safety-training",
@@ -319,9 +359,14 @@
    "rate": "https://lpawings.com/",
    "ea": "https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/",
-   "rating": "https://www.google.com/maps/search/Aero+Safety+Training+Lincoln+Park+NJ"
+   "rating": "https://www.google.com/maps/search/Aero+Safety+Training+Lincoln+Park+NJ",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 28.5,
+  "driveMinutes": 42,
+  "driveTo": "N07",
+  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "aero-flight-school-n07",
@@ -351,9 +396,14 @@
    "rate": "https://n07lincolnparkairport.com/flight-school/",
    "ea": "https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-lincoln-park-airport-n07/",
-   "rating": "https://www.google.com/maps/search/Aero+Flight+School+Lincoln+Park+Airport+425+Beaverbrook+Rd"
+   "rating": "https://www.google.com/maps/search/Aero+Flight+School+Lincoln+Park+Airport+425+Beaverbrook+Rd",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 28.5,
+  "driveMinutes": 42,
+  "driveTo": "N07",
+  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "atp-morristown",
@@ -385,9 +435,14 @@
    "rate": "https://atpflightschool.com/locations/new-jersey/morristown-flight-school-mmu.html",
    "ea": "https://www.aviator.nyc/blog/flight-schools-morristown-airport-kmmu/",
    "checkride": "https://www.aviator.nyc/blog/flight-schools-morristown-airport-kmmu/",
-   "rating": "https://www.google.com/maps/search/ATP+Flight+School+Morristown+NJ"
+   "rating": "https://www.google.com/maps/search/ATP+Flight+School+Morristown+NJ",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 39.8,
+  "driveMinutes": 59,
+  "driveTo": "KMMU",
+  "driveNote": "Road route from the ZIP 10030 centroid to KMMU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "learn2flynj",
@@ -417,9 +472,14 @@
    "rate": "https://www.learn2flynj.com/private-pilot-training/",
    "ea": "https://www.learn2flynj.com/private-pilot-training/",
    "checkride": "https://www.learn2flynj.com/private-pilot-training/",
-   "rating": null
+   "rating": null,
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 27.1,
+  "driveMinutes": 49,
+  "driveTo": "KLDJ",
+  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "luvsflying",
@@ -451,9 +511,14 @@
    "rate": "https://luvsflying.com/",
    "ea": "https://luvsflying.com/",
    "checkride": "https://luvsflying.com/",
-   "rating": null
+   "rating": null,
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 27.1,
+  "driveMinutes": 49,
+  "driveTo": "KLDJ",
+  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "arrow-aviation",
@@ -483,9 +548,14 @@
    "rate": "http://www.arrowaviationllc.com/Our-Aircraft/",
    "ea": "https://pilotbound.app/flight-schools/connecticut",
    "checkride": "http://www.arrowaviationllc.com/",
-   "rating": "https://www.google.com/maps/search/Arrow+Aviation+Danbury+CT+flight+school"
+   "rating": "https://www.google.com/maps/search/Arrow+Aviation+Danbury+CT+flight+school",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 56.6,
+  "driveMinutes": 81,
+  "driveTo": "KDXR",
+  "driveNote": "Road route from the ZIP 10030 centroid to KDXR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "three-wing",
@@ -515,9 +585,14 @@
    "rate": "https://www.threewing.com/wp-content/uploads/2025/07/Flying-club-packet-2025.pdf",
    "ea": "https://www.threewing.com/part-61-flight-school/",
    "checkride": "https://flightschools.fyi/flight-schools/three-wing-aviation-group-llc-kbdr/",
-   "rating": "https://www.google.com/maps/search/Three+Wing+Aviation+Stratford+CT"
+   "rating": "https://www.google.com/maps/search/Three+Wing+Aviation+Stratford+CT",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 56.6,
+  "driveMinutes": 84,
+  "driveTo": "KBDR",
+  "driveNote": "Road route from the ZIP 10030 centroid to KBDR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "meriden-aviation",
@@ -547,9 +622,14 @@
    "rate": "https://www.meridenaviationcenter.com/flight-training/",
    "ea": "https://www.meridenaviationcenter.com/flight-training/",
    "checkride": "https://www.meridenaviationcenter.com/flight-training/",
-   "rating": "https://www.google.com/maps/search/Meriden+Aviation+Center+Meriden+CT"
+   "rating": "https://www.google.com/maps/search/Meriden+Aviation+Center+Meriden+CT",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 86.9,
+  "driveMinutes": 127,
+  "driveTo": "KMMK",
+  "driveNote": "Road route from the ZIP 10030 centroid to KMMK via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "interstate-aviation",
@@ -579,9 +659,14 @@
    "rate": "https://interstateaviation.com/wp-content/uploads/2019/12/WEBSITE-AIRCRAFT-RENTAL.pdf",
    "ea": "https://pilotbound.app/flight-schools/connecticut",
    "checkride": "https://interstateaviation.com/",
-   "rating": "https://www.google.com/maps/search/Interstate+Aviation+Oxford+CT+Waterbury+Oxford+Airport"
+   "rating": "https://www.google.com/maps/search/Interstate+Aviation+Oxford+CT+Waterbury+Oxford+Airport",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 81.3,
+  "driveMinutes": 113,
+  "driveTo": "KOXC",
+  "driveNote": "Road route from the ZIP 10030 centroid to KOXC via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "global-aviation-center",
@@ -616,9 +701,14 @@
    "rate": "https://www.globalaviationcenter.com/rental-rates",
    "ea": "https://www.globalaviationcenter.com/",
    "checkride": "https://www.globalaviationcenter.com/",
-   "rating": "https://www.google.com/maps/search/Global+Aviation+Center+Farmingdale+NY"
+   "rating": "https://www.google.com/maps/search/Global+Aviation+Center+Farmingdale+NY",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 38.9,
+  "driveMinutes": 59,
+  "driveTo": "KFRG",
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "airborne-elite",
@@ -654,9 +744,14 @@
    "rate": "https://flyforreal.com/fleet/",
    "ea": "https://pilotbound.app/flight-schools/new-york",
    "checkride": "https://www.google.com/maps/search/Airborne+Elite+Flight+Training+Farmingdale+NY",
-   "rating": "https://www.google.com/maps/search/Airborne+Elite+Flight+Training+Farmingdale+NY"
+   "rating": "https://www.google.com/maps/search/Airborne+Elite+Flight+Training+Farmingdale+NY",
+   "drive": "https://router.project-osrm.org/"
   },
-  "dpeFeeSource": "modeled"
+  "dpeFeeSource": "modeled",
+  "driveMiles": 38.9,
+  "driveMinutes": 59,
+  "driveTo": "KFRG",
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  },
  {
   "id": "lookup-flight-academy",
@@ -692,7 +787,12 @@
    "rate": "https://lookupflightacademy.com/private-pilot/",
    "ea": "https://checkrides.io/flight-schools/lookup-flight-academy-llc-lawrenceville-ga",
    "checkride": "https://lookupflightacademy.com/academy-flight-training/",
-   "rating": "https://www.yelp.com/biz/lookup-flight-academy-lawrenceville"
-  }
+   "rating": "https://www.yelp.com/biz/lookup-flight-academy-lawrenceville",
+   "drive": "https://router.project-osrm.org/"
+  },
+  "driveMiles": 862.8,
+  "driveMinutes": 1002,
+  "driveTo": "KLZU",
+  "driveNote": "Road route from the ZIP 10030 centroid to KLZU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
  }
 ]
