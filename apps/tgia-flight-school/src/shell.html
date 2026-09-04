@@ -445,7 +445,10 @@ textarea.notes {
       { k: "dualFrac",      label: "Share flown with a CFI",  min: 0.4, max: 1,    step: 0.05, pct: true },
       { k: "groundHours",   label: "CFI ground instruction",  min: 0,   max: 40,   step: 1,    unit: "h",
         tip: "0 because you are doing Sporty's yourself. Pre/post-flight briefings are often billed on top." },
-      { k: "lessonsPerWeek",label: "Lessons per week",        min: 1,   max: 7,    step: 1 },
+      { k: "flyingDays", label: "Flying days per week",     min: 1,   max: 7,    step: 1,
+        tip: "Accelerated means 5+. Weather and maintenance still apply — that is the buffer below." },
+      { k: "flightsPerDay", label: "Flights per flying day",  min: 1,   max: 2,    step: 0.1,
+        tip: "1.4 means most days one flight, some days two. Two every day is the practical ceiling." },
       { k: "hoursPerLesson",label: "Hours per lesson",        min: 1,   max: 3,    step: 0.25, unit: "h" },
       { k: "buffer",        label: "Weather / cancellation buffer", min: 0, max: 0.6, step: 0.05, pct: true,
         tip: "NYC-area weather and maintenance kill 20–25% of booked lessons." },
@@ -464,7 +467,8 @@ textarea.notes {
       { k: "assumedInstructor", label: "Assumed instructor $/hr",     min: 50,  max: 140,  step: 5,  money: true },
     ]},
     { title: "Travel and deadline", fields: [
-      { k: "days",       label: "Days until your deadline", min: 14, max: 365, step: 1, unit: "d" },
+      { k: "days",       label: "Days until the car goes back", min: 7, max: 365, step: 1, unit: "d",
+        tip: "A marker, not a constraint — the table shows a finish date either way. 57 = 31 Oct 2026." },
       { k: "mileage",    label: "Cost per mile driven",     min: 0.3, max: 1.2, step: 0.05, money: true, dp: 2 },
       { k: "traffic",    label: "Traffic factor on drive time", min: 1, max: 2.5, step: 0.1, mult: true,
         tip: "Routes are free-flow with no traffic. ×1.3–×1.6 is realistic for NYC-area peak." },
@@ -480,9 +484,9 @@ textarea.notes {
   ];
   const FIELDS = GROUPS.flatMap(g => g.fields);
   const DEFAULTS = {
-    flightHours: 60, dualFrac: 0.75, groundHours: 0, lessonsPerWeek: 6, hoursPerLesson: 1.5,
+    flightHours: 60, dualFrac: 0.75, groundHours: 0, flyingDays: 5, flightsPerDay: 1.4, hoursPerLesson: 1.5,
     buffer: 0.25, simHours: 2.5, knowledgeTest: 0, dpeFee: 900, weeklyDelay: 150, extras: 0,
-    assumedAircraft: 165, assumedInstructor: 80, days: 59, mileage: 0.7, traffic: 1.3, timeValue: 0, stayTrigger: 1.5, stayHousing: 1000, housing: 900,
+    assumedAircraft: 165, assumedInstructor: 80, days: 57, mileage: 0.7, traffic: 1.3, timeValue: 0, stayTrigger: 1.5, stayHousing: 1000, housing: 900,
   };
   const WEIGHTS = [
     { k: "cost",    label: "Lowest total cost" },
@@ -623,7 +627,8 @@ textarea.notes {
     const dualFlight = A.flightHours * A.dualFrac;
     const instructorHours = dualFlight + A.groundHours;
     const lessons = Math.ceil(A.flightHours / A.hoursPerLesson);
-    const trainingWeeks = Math.ceil(lessons / A.lessonsPerWeek);
+    const perWeek = Math.max(1, A.flyingDays * A.flightsPerDay);
+    const trainingWeeks = Math.ceil(lessons / perWeek);
     const bufferedWeeks = Math.ceil(trainingWeeks * (1 + A.buffer));
     const wait = e.dpeWait == null ? 0 : e.dpeWait;
     const totalWeeks = bufferedWeeks + wait;
@@ -674,7 +679,7 @@ textarea.notes {
     const total = flightSub + tax + clubFees + A.knowledgeTest + A.extras
       + fee + waitCost + commuteCost + driveTimeCost + tolls + housingCost + stayCost;
 
-    return { e, isPackage, published, ar, ir, instructorHours, lessons, trainingWeeks, bufferedWeeks,
+    return { e, isPackage, published, ar, ir, instructorHours, lessons, perWeek, trainingWeeks, bufferedWeeks,
       wait, totalWeeks, projectedDays, margin, fits: margin >= 0, simHrs, flownHours, aircraftCost,
       instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost,
       driveHours, driveTimeCost, housingCost, monthlyHousing,
@@ -808,10 +813,10 @@ textarea.notes {
         `$${cheapest.c.ar}/hr aircraft + $${cheapest.c.ir}/hr instructor`) : "",
       fastest ? tile("", "Fastest to checkride", fastest.c.totalWeeks + " wk", fastest.s.name,
         `${fastest.c.bufferedWeeks} wk training + ${fastest.c.wait} wk examiner wait`) : "",
-      fit ? tile("", "Cheapest inside your deadline", money(fit.c.total), fit.s.name,
-        `${fit.c.projectedDays} days projected — ${fit.c.margin} to spare`)
-          : tile("", "Cheapest inside your deadline", "none", "No school fits " + state.A.days + " days",
-            "Raise lessons per week, or move the deadline"),
+      fit ? tile("", "Cheapest before the car goes back", money(fit.c.total), fit.s.name,
+        `finishes ${finishDate(fit.c)} — ${fit.c.margin} days spare`)
+          : (fastest ? tile("", "Earliest finish", finishDate(fastest.c), fastest.s.name,
+              `${fastest.c.projectedDays} days at ${fastest.c.perWeek.toFixed(1)} flights/wk — ${-fastest.c.margin} days past the car`) : ""),
     ].join("");
   }
 
@@ -826,7 +831,7 @@ textarea.notes {
     { k: "rating", label: "Rating", sort: true },
     { k: "cost",   label: "Modeled cost", sort: true, n: true },
     { k: "weeks",  label: "Weeks", sort: true, n: true },
-    { k: "fit",    label: "Deadline", sort: true },
+    { k: "fit",    label: "Finishes", sort: true },
     { k: "match",  label: "Match", sort: true },
   ];
   const sortVal = (r, k) => ({
@@ -879,10 +884,16 @@ textarea.notes {
     return `<span class="mono" style="white-space:nowrap">${hhmm(t)}</span>
       <div style="font-size:.68rem;color:var(--ink-3);white-space:nowrap">${c.e.driveMiles} mi each way${own ? " · yours" : ""}</div>`;
   }
+  const DAY = 86400000;
+  function finishDate(c) {
+    const d = new Date(Date.now() + c.projectedDays * DAY);
+    return d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+  }
   function fitChip(c) {
-    if (!c.fits) return `<span class="chip over">${-c.margin}d over</span>`;
-    if (c.margin < 10) return `<span class="chip tight">+${c.margin}d tight</span>`;
-    return `<span class="chip fit">+${c.margin}d</span>`;
+    const cls = c.fits ? "fit" : c.margin > -21 ? "tight" : "over";
+    return `<span class="chip ${cls}">${finishDate(c)}</span>
+      <div style="font-size:.68rem;color:var(--ink-3);white-space:nowrap">${c.projectedDays} days${
+        c.fits ? " · " + c.margin + "d spare" : " · " + -c.margin + "d past the car"}</div>`;
   }
   function rateCell(s, c, kind) {
     const isAc = kind === "ac";
@@ -1014,7 +1025,7 @@ textarea.notes {
               ${line("<strong>Total</strong>", "<strong>" + money(c.total) + "</strong>").replace('class="r"', 'class="r tot"')}
             </div>
             ${!c.relocate ? `<p class="src"><strong>${c.driveHours.toFixed(0)} hours in the car</strong> over ${c.lessons} round trips &mdash; ${hhmm(c.e.driveMinutes * state.A.traffic)} each way at &times;${state.A.traffic} traffic.</p>` : ""}
-            <p class="src">${c.trainingWeeks} wk of lessons &times; ${Math.round(state.A.buffer * 100)}% buffer = ${c.bufferedWeeks} wk, plus ${c.wait} wk waiting for a checkride = <strong>${c.totalWeeks} wk (${c.projectedDays} days)</strong> &mdash; ${c.fits ? `${c.margin} days inside your deadline` : `${-c.margin} days past it`}.</p>
+            <p class="src">${c.lessons} flights at ${c.perWeek.toFixed(1)}/wk = ${c.trainingWeeks} wk, &times; ${Math.round(state.A.buffer * 100)}% buffer = ${c.bufferedWeeks} wk, plus ${c.wait} wk waiting for a checkride = <strong>${c.totalWeeks} wk (${c.projectedDays} days)</strong> &mdash; finishing about <strong>${finishDate(c)}</strong>.</p>
           </div>
 
           <div>
@@ -1121,7 +1132,7 @@ textarea.notes {
     scoreAll(rows);
     const A = state.A;
     const out = ["PPL school shortlist — " + new Date().toISOString().slice(0, 10),
-      `Scenario: ${A.flightHours} flight hours, ${A.lessonsPerWeek} lessons/wk, ${Math.round(A.buffer * 100)}% weather buffer, ${A.days}-day deadline.`, ""];
+      `Scenario: ${A.flightHours} flight hours, ${A.flyingDays} days/wk x ${A.flightsPerDay} flights, ${Math.round(A.buffer * 100)}% weather buffer, ${A.days}-day deadline.`, ""];
     rows.sort((a, b) => b.score - a.score).forEach(r => {
       out.push(`${r.s.name} — ${r.s.airport}`);
       out.push(`  ${money(r.c.total)} modeled · ${r.c.totalWeeks} weeks · ${r.c.fits ? r.c.margin + " days spare" : -r.c.margin + " days over"} · match ${r.score}/100`);
