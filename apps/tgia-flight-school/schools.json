@@ -39,7 +39,11 @@
   "driveMiles": 38.9,
   "driveMinutes": 59,
   "driveTo": "KFRG",
-  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.92,
+  "tollNote": "Assumes one MTA crossing each way (RFK, Whitestone or Throgs Neck) at $7.46 E-ZPass. The Queensboro Bridge is free but slower and runs into the congestion zone.",
+  "blockRate": 145,
+  "blockNote": "C152 block rate $145/hr vs $155 walk-up."
  },
  {
   "id": "academy-of-aviation",
@@ -77,7 +81,9 @@
   "driveMiles": 27.2,
   "driveMinutes": 44,
   "driveTo": "KHPN",
-  "driveNote": "Road route from the ZIP 10030 centroid to KHPN via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KHPN via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "No toll — Major Deegan / Sprain Brook to Westchester."
  },
  {
   "id": "heritage-flight-academy",
@@ -119,7 +125,11 @@
   "driveMiles": 52.8,
   "driveMinutes": 78,
   "driveTo": "KISP",
-  "driveNote": "Road route from the ZIP 10030 centroid to KISP via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KISP via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.92,
+  "tollNote": "Assumes one MTA crossing each way (RFK, Whitestone or Throgs Neck) at $7.46 E-ZPass.",
+  "blockRate": 179,
+  "blockNote": "Piper Archer II 20-hour block $179/hr vs $189 walk-up (10-hour block $184)."
  },
  {
   "id": "luke-weathers-flight-academy",
@@ -164,7 +174,11 @@
   "driveMiles": 1111.7,
   "driveMinutes": 1251,
   "driveTo": "KOLV",
-  "driveNote": "Road route from the ZIP 10030 centroid to KOLV via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KOLV via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "Relocation — no per-lesson commute.",
+  "discountPct": 10,
+  "discountNote": "OBAP member-students get roughly 10% off flight training (per Flying magazine). Membership required; not automatic."
  },
  {
   "id": "richmor-aviation",
@@ -207,7 +221,11 @@
   "driveMiles": 95,
   "driveMinutes": 122,
   "driveTo": "20N",
-  "driveNote": "Road route from the ZIP 10030 centroid to 20N via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to 20N via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": null,
+  "tollNote": "NY Thruway toll from NYC to Kingston NOT VERIFIED — type your own into the row.",
+  "soloRate": 135,
+  "soloNote": "Published C152 solo $135 vs dual $205 — solo hours are billed at the lower rate."
  },
  {
   "id": "century-air",
@@ -244,7 +262,9 @@
   "driveMiles": 25.5,
   "driveMinutes": 37,
   "driveTo": "KCDW",
-  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak."
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -287,7 +307,9 @@
   "driveMiles": 25.5,
   "driveMinutes": 37,
   "driveTo": "KCDW",
-  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak."
  },
  {
   "address": "35 Wright Way, Fairfield, NJ 07004",
@@ -329,7 +351,9 @@
   "driveMiles": 25.5,
   "driveMinutes": 37,
   "driveTo": "KCDW",
-  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KCDW via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, tolled eastbound only (coming home) — $14.79 off-peak E-ZPass, $16.79 peak."
  },
  {
   "id": "aero-safety-training",
@@ -366,7 +390,9 @@
   "driveMiles": 28.5,
   "driveMinutes": 42,
   "driveTo": "N07",
-  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass."
  },
  {
   "id": "aero-flight-school-n07",
@@ -403,7 +429,11 @@
   "driveMiles": 28.5,
   "driveMinutes": 42,
   "driveTo": "N07",
-  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to N07 via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass.",
+  "taxPct": 6.625,
+  "taxNote": "Their rate sheet says 'plus tax'; NJ sales tax is 6.625%."
  },
  {
   "id": "atp-morristown",
@@ -442,7 +472,9 @@
   "driveMiles": 39.8,
   "driveMinutes": 59,
   "driveTo": "KMMU",
-  "driveNote": "Road route from the ZIP 10030 centroid to KMMU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KMMU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass."
  },
  {
   "id": "learn2flynj",
@@ -479,7 +511,9 @@
   "driveMiles": 27.1,
   "driveMinutes": 49,
   "driveTo": "KLDJ",
-  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass. A Staten Island / Goethals routing tolls the same."
  },
  {
   "id": "luvsflying",
@@ -518,7 +552,9 @@
   "driveMiles": 27.1,
   "driveMinutes": 49,
   "driveTo": "KLDJ",
-  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KLDJ via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.79,
+  "tollNote": "George Washington Bridge, eastbound only — $14.79 off-peak E-ZPass. A Staten Island / Goethals routing tolls the same."
  },
  {
   "id": "arrow-aviation",
@@ -555,7 +591,9 @@
   "driveMiles": 56.6,
   "driveMinutes": 81,
   "driveTo": "KDXR",
-  "driveNote": "Road route from the ZIP 10030 centroid to KDXR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KDXR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "No toll — Hutchinson River and Merritt Parkways are untolled in NY and CT."
  },
  {
   "id": "three-wing",
@@ -592,7 +630,13 @@
   "driveMiles": 56.6,
   "driveMinutes": 84,
   "driveTo": "KBDR",
-  "driveNote": "Road route from the ZIP 10030 centroid to KBDR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KBDR via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "No toll — I-95 is untolled in Connecticut.",
+  "taxPct": 8.35,
+  "taxNote": "CT 6.35% sales tax + 2% airport fee, both excluded from the published rate.",
+  "monthlyFee": 90,
+  "feeNote": "$90/mo club fee, waived for students until solo — modelled from solo onward is not attempted, so this is the conservative full-course figure."
  },
  {
   "id": "meriden-aviation",
@@ -629,7 +673,9 @@
   "driveMiles": 86.9,
   "driveMinutes": 127,
   "driveTo": "KMMK",
-  "driveNote": "Road route from the ZIP 10030 centroid to KMMK via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KMMK via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "No toll — I-95 / Merritt are untolled in Connecticut."
  },
  {
   "id": "interstate-aviation",
@@ -666,7 +712,9 @@
   "driveMiles": 81.3,
   "driveMinutes": 113,
   "driveTo": "KOXC",
-  "driveNote": "Road route from the ZIP 10030 centroid to KOXC via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KOXC via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "No toll — Hutchinson / Merritt / Route 8 are untolled."
  },
  {
   "id": "global-aviation-center",
@@ -674,7 +722,7 @@
   "airport": "KFRG — Republic Airport",
   "address": "Atlantic Aviation Bldg, 9100 Republic Airport #106, Farmingdale, NY 11735",
   "distance": 28.4,
-  "aircraftRate": 179,
+  "aircraftRate": 184,
   "wet": null,
   "aircraftNote": "Wet vs dry NOT stated on site. Warrior II $179 cash/$184 cc; TAA $184/$189; Warrior III glass $194/$199; Duchess $350. Sims $85/$99. Rentals to enrolled students only. Tracker lists ~$192/hr wet.",
   "instructorRate": 89,
@@ -708,7 +756,11 @@
   "driveMiles": 38.9,
   "driveMinutes": 59,
   "driveTo": "KFRG",
-  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.92,
+  "tollNote": "Assumes one MTA crossing each way (RFK, Whitestone or Throgs Neck) at $7.46 E-ZPass. The Queensboro Bridge is free but slower and runs into the congestion zone.",
+  "blockRate": 179,
+  "blockNote": "Warrior II $179/hr paying cash vs $184 on a card — the row defaults to the card price and the toggle applies the cash discount."
  },
  {
   "id": "airborne-elite",
@@ -751,7 +803,9 @@
   "driveMiles": 38.9,
   "driveMinutes": 59,
   "driveTo": "KFRG",
-  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KFRG via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 14.92,
+  "tollNote": "Assumes one MTA crossing each way (RFK, Whitestone or Throgs Neck) at $7.46 E-ZPass. The Queensboro Bridge is free but slower and runs into the congestion zone."
  },
  {
   "id": "lookup-flight-academy",
@@ -793,6 +847,8 @@
   "driveMiles": 862.8,
   "driveMinutes": 1002,
   "driveTo": "KLZU",
-  "driveNote": "Road route from the ZIP 10030 centroid to KLZU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor."
+  "driveNote": "Road route from the ZIP 10030 centroid to KLZU via OSRM (OpenStreetMap), free-flow with NO traffic. Real NYC-area peak times run materially longer — use the traffic factor.",
+  "tollRoundTrip": 0,
+  "tollNote": "Relocation — no per-lesson commute."
  }
 ]

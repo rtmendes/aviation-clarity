@@ -332,8 +332,12 @@ textarea.notes {
         <span class="note">everything recalculates live</span>
       </header>
       <div class="panel-body" id="scenarioFields"></div>
-      <div class="actions">
-        <button class="ghost" id="resetScenario" type="button">Reset scenario</button>
+      <div class="actions" style="flex-direction:column;align-items:stretch;gap:10px">
+        <label class="mini" style="gap:9px;white-space:normal;align-items:flex-start">
+          <input type="checkbox" id="bestRates" checked style="margin-top:2px;accent-color:var(--magenta)" />
+          <span>Use published block, cash and member rates where a school has one<span style="display:block;color:var(--ink-3);font-size:.72rem">Block time and cash pricing are advertised, not negotiated — but you must ask for them.</span></span>
+        </label>
+        <button class="ghost" id="resetScenario" type="button" style="align-self:flex-start">Reset scenario</button>
       </div>
     </section>
 
@@ -498,6 +502,8 @@ textarea.notes {
     { k: "simRate",        label: "Simulator $/hr" },
     { k: "dpeFee",         label: "Examiner fee $" },
     { k: "dpeWait",        label: "Checkride wait (weeks)" },
+    { k: "soloRate",       label: "Solo aircraft $/hr" },
+    { k: "toll",           label: "Tolls per round trip $" },
     { k: "driveMinutes",   label: "Drive time each way (min)" },
     { k: "driveMiles",     label: "Drive distance (mi)" },
   ];
@@ -517,7 +523,7 @@ textarea.notes {
     st: {},        /* per-school status */
     notes: {},     /* per-school free text */
     checks: {},    /* per-school call-checklist ticks */
-    ui: { sort: "match", dir: -1, q: "", ea: "all", maxDist: 1200, hideOut: true, tab: "compare", open: null },
+    ui: { sort: "match", dir: -1, q: "", ea: "all", maxDist: 1200, hideOut: true, bestRates: true, tab: "compare", open: null },
   };
   function load() {
     try {
@@ -527,6 +533,7 @@ textarea.notes {
       if (d.A) Object.assign(state.A, d.A);
       if (d.W) Object.assign(state.W, d.W);
       state.ov = d.ov || {}; state.st = d.st || {}; state.notes = d.notes || {}; state.checks = d.checks || {};
+      if (typeof d.bestRates === "boolean") state.ui.bestRates = d.bestRates;
       if (d.theme) document.documentElement.setAttribute("data-theme", d.theme);
     } catch (e) { /* private mode, blocked storage — run with defaults */ }
   }
@@ -534,6 +541,7 @@ textarea.notes {
     try {
       localStorage.setItem(KEY, JSON.stringify({
         A: state.A, W: state.W, ov: state.ov, st: state.st, notes: state.notes, checks: state.checks,
+        bestRates: state.ui.bestRates,
         theme: document.documentElement.getAttribute("data-theme") || "",
       }));
     } catch (e) { /* nothing to do — the page still works, it just forgets */ }
@@ -582,6 +590,8 @@ textarea.notes {
       distance: pick("distance", s.distance),
       driveMiles: pick("driveMiles", s.driveMiles),
       driveMinutes: pick("driveMinutes", s.driveMinutes),
+      soloRate: pick("soloRate", s.soloRate),
+      toll: pick("toll", s.tollRoundTrip),
       mine: OV_FIELDS.some(f => num(o[f.k]) != null),
       minSet: (k) => num(o[k]) != null,
     };
@@ -590,7 +600,11 @@ textarea.notes {
   function calc(s) {
     const A = state.A, e = eff(s);
     const isPackage = s.allInRate != null;
-    const ar = isPackage ? s.allInRate : (e.aircraftRate == null ? A.assumedAircraft : e.aircraftRate);
+    const useBest = state.ui.bestRates;
+    const listed = e.aircraftRate == null ? A.assumedAircraft : e.aircraftRate;
+    const blocked = (useBest && s.blockRate != null && !e.minSet("aircraftRate")) ? s.blockRate : listed;
+    const ar = isPackage ? s.allInRate : blocked;
+    const usedBlock = ar !== listed;
     const ir = isPackage ? 0 : (e.instructorRate == null ? A.assumedInstructor : e.instructorRate);
     const published = isPackage || (e.aircraftRate != null && e.instructorRate != null);
 
@@ -609,9 +623,19 @@ textarea.notes {
       ? Math.min(A.simHours, 2.5, A.flightHours) : 0;
     const flownHours = A.flightHours - simHrs;
 
-    const aircraftCost = ar * flownHours;
+    // Solo hours cost aircraft only, and several schools publish a cheaper solo rate.
+    const dualFlown = flownHours * A.dualFrac;
+    const soloFlown = flownHours - dualFlown;
+    const soloAr = e.soloRate != null ? e.soloRate : ar;
+    const aircraftCost = ar * dualFlown + soloAr * soloFlown;
     const instructorCost = ir * instructorHours;
     const simCost = simHrs * ((e.simRate || 0) + ir);
+    const flightSub0 = aircraftCost + instructorCost + simCost;
+    const discountPct = (useBest && s.discountPct) ? s.discountPct : 0;
+    const discount = flightSub0 * discountPct / 100;
+    const flightSub = flightSub0 - discount;
+    const taxPct = s.taxPct || 0;
+    const tax = flightSub * taxPct / 100;
     const fee = e.dpeFee == null ? A.dpeFee : e.dpeFee;
     const waitCost = wait * A.weeklyDelay;
     const relocate = !!s.relocate;
@@ -622,13 +646,18 @@ textarea.notes {
     const driveTimeCost = driveHours * A.timeValue;
     const monthlyHousing = s.housingMonthly != null ? s.housingMonthly : A.housing;
     const housingCost = relocate ? monthlyHousing * months : 0;
-    const total = aircraftCost + instructorCost + simCost + A.knowledgeTest + A.extras
-      + fee + waitCost + commuteCost + driveTimeCost + housingCost;
+    const tolls = relocate ? 0 : (e.toll == null ? 0 : e.toll) * lessons;
+    const tollUnknown = !relocate && e.toll == null;
+    const months2 = Math.ceil(totalWeeks / 4.345);
+    const clubFees = (s.monthlyFee || 0) * months2;
+    const total = flightSub + tax + clubFees + A.knowledgeTest + A.extras
+      + fee + waitCost + commuteCost + driveTimeCost + tolls + housingCost;
 
     return { e, isPackage, published, ar, ir, instructorHours, lessons, trainingWeeks, bufferedWeeks,
       wait, totalWeeks, projectedDays, margin, fits: margin >= 0, simHrs, flownHours, aircraftCost,
       instructorCost, simCost, fee, waitCost, relocate, months, commuteMiles, commuteCost,
-      driveHours, driveTimeCost, housingCost, monthlyHousing, total };
+      driveHours, driveTimeCost, housingCost, monthlyHousing,
+      discount, discountPct, tax, taxPct, clubFees, tolls, tollUnknown, usedBlock, soloFlown, dualFlown, soloAr, total };
   }
 
   const CONF = { high: 1, medium: 0.55, low: 0.15 };
@@ -869,6 +898,12 @@ textarea.notes {
     if (s.exclFuel) tags.push('<span class="chip flag">excl. fuel</span>');
     if (s.relocate) tags.push('<span class="chip flag">relocate</span>');
     if (s.confidence === "low") tags.push('<span class="chip over">thin data</span>');
+    if (c.usedBlock) tags.push('<span class="chip fit">block rate</span>');
+    if (c.discountPct) tags.push('<span class="chip fit">&minus;' + c.discountPct + '% member</span>');
+    if (c.taxPct) tags.push('<span class="chip flag">+' + c.taxPct + '% tax</span>');
+    if (c.tollUnknown) tags.push('<span class="chip over">toll unverified</span>');
+    if (s.billing) tags.push('<span class="chip flag">' + esc(s.billing) + ' billing</span>');
+    if (s.pipistrel) tags.push('<span class="chip flag">Pipistrel</span>');
     if (st === "called") tags.push('<span class="chip mine">called</span>');
     return `
       <tr class="row ${state.ui.open === s.id ? "open" : ""} ${st === "out" ? "out" : ""}" data-id="${s.id}">
@@ -927,15 +962,23 @@ textarea.notes {
           <div>
             <h4>Cost breakdown</h4>
             <div class="breakdown">
-              ${line(`Aircraft &mdash; ${c.flownHours.toFixed(1)}h &times; $${c.ar}`, money(c.aircraftCost))}
+              ${c.soloAr !== c.ar
+                ? line(`Aircraft &mdash; ${c.dualFlown.toFixed(1)}h dual $${c.ar} + ${c.soloFlown.toFixed(1)}h solo $${c.soloAr}`, money(c.aircraftCost))
+                : line(`Aircraft &mdash; ${c.flownHours.toFixed(1)}h &times; $${c.ar}`, money(c.aircraftCost))}
               ${line(c.isPackage ? "Instructor &mdash; bundled" : `Instructor &mdash; ${c.instructorHours.toFixed(0)}h &times; $${c.ir}`, c.isPackage ? "incl." : money(c.instructorCost))}
               ${c.simHrs > 0 ? line(`Simulator &mdash; ${c.simHrs}h &times; $${(c.e.simRate || 0) + c.ir}`, money(c.simCost)) : ""}
-              ${line("FAA knowledge test", money(state.A.knowledgeTest))}
+              ${c.discountPct ? line(`Member discount &mdash; &minus;${c.discountPct}%`, "&minus;" + money(c.discount)) : ""}
+              ${c.taxPct ? line(`Tax and airport fee &mdash; ${c.taxPct}%`, money(c.tax)) : ""}
+              ${c.clubFees > 0 ? line(`Club fee &mdash; ${c.months} mo &times; $${s.monthlyFee}`, money(c.clubFees)) : ""}
+              ${state.A.knowledgeTest > 0 ? line("FAA knowledge test", money(state.A.knowledgeTest)) : ""}
               ${line(c.fee === 0 ? "Examiner &mdash; in-house authority" : "Examiner fee", money(c.fee))}
               ${line(`Waiting &mdash; ${c.wait} wk &times; $${state.A.weeklyDelay}`, money(c.waitCost))}
               ${c.relocate
                 ? line(`Housing &mdash; ${c.months} mo &times; $${c.monthlyHousing}${s.housingMonthly != null ? " (their published rate)" : ""}`, money(c.housingCost))
                 : line(`Driving &mdash; ${Math.round(c.commuteMiles)} mi &times; $${state.A.mileage}`, money(c.commuteCost))}
+              ${!c.relocate ? (c.tollUnknown
+                ? line(`Tolls &mdash; ${c.lessons} round trips`, '<span style="color:var(--stop)">not verified</span>')
+                : line(`Tolls &mdash; ${c.lessons} round trips &times; $${c.e.toll.toFixed(2)}`, money(c.tolls))) : ""}
               ${!c.relocate && state.A.timeValue > 0
                 ? line(`Your time &mdash; ${c.driveHours.toFixed(0)} h driving &times; $${state.A.timeValue}`, money(c.driveTimeCost)) : ""}
               ${state.A.extras > 0 ? line("Headset, medical, books", money(state.A.extras)) : ""}
@@ -949,6 +992,9 @@ textarea.notes {
             <h4>Aircraft and rates</h4>
             <p>${esc(s.aircraftNote)}</p>
             ${s.sim ? `<p style="margin-top:7px"><strong>Simulator:</strong> ${esc(s.sim.note || "")}</p>` : ""}
+            ${[["blockNote", s.blockNote], ["soloNote", s.soloNote], ["discountNote", s.discountNote],
+                ["taxNote", s.taxNote], ["feeNote", s.feeNote], ["tollNote", s.tollNote], ["driveNote", s.driveNote]]
+                .filter(x => x[1]).map(x => `<p class="src">${esc(x[1])}</p>`).join("")}
             <p class="src">${srcLink(src.rate, "Rate source")}</p>
             <h4 style="margin-top:13px">Checkride access</h4>
             <p>${esc(s.checkride)}</p>
@@ -1032,11 +1078,11 @@ textarea.notes {
   /* ---------------- exports ---------------- */
   function csv() {
     const rows = visibleRows();
-    const head = ["School", "Airport", "Drive min each way", "Drive miles", "Hours in car", "Aircraft $/hr", "Instructor $/hr", "Examining authority",
+    const head = ["School", "Airport", "Drive min each way", "Drive miles", "Hours in car", "Tolls total", "Tax", "Aircraft $/hr", "Instructor $/hr", "Examining authority",
       "Rating", "Modeled cost", "Weeks", "Days vs deadline", "Match", "Status", "Website"];
     const cell = (v) => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
     const body = rows.map(r => [r.s.name, r.s.airport, Math.round(r.c.e.driveMinutes * state.A.traffic),
-      r.c.e.driveMiles, r.c.driveHours.toFixed(0), r.c.ar, r.c.isPackage ? 0 : r.c.ir,
+      r.c.e.driveMiles, r.c.driveHours.toFixed(0), Math.round(r.c.tolls), Math.round(r.c.tax), r.c.ar, r.c.isPackage ? 0 : r.c.ir,
       r.s.ea, r.s.google != null ? r.s.google : (r.s.yelp != null ? r.s.yelp : ""), Math.round(r.c.total),
       r.c.totalWeeks, r.c.margin, r.score, state.st[r.s.id] || "none", r.s.website].map(cell).join(","));
     return [head.map(cell).join(",")].concat(body).join("\n");
@@ -1080,6 +1126,7 @@ textarea.notes {
       renderTable();
     });
     $("#hideOut").addEventListener("change", (e) => { state.ui.hideOut = e.target.checked; renderTable(); });
+    $("#bestRates").addEventListener("change", (e) => { state.ui.bestRates = e.target.checked; save(); renderAll(); });
     document.querySelectorAll("#eaSeg button").forEach(b => b.addEventListener("click", () => {
       state.ui.ea = b.dataset.val;
       document.querySelectorAll("#eaSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
@@ -1176,6 +1223,7 @@ textarea.notes {
   renderRail();
   bind();
   $("#distVal").innerHTML = state.ui.maxDist + "&nbsp;mi";
+  $("#bestRates").checked = state.ui.bestRates;
   renderAll();
 })();
 </script>
