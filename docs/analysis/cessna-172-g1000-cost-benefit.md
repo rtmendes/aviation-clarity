@@ -13,7 +13,9 @@ here or later (Instrument, Commercial)?
 | Budget baseline | **50 flight hours** | Student's planning figure |
 | Dual / solo split | **35 dual + 15 solo** — held constant across every aircraft | Meets 61.109(a); 70/30 ratio applied to every hour scenario |
 | Ground instruction | **Modelled at 10 hr @ $86/hr**, sensitivity 0–30 hr (§3.8) | Student holds a Sporty's home-study course; 14 CFR 61.105(a) accepts it in place of logged instructor ground training |
-| Fixed course costs | **$975** — constant | Books $650 + FAA written $175 + tax $150 |
+| Course materials | **Waived — $0** | Student already owns books, headset, foggles, flashlights and flight bag; confirm the kit is not a mandatory enrollment condition |
+| FAA written test | **$175, paid directly** | Student pays the testing fee themselves; Sporty's home-study course supplies the 61.35(a)(1) endorsement |
+| DPE practical-test fee | **$1,000 budgeted** | Student's figure; the fee is set by the individual examiner and is not published by the school |
 
 **Primary source for pricing:** Century Air *Private Pilot — Flight Training Course
 Information* brochure (© 2025 Century Air Inc., footer code 1012020), pages 4–6.
@@ -33,11 +35,12 @@ manufacturer documents in [Sources](#sources).
 
 ## 1. Bottom line
 
-**Fly the Cessna 172P (or the 172N, if Century Air prices it lower).** On a 50-hour Part 61
-budget it is the cheapest aircraft in the fleet — **$14,645** with a realistic 10 hours of
-ground instruction alongside a home-study course, or $16,365 on the brochure's 30-hour ground
-assumption. It is the aircraft the school budgets no extra hours for, and it presents the
-smallest systems surface to the examiner.
+**Fly the Cessna 172P (or the 172N, if Century Air prices it lower).** On the optimized
+Part 61 plan in §3.9 — 50 flight hours, 8 hours of ground alongside the student's own
+home-study course, no materials kit — the school invoice is **$13,498**, and the realistic
+all-in figure including the written fee, a $1,000 DPE budget and renter's insurance is
+**$15,423–$15,573**. It is the aircraft the school budgets no extra hours for, and it presents
+the smallest systems surface to the examiner.
 
 **The G1000 costs $1,900 more for the identical 50 hours** — and $3,328 more if the school's
 own +5-hour assumption for glass holds. That gap does not move with ground hours: ground is
@@ -241,6 +244,68 @@ $1,300–$1,700 swing.
 
 ---
 
+### 3.9 The optimized budget — what this student actually pays
+
+Applying the student's own circumstances: a Sporty's home-study course that supplies the
+written-test endorsement, materials already owned, test fees paid directly, and a $1,000
+allowance for the examiner.
+
+**Build-up, Cessna 172P, 50 flight hours:**
+
+| Line | Hours | Rate | Cost | Note |
+| --- | --- | --- | --- | --- |
+| Dual instruction | 35 | $282/hr | $9,870 | ≥20 required by 61.109(a) |
+| Solo | 15 | $196/hr | $2,940 | ≥10 required by 61.109(a) |
+| Ground instruction | 8 | $86/hr | $688 | Endorsements and oral prep only — see below |
+| Materials kit | — | — | **$0** | Waived; student owns books, headset, foggles, flashlights, flight bag |
+| Sales tax | — | — | **$0–$150** | **Confirm what the brochure's $150 covers.** If it is tax on the kit it goes with the kit |
+| **School invoice** | | | **$13,498** | |
+| FAA written test | — | — | $175 | Paid directly by the student |
+| DPE practical test | — | — | $1,000 | Student's budget; set by the individual examiner |
+| Renter's insurance | — | — | $750–$900 | Required before solo; brochure figure |
+| **All-in** | | | **$15,423–$15,573** | Excludes the FAA medical — see the gap below |
+
+**All four aircraft on the same optimized basis** (50 flight hr, 8 ground hr, no kit):
+
+| Aircraft | School invoice | All-in incl. written, DPE and insurance |
+| --- | --- | --- |
+| **Cessna 172P** | **$13,498** | **$15,423 – $15,573** |
+| Cessna 172SP | $14,398 | $16,323 – $16,473 |
+| Cessna 172SP G1000 | $15,398 | $17,323 – $17,473 |
+| Cirrus SR-20 | $19,065 | $20,990 – $21,140 |
+
+**What the optimization removed** (172P, against the $16,365 figure in §3.3):
+
+| Change | Saving |
+| --- | --- |
+| Ground 30 → 8 hours, using the home-study course | −$1,892 |
+| Materials kit waived | −$650 |
+| Tax, if it rides on the kit | −$150 (confirm) |
+| Moving the written fee to direct payment | $0 net — still $175 out of pocket, unless the school marked it up |
+| **Total off the school invoice** | **−$2,867** |
+
+**Why 8 ground hours and not zero.** 61.105(a) lets the home-study course replace logged
+ground training, but four instructor items remain, and they are instruction, not paperwork:
+the pre-solo knowledge test must be administered, graded and reviewed by the instructor
+(61.87(b)); solo and solo cross-country endorsements require the instructor to review your
+planning (61.87, 61.93); and the practical-test endorsement (61.39, 61.103(d)) normally comes
+with oral-exam preparation, which is where thin ground work shows up as a failed checkride.
+Budget 8, push for less, and do not let it reach zero.
+
+**Two gaps this budget still has:**
+
+1. **The FAA medical.** A Class III medical certificate is required before your first solo
+   and, per the brochure, before the first flight lesson. AME fees vary and are not published
+   by the school — get a price from your AME and add it.
+2. **The briefing question.** If Century Air bills pre- and post-flight briefings as ground
+   instruction, the 8-hour line becomes 15–25 hours and the school invoice rises by
+   $600–$1,500. Ask before enrolling; it is the largest remaining uncertainty in this budget.
+
+**The aircraft comparison is unchanged.** Every optimization above applies identically to all
+four aircraft, so the G1000 premium stays at **+$1,900**.
+
+---
+
 ## 4. What the three panels physically are
 
 | Item | Cessna 172N / 172P (analog) | Cessna 172SP (analog) | Cessna 172SP NAV III (G1000) |
@@ -389,15 +454,17 @@ These change the numbers and are not published:
 3. **Part 61 pricing generally** — the brochure prices Part 141 packages, so confirm the school bills Part 61 training at the same hourly rates.
 4. The **DPE practical-test fee** (excluded from all package prices).
 5. **Whether pre- and post-flight briefings are billed as ground instruction** — the single biggest driver of the ground line, worth $1,300–$1,700.
-6. **Whether the $650 private pilot kit is mandatory for a Part 61 student** who already holds a home-study course.
-7. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
-8. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
-9. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
-10. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
-11. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
-12. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
-13. **Instrument and Commercial course pricing**, which is not in this brochure at all.
-14. The $75 arithmetic discrepancy in the printed 172P average total.
+6. **Whether the $650 private pilot kit can be waived** for a Part 61 student who already owns the books and equipment — this budget assumes it can.
+7. **What the brochure's $150 "applicable tax" line covers** — if it is sales tax on the kit, it goes away with the kit.
+8. **The AME's fee for the Class III medical**, which no version of this budget includes.
+9. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
+10. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
+11. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
+12. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
+13. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
+14. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
+15. **Instrument and Commercial course pricing**, which is not in this brochure at all.
+16. The $75 arithmetic discrepancy in the printed 172P average total.
 
 ---
 
