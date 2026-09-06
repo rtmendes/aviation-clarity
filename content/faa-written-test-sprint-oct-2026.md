@@ -84,6 +84,37 @@ applying to or starting the program." Knowledge tests are not ratings and carry
 no risk. A **completed instrument rating** before program start may cross that
 line. Wording is ambiguous; requires written confirmation from Southwest.
 
+## Prior flight time does not appear to shorten the cadet program
+
+A common planning assumption — that hours and writtens accumulated before a cadet
+program reduce time or cost inside it — is contradicted by the partner academy's
+own page. [CAE's Destination 225° Cadet Pathway page](https://www.cae.com/civil-aviation/become-a-pilot/our-pilot-training-programmes/southwest-airlines-destination-225-cadet-pathway/)
+states verbatim:
+
+> The Cadet pathway is designed for someone without previous flight experience,
+> so prior flight time does not provide any advantages during the application
+> process or reduce the cost of training
+
+CAE describes the pathway as "an ab initio — 'from the beginning' — program",
+with Phase 1 running approximately 285 hours to Commercial with instrument
+rating, and Phase 2 approximately 100 hours classroom plus 20 hours aircraft for
+CFI/CFII. [US Aviation Academy's page](https://www.usaviationacademy.com/destination-225/)
+likewise calls it ab initio and says "If you don't have previous experience as a
+pilot, this four- to five-year program is for you," but does **not** address
+credit for prior hours either way; it directs enquiries to a named contact.
+
+Consequence for planning: pre-program hours should be justified as **washout-risk
+reduction and proficiency**, not as a shortcut through the program. They are
+likely additive cost, not substitutive. This must be confirmed with the specific
+academy before it is relied on.
+
+## Sequencing note: the medical is the first gate, not the last
+
+The cadet pathway requires the "ability to obtain an FAA First-Class Medical
+Certificate." A first-class medical obtained **before** significant flight-
+training spend is the cheapest risk retirement available on this pathway;
+deferred issuance or a Special Issuance review can take months.
+
 ## Tooling (publisher-listed, verified 2026-09-06)
 
 | Tool | Price | Source |
@@ -110,7 +141,11 @@ recall of supplement figures. Chart-reading competence is the durable skill.
 - PSI test fee of ~$175 (third-party figure; PSI posts the fee at scheduling).
 - Whether Century Air will endorse a pre-solo student for the IRA knowledge test.
 - Whether US Aviation Academy's program price or duration changes for entrants
-  arriving with writtens already passed.
+  arriving with writtens already passed, or arriving holding a private pilot
+  certificate. CAE states prior flight time confers no advantage and no cost
+  reduction; US Aviation Academy has published no equivalent statement, and the
+  two partner academies may differ. Contact listed on US Aviation Academy's
+  Destination 225° page: Scott Sykes, 940-297-6419, ssykes@usaviation.aero.
 - Whether a completed instrument rating disqualifies a Cadet applicant — this is
   an interpretation of ambiguous wording, not a Southwest ruling.
 
