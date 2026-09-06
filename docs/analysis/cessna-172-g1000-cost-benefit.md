@@ -12,7 +12,7 @@ here or later (Instrument, Commercial)?
 | Legal minimum | **40 hr total, ≥20 dual, ≥10 solo** | 14 CFR 61.109(a) |
 | Budget baseline | **50 flight hours** | Student's planning figure |
 | Dual / solo split | **35 dual + 15 solo** — held constant across every aircraft | Meets 61.109(a); 70/30 ratio applied to every hour scenario |
-| Ground instruction | **Modelled at 10 hr @ $86/hr**, sensitivity 0–30 hr (§3.8) | Student holds a Sporty's home-study course; 14 CFR 61.105(a) accepts it in place of logged instructor ground training |
+| Ground instruction | **Modelled at 8 hr @ $86/hr** in the optimized budget (§3.9); sensitivity 0–30 hr in §3.8 | Student holds a Sporty's home-study course; 14 CFR 61.105(a) accepts it in place of logged instructor ground training |
 | Course materials | **Waived — $0** | Student already owns books, headset, foggles, flashlights and flight bag; confirm the kit is not a mandatory enrollment condition |
 | FAA written test | **$175, paid directly** | Student pays the testing fee themselves; Sporty's home-study course supplies the 61.35(a)(1) endorsement |
 | DPE practical-test fee | **$1,000 budgeted** | Student's figure; the fee is set by the individual examiner and is not published by the school |
