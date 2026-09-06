@@ -12,7 +12,7 @@ here or later (Instrument, Commercial)?
 | Legal minimum | **40 hr total, ≥20 dual, ≥10 solo** | 14 CFR 61.109(a) |
 | Budget baseline | **50 flight hours** | Student's planning figure |
 | Dual / solo split | **35 dual + 15 solo** — held constant across every aircraft | Meets 61.109(a); 70/30 ratio applied to every hour scenario |
-| Ground instruction | **30 hr @ $86/hr** — constant | Brochure line item |
+| Ground instruction | **Modelled at 10 hr @ $86/hr**, sensitivity 0–30 hr (§3.8) | Student holds a Sporty's home-study course; 14 CFR 61.105(a) accepts it in place of logged instructor ground training |
 | Fixed course costs | **$975** — constant | Books $650 + FAA written $175 + tax $150 |
 
 **Primary source for pricing:** Century Air *Private Pilot — Flight Training Course
@@ -34,11 +34,14 @@ manufacturer documents in [Sources](#sources).
 ## 1. Bottom line
 
 **Fly the Cessna 172P (or the 172N, if Century Air prices it lower).** On a 50-hour Part 61
-budget it is the cheapest aircraft in the fleet at **$16,365**, it is the aircraft the school
-budgets no extra hours for, and it presents the smallest systems surface to the examiner.
+budget it is the cheapest aircraft in the fleet — **$14,645** with a realistic 10 hours of
+ground instruction alongside a home-study course, or $16,365 on the brochure's 30-hour ground
+assumption. It is the aircraft the school budgets no extra hours for, and it presents the
+smallest systems surface to the examiner.
 
-**The G1000 costs $1,900 more (+11.6%) for the identical 50 hours** — and $3,328 more if the
-school's own +5-hour assumption for glass holds. It adds an automation-management skill
+**The G1000 costs $1,900 more for the identical 50 hours** — and $3,328 more if the school's
+own +5-hour assumption for glass holds. That gap does not move with ground hours: ground is
+billed at $86/hr whatever you fly. It adds an automation-management skill
 element and an electronic-display-malfunction knowledge element to the checkride that the
 gauge aircraft does not.
 
@@ -190,6 +193,54 @@ Simulator credit is far more restrictive under Part 61 than Part 141:
 If a device is a big part of your plan, that alone is an argument for the Part 141 course —
 it does not change which *aircraft* to pick.
 
+### 3.8 Ground instruction is a separate line — and Part 61 lets you cut it
+
+**The 50 and 65-hour figures are flight time only.** Ground instruction is billed separately
+at **$86/hr**, and the brochure's baseline assumes **30 hours = $2,580** on top of the flying.
+
+Part 61 does not prescribe a number of ground hours. 14 CFR 61.105(a): an applicant
+*"must receive and log ground training from an authorized instructor **or complete a
+home-study course**"* on the knowledge areas in 61.105(b). A commercial home-study course
+(Sporty's, King, Gleim) satisfies that on its own. What still requires instructor time:
+
+| Item | Why | Reference |
+| --- | --- | --- |
+| Written-test endorsement | Instructor certifies you completed the ground training or home-study course and are prepared | 14 CFR 61.35(a)(1) |
+| Pre-solo knowledge test and review | Administered and reviewed by the instructor | 14 CFR 61.87(b) |
+| Solo and solo cross-country endorsements | Instructor reviews planning and currency | 14 CFR 61.87, 61.93 |
+| Practical-test endorsement and oral prep | The oral exam is where thin ground work shows | 14 CFR 61.39, 61.103(d) |
+
+Totals at 50 flight hours (35 dual + 15 solo), varying only the ground line:
+
+| Ground hours | 172P | 172SP | 172SP G1000 | SR-20 |
+| --- | --- | --- | --- | --- |
+| 30 hr — brochure baseline | $16,365 | $17,265 | $18,265 | $21,932 |
+| 20 hr | $15,505 | $16,405 | $17,405 | $21,072 |
+| 15 hr | $15,075 | $15,975 | $16,975 | $20,642 |
+| **10 hr — realistic with a home-study course** | **$14,645** | **$15,545** | **$16,545** | **$20,212** |
+| 5 hr — endorsements only | $14,215 | $15,115 | $16,115 | $19,782 |
+
+Flight-only subtotals at 50 hr: 172P **$12,810** · 172SP $13,710 · G1000 $14,710 · SR-20 $18,377.
+The $975 of fixed costs is included in every total above.
+
+| Change | Saving | Note |
+| --- | --- | --- |
+| 30 → 15 ground hours | −$1,290 | |
+| 30 → 10 ground hours | **−$1,720** | |
+| Drop the $650 Jeppesen kit | **−$650** | **Confirm first.** The brochure lists purchasing the private pilot kit as an *enrollment* requirement; that may be a Part 141 course condition a Part 61 student can decline |
+| Both | **−$2,370** | 172P lands at **$13,995** |
+
+**The aircraft comparison is unaffected.** Ground is charged at $86/hr regardless of airframe,
+so the G1000 premium stays at +$1,900 whether you buy 30 ground hours or five.
+
+**One question that decides which row you land on:** ask whether **pre- and post-flight
+briefings are billed as ground instruction**. At most schools that is where the 30 hours
+actually goes — not a classroom. At 0.3–0.5 hr of briefing per lesson, 50 flight hours drags
+15–25 ground hours behind it regardless of how good your self-study is, which is a
+$1,300–$1,700 swing.
+
+---
+
 ## 4. What the three panels physically are
 
 | Item | Cessna 172N / 172P (analog) | Cessna 172SP (analog) | Cessna 172SP NAV III (G1000) |
@@ -337,14 +388,16 @@ These change the numbers and are not published:
 2. **The solo (aircraft-only) rate for the 172SP, G1000 and SR-20** — §3.2 derives these as dual minus the $86/hr instructor charge, a model that reproduces the printed 172P solo rate exactly, but they are not published.
 3. **Part 61 pricing generally** — the brochure prices Part 141 packages, so confirm the school bills Part 61 training at the same hourly rates.
 4. The **DPE practical-test fee** (excluded from all package prices).
-5. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
-6. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
-7. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
-8. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
-9. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
-10. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
-11. **Instrument and Commercial course pricing**, which is not in this brochure at all.
-12. The $75 arithmetic discrepancy in the printed 172P average total.
+5. **Whether pre- and post-flight briefings are billed as ground instruction** — the single biggest driver of the ground line, worth $1,300–$1,700.
+6. **Whether the $650 private pilot kit is mandatory for a Part 61 student** who already holds a home-study course.
+7. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
+8. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
+9. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
+10. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
+11. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
+12. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
+13. **Instrument and Commercial course pricing**, which is not in this brochure at all.
+14. The $75 arithmetic discrepancy in the printed 172P average total.
 
 ---
 
@@ -361,6 +414,9 @@ Century Air
 Regulations (14 CFR)
 - [§ 61.1 — definition of *complex airplane*](https://www.law.cornell.edu/cfr/text/14/61.1)
 - [§ 61.109 — Private pilot aeronautical experience (Part 61 route), incl. (k) device credit](https://www.law.cornell.edu/cfr/text/14/61.109)
+- [§ 61.105 — Private pilot aeronautical knowledge; home-study course accepted](https://www.law.cornell.edu/cfr/text/14/61.105)
+- [§ 61.35 — Knowledge test prerequisites and endorsement](https://www.law.cornell.edu/cfr/text/14/61.35)
+- [§ 61.87 — Pre-solo requirements, incl. the pre-solo knowledge test](https://www.law.cornell.edu/cfr/text/14/61.87)
 - [§ 61.129 — Commercial pilot aeronautical experience, incl. (a)(3)(ii) and (j) TAA definition](https://www.law.cornell.edu/cfr/text/14/61.129)
 - [§ 61.65 — Instrument rating requirements](https://www.law.cornell.edu/cfr/text/14/61.65)
 - [Part 141 Appendix B — Private Pilot Certification Course](https://www.law.cornell.edu/cfr/text/14/appendix-B_to_part_141)
