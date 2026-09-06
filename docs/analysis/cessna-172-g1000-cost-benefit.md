@@ -16,6 +16,7 @@ here or later (Instrument, Commercial)?
 | Course materials | **Waived — $0** | Student already owns books, headset, foggles, flashlights and flight bag; confirm the kit is not a mandatory enrollment condition |
 | FAA written test | **$175, paid directly** | Student pays the testing fee themselves; Sporty's home-study course supplies the 61.35(a)(1) endorsement |
 | DPE practical-test fee | **$1,000 budgeted** | Student's figure; the fee is set by the individual examiner and is not published by the school |
+| FAA medical | **Held — first class, $0 remaining** | Already secured. Exceeds the Class III minimum the brochure requires; under 14 CFR 61.23(d)(1)(iv)–(v) a first-class certificate carries private-pilot privileges for **60 months** if the exam was taken under age 40, **24 months** at 40 or older |
 
 **Primary source for pricing:** Century Air *Private Pilot — Flight Training Course
 Information* brochure (© 2025 Century Air Inc., footer code 1012020), pages 4–6.
@@ -263,7 +264,7 @@ allowance for the examiner.
 | FAA written test | — | — | $175 | Paid directly by the student |
 | DPE practical test | — | — | $1,000 | Student's budget; set by the individual examiner |
 | Renter's insurance | — | — | $750–$900 | Required before solo; brochure figure |
-| **All-in** | | | **$15,423–$15,573** | Excludes the FAA medical — see the gap below |
+| **All-in** | | | **$15,423–$15,573** | Medical already held — nothing further to add |
 
 **All four aircraft on the same optimized basis** (50 flight hr, 8 ground hr, no kit):
 
@@ -292,14 +293,18 @@ planning (61.87, 61.93); and the practical-test endorsement (61.39, 61.103(d)) n
 with oral-exam preparation, which is where thin ground work shows up as a failed checkride.
 Budget 8, push for less, and do not let it reach zero.
 
-**Two gaps this budget still has:**
+**The medical is already covered.** The student holds a **first-class medical certificate**,
+which exceeds the Class III minimum the brochure requires before the first lesson and before
+solo. No further cost. Under 14 CFR 61.23(d)(1)(iv)–(v) it carries private-pilot privileges
+for 60 calendar months from the month of examination if taken under age 40, or 24 months at
+age 40 or older — comfortably beyond a 6–8 month course either way. Holding a first class also
+means the medical is already in place for the commercial and ATP path, so no medical spend is
+needed at any later stage of §6A's progression.
 
-1. **The FAA medical.** A Class III medical certificate is required before your first solo
-   and, per the brochure, before the first flight lesson. AME fees vary and are not published
-   by the school — get a price from your AME and add it.
-2. **The briefing question.** If Century Air bills pre- and post-flight briefings as ground
-   instruction, the 8-hour line becomes 15–25 hours and the school invoice rises by
-   $600–$1,500. Ask before enrolling; it is the largest remaining uncertainty in this budget.
+**One gap remains: the briefing question.** If Century Air bills pre- and post-flight
+briefings as ground instruction, the 8-hour line becomes 15–25 hours and the school invoice
+rises by $600–$1,500. Ask before enrolling; it is the largest remaining uncertainty in this
+budget.
 
 **The aircraft comparison is unchanged.** Every optimization above applies identically to all
 four aircraft, so the G1000 premium stays at **+$1,900**.
@@ -456,15 +461,14 @@ These change the numbers and are not published:
 5. **Whether pre- and post-flight briefings are billed as ground instruction** — the single biggest driver of the ground line, worth $1,300–$1,700.
 6. **Whether the $650 private pilot kit can be waived** for a Part 61 student who already owns the books and equipment — this budget assumes it can.
 7. **What the brochure's $150 "applicable tax" line covers** — if it is sales tax on the kit, it goes away with the kit.
-8. **The AME's fee for the Class III medical**, which no version of this budget includes.
-9. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
-10. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
-11. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
-12. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
-13. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
-14. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
-15. **Instrument and Commercial course pricing**, which is not in this brochure at all.
-16. The $75 arithmetic discrepancy in the printed 172P average total.
+8. Whether a **fuel surcharge** is currently in effect at KCDW, and per which aircraft.
+9. Whether renter's **insurance premiums differ** by aircraft (the $750–900 figure is generic).
+10. Which **autopilot** is fitted to the 172SP NAV III — **GFC 700 or KAP 140** — since 61.129(j) TAA credit requires a two-axis autopilot integrated with nav and heading.
+11. Which optional G1000 features are installed (traffic, TAWS-B, SiriusXM weather, synthetic vision) — these change both training value and the oral exam scope.
+12. Whether any 172N/172P in the fleet has an **EGT gauge** fitted (changes how leaning is taught in item 5.1.1).
+13. Whether the simulator centre has a **G1000-configured FTD/AATD** eligible for Part 141 credit — this is the single largest lever on instrument-course cost.
+14. **Instrument and Commercial course pricing**, which is not in this brochure at all.
+15. The $75 arithmetic discrepancy in the printed 172P average total.
 
 ---
 
@@ -483,6 +487,7 @@ Regulations (14 CFR)
 - [§ 61.109 — Private pilot aeronautical experience (Part 61 route), incl. (k) device credit](https://www.law.cornell.edu/cfr/text/14/61.109)
 - [§ 61.105 — Private pilot aeronautical knowledge; home-study course accepted](https://www.law.cornell.edu/cfr/text/14/61.105)
 - [§ 61.35 — Knowledge test prerequisites and endorsement](https://www.law.cornell.edu/cfr/text/14/61.35)
+- [§ 61.23 — Medical certificate requirements and duration](https://www.law.cornell.edu/cfr/text/14/61.23)
 - [§ 61.87 — Pre-solo requirements, incl. the pre-solo knowledge test](https://www.law.cornell.edu/cfr/text/14/61.87)
 - [§ 61.129 — Commercial pilot aeronautical experience, incl. (a)(3)(ii) and (j) TAA definition](https://www.law.cornell.edu/cfr/text/14/61.129)
 - [§ 61.65 — Instrument rating requirements](https://www.law.cornell.edu/cfr/text/14/61.65)
