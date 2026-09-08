@@ -18,14 +18,14 @@ own equipment, no materials kit · $1,000 budgeted per DPE · instrument trainin
 | Phase | Where | Aircraft | Hours | Cost | Target date |
 | --- | --- | --- | --- | --- | --- |
 | Private written (PAR) | Century Air testing centre | — | — | $175 direct | **9 Sep 2026** — booked |
-| Private flight training | Century Air | **Cessna 172P** | 50 (35 dual / 15 solo) | $13,498 school invoice | Start 14 Sep, **checkride 8 Dec 2026** at 4 lessons/week |
-| Private checkride | Century Air / DPE | 172P | — | $1,000 + insurance $750–900 | mid-Dec 2026 |
-| Instrument written (IRA) | Sheppard Air self-study | — | — | course + $175 test | **Dec 2026**, before instrument flying |
-| XC PIC time-building | Century Air | 172P (cheapest) | 24 | $4,704 solo / $2,352 shared | Dec 2026 – Mar 2027 |
-| Instrument training | Century Air | **172SP G1000** | 20 aircraft + 20 AATD | $6,400 + AATD rate | Dec 2026 – Mar 2027 |
-| **Relocate to Denton** | — | — | — | — | ~Mar 2027 |
+| Private flight training | Century Air | **Cessna 172P** | 50 (35 dual / 15 solo) | $13,498 school invoice | Start 14 Sep, **checkride 1–21 Nov 2026** at 5+ days/week |
+| Private checkride | Century Air / DPE | 172P | — | $1,000 + insurance $750–900 | early-to-mid Nov 2026 |
+| Instrument written (IRA) | Sheppard Air self-study | — | — | course + $175 test | **Nov 2026**, before instrument flying |
+| XC PIC time-building | Century Air | 172P (cheapest) | 24 | $4,704 solo / $2,352 shared | Nov 2026 – Feb 2027 |
+| Instrument training | Century Air | **172SP G1000** | 20 aircraft + 20 AATD | $6,400 + AATD rate | Nov 2026 – Feb 2027 |
+| **Relocate to Denton** | — | — | — | — | ~Feb 2027 |
 | Final 3 hr + endorsement | Denton CFII | same type | 3 | Denton rates | within 2 calendar months of the test |
-| Instrument checkride | Denton DPE | same type | — | $1,000 budgeted | ~Apr 2027 |
+| Instrument checkride | Denton DPE | same type | — | $1,000 budgeted | ~Mar 2027 |
 
 ---
 
@@ -44,39 +44,55 @@ own equipment, no materials kit · $1,000 budgeted per DPE · instrument trainin
 | Practical-test preparation | 3 | — | Must fall **within the preceding 2 calendar months** — 61.109(a)(4) |
 | **Total** | **35** | **15** | Legal floor is 40 hr / 20 dual / 10 solo |
 
-### 2.2 Realistic timing
+### 2.2 Realistic timing at 5+ days a week
 
-50 hours is roughly **34 flights** — about 25 dual at ~1.4 hr and 9 solo at ~1.7 hr. Northern
-New Jersey from September into December loses roughly 30% of booked slots to weather,
-maintenance and instructor availability, so plan on effective rates below what you schedule:
+50 hours is roughly **34 sessions** — about 25 dual at ~1.4 hr and 9 solo at ~1.7 hr. The plan
+is a **minimum of five days a week, with two blocks on some days**. Northern New Jersey from
+September into November still costs roughly 30% of booked slots to weather, maintenance and
+instructor availability, but flying five days a week absorbs that far better than three: a
+lost morning has another slot behind it rather than a three-day gap.
 
-| Scheduled per week | Effective after 30% attrition | Weeks | Checkride-ready |
+| Sessions/week | Pattern | Effective after 30% attrition | Weeks | Checkride-ready |
+| --- | --- | --- | --- | --- |
+| 5 | five days, one block each | 3.5 | 9.7 | **21 Nov 2026** |
+| 6 | five days, one double | 4.2 | 8.1 | **9 Nov 2026** |
+| **7** | **five days, two doubles** | **4.9** | **6.9** | **1 Nov 2026** |
+| 8 | five days, three doubles | 5.6 | 6.1 | 26 Oct 2026 |
+
+Starting 14 September, that is a **late-October to late-November checkride**, not December.
+
+### 2.3 At this cadence the examiner becomes the binding constraint, not the flying
+
+This is the thing to fix tomorrow. Examiner lead times of 4–8 weeks are normal, and at 6–7
+sessions a week the airplane finishes before the examiner is free:
+
+| Cadence | Ready | Book by, 4-week lead | Book by, 8-week lead |
 | --- | --- | --- | --- |
-| 5 | 3.5 | 9.7 | **21 Nov 2026** |
-| **4** | **2.8** | **12.1** | **8 Dec 2026** |
-| 3 | 2.1 | 16.2 | 5 Jan 2027 |
+| 5/week | 21 Nov | 24 Oct | 26 Sep |
+| 6/week | 9 Nov | 12 Oct | **14 Sep — the day training starts** |
+| 7/week | 1 Nov | 4 Oct | **6 Sep — before training starts** |
 
-**Book at four lessons per week and target a mid-December checkride.** Three per week pushes
-you into January and — more importantly — into the gap-driven hour inflation that turns a
-50-hour plan into a 65-hour one.
+**Book the DPE at enrollment**, with a date around 1–9 November and a weather alternate. If the
+examiner cannot be booked that early, that fact — not the flying — sets the finish date, and
+it is worth knowing before committing to the pace.
 
-### 2.3 The seven things that actually keep it at 50 hours
+### 2.3a How to structure a double-block day
 
-1. **Fly four times a week, minimum.** Nothing else on this list matters as much. Skill decay
-   between lessons is the single largest cause of hour overrun; two lessons a week means
-   re-flying the last lesson every time.
-2. **Written done first.** Your 9 September test date is the right call — it front-loads the
-   knowledge so airborne time is spent on flying, not explaining.
-3. **Book the DPE early.** Examiner lead times of 4–8 weeks are normal. At four lessons a
-   week, book around **4 November 2026**; at three, around **21 November**.
-4. **Fly early mornings.** Calm air, fewer cancellations, less traffic, shorter taxi times.
-   Afternoon summer and autumn slots in the New York area lose more days than morning ones.
-5. **Chair-fly the flows.** Free, and it is the difference between learning a procedure in the
-   airplane at $282/hr and arriving with it already memorized.
-6. **Combine the requirements.** The night 100 NM cross-country satisfies 61.109(a)(2) in one
-   flight; plan the solo 150 NM cross-country before mid-November while daylight lasts.
-7. **Debrief on the ground, not in the air.** Hobbs time spent on discussion is the most
-   expensive discussion you will ever have.
+Two blocks in a day works, but not as two lessons of new material — the second one doesn't
+stick. The productive shapes are:
+
+| Phase | Morning block | Afternoon block |
+| --- | --- | --- |
+| Pre-solo (roughly the first 15 dual hours) | New material — airwork, stalls, emergencies | Pattern work, a different objective, same instructor |
+| Post-solo | Dual: new material or cross-country | **Solo practice consolidating the morning** |
+| Cross-country phase | Dual or solo cross-country (4–5 hr block) | Ground, planning, chair-flying — not a second flight |
+
+**First solo lands around 29 September – 6 October** at this pace, which is when double days
+become genuinely efficient, because the afternoon can be solo at $196/hr instead of $282/hr.
+Before that, a double day is two dual sessions with different objectives.
+
+Two flights a day is productive; three is not. Fatigue degrades learning faster than the extra
+hour buys, and it shows up as repeated lessons — the exact thing that turns 50 hours into 65.
 
 ### 2.4 Private phase cost
 
@@ -208,18 +224,17 @@ commit to the glass premium: if their 172s are steam-gauge, train instrument in 
 | Date | Milestone |
 | --- | --- |
 | **9 Sep 2026** | FAA private written (PAR) — booked. Valid for the practical through **30 Sep 2028** (61.39(a)(1)) |
-| 14 Sep 2026 | Begin flight training, 4 lessons/week |
-| ~mid-Oct 2026 | First solo |
-| ~4 Nov 2026 | **Book the DPE** — at roughly 60% progress |
-| before mid-Nov 2026 | Solo 150 NM cross-country, while daylight allows |
-| Nov 2026 | Night 100 NM cross-country and 10 full-stop landings |
-| early Dec 2026 | 3 hr practical-test prep (within 2 calendar months of the test) |
-| **~8–15 Dec 2026** | **Private pilot checkride** |
-| Dec 2026 | Sheppard Air IRA written — do it before instrument flying begins |
-| Dec 2026 – Mar 2027 | Instrument phase: 20 hr AATD, 20 hr aircraft dual flown as cross-countries, 24 hr XC PIC time-building. At 3 sessions/week with ~20% attrition (device sessions are weather-proof), **~10 weeks** |
-| ~Mar 2027 | Relocate to Denton |
+| **~9 Sep 2026** | **Book the DPE at enrollment** — at 5+ days a week the examiner, not the flying, sets the finish date (§2.3) |
+| 14 Sep 2026 | Begin flight training, **5 days a week, doubles where possible** |
+| ~29 Sep – 6 Oct 2026 | First solo — after which afternoon blocks become solo at $196/hr instead of dual at $282 |
+| Oct 2026 | Solo 150 NM cross-country while daylight is still long; night 100 NM cross-country and 10 full-stop landings |
+| late Oct 2026 | 3 hr practical-test preparation, inside the 2-calendar-month window |
+| **~1–21 Nov 2026** | **Private pilot checkride** |
+| Nov 2026 | Sheppard Air IRA written — before instrument flying begins |
+| Nov 2026 – Feb 2027 | Instrument phase: 20 hr AATD, 20 hr aircraft dual flown as cross-countries, 24 hr XC PIC time-building |
+| ~Feb 2027 | Relocate to Denton |
 | within 2 calendar months of the test | 3 hr with a Denton CFII + practical-test endorsement |
-| **~Apr 2027** | **Instrument checkride, Denton DPE** |
+| **~Mar 2027** | **Instrument checkride, Denton DPE** |
 
 ---
 

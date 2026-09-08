@@ -2,7 +2,8 @@
 
 **Meeting:** head of Century Air (Richard A. Greene, President/CEO and FAA Designated
 Pilot Examiner), Essex County Airport (KCDW).
-**Context:** Part 61 private pilot course, 50-flight-hour budget, Cessna 172P, FAA private
+**Context:** Part 61 private pilot course, 50-flight-hour budget, Cessna 172P, flying a
+**minimum of five days a week with double blocks where possible**, FAA private
 written booked 9 September 2026, first-class medical held, own equipment, then instrument
 training here and the instrument checkride at Denton, Texas.
 
@@ -60,6 +61,44 @@ tester calibrated for the Cessna 172. All five are needed from the first lesson,
 are cheap individually — but if you are missing them, the kit stops looking like pure overhead.
 
 
+## ForeFlight: school licence vs. your own account, and what happens to your records
+
+ForeFlight states that **"flight schools own the licenses and manage distribution to their
+students and instructors"** and can *assign and re-assign* them. What it does not publish is
+whether the seat attaches to **your** ForeFlight ID or to an account the school creates — and
+that is the whole question.
+
+| | School licence on **your own** ForeFlight ID | School-created account on **their** address |
+| --- | --- | --- |
+| Who owns the subscription | The school | The school |
+| Who owns the account and its data | **You** | **The school** |
+| When the licence is withdrawn | Account and history stay; you lose the app until you subscribe yourself | You may lose access to the account entirely, and the logbook and documents in it |
+| Moving to Denton | Buy your own plan, everything is already there | Potentially starting over |
+| Risk | Low | **This is the one to avoid** |
+
+**Your certification records are not at risk either way.** You keep a paper logbook, and that is
+your record of authority — instructor endorsements live there. ForeFlight's logbook is a
+convenience copy and a backup. What's genuinely at stake is flight history, routes, custom
+checklists, binders and documents.
+
+**Do this regardless of which account you end up on:**
+
+1. Turn on ForeFlight's **logbook auto-export** at the start — per ForeFlight's support
+   documentation it emails your logbook files to the account address every 30 days, so a copy
+   always lands outside the app.
+2. Keep the **paper logbook as primary** and ForeFlight as the secondary copy, which is already
+   your plan.
+3. **Before you leave for Denton**, export the full logbook zip — ForeFlight's expiry flow
+   offers a Complete Logbook Report (PDF) plus the data as CSV — and save copies of any
+   checklists and documents you have built.
+
+**The economics:** a school licence is worth up to **$390 a year**, and ForeFlight says group
+licences cost less per seat than buying individually. Over a roughly seven-month private course
+the saving is on the order of $150 on the Essential tier. That is not worth losing your flight
+history over — but you probably don't have to choose. Ask question E2 first, and if the answer
+is "an account we create", buy your own.
+
+
 ## Block time — the arithmetic, and the one thing worth negotiating hardest
 
 A reservation is not flight time. Budget roughly 30 minutes before (preflight, brief) and
@@ -112,16 +151,18 @@ Four levers, in order of value:
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
-| B1 | Can I lock a standing recurring reservation — four fixed slots a week for the whole course? | The most valuable thing I can get from this meeting. Four lessons a week is what holds the course to 50 hours; three a week is what turns it into 65. Ad-hoc booking will not hold that cadence. | A named recurring slot pattern (e.g. Mon/Wed/Fri 07:00–10:00 plus a Saturday block), reserved for the duration, in writing. | **MUST** |
-| B2 | How many 172P/172N are in service right now, and which tail numbers? | One airplane means every inspection stops my training. Two or more means a backup exists. | Specific tail numbers, and ideally seeing them today. | **MUST** |
-| B3 | Will you assign me a primary aircraft and a named backup? | Flying the same airplane speeds up learning; a named backup keeps a maintenance day from becoming a cancelled week. | One primary, one backup, both the same type. | HIGH |
-| B4 | What does maintenance downtime actually look like — 100-hour inspection cadence, and how do you schedule it around students? | A rental trainer needs 100-hour inspections. Unplanned downtime is the second-biggest schedule risk after weather. | Typical days out per inspection and how far ahead it's planned. | HIGH |
-| B5 | What is realistic availability for the first slot of the day, around 07:00? | Calm air, fewest cancellations, no delay cascade from earlier flights. Early slots are the highest-yield hours in the whole course. | Confirmed early availability on my standing days. | HIGH |
-| B6 | How far ahead can I book, and which days and times are hardest to get? | I need to plan around contention rather than discover it. | The booking window and the busy periods. | — |
-| B7 | Can a student pilot take an aircraft overnight or multi-day, or is that post-certificate only? | Affects my long solo cross-country planning now, and matters much more for the instrument phase when I need ~44 more hours of cross-country PIC. | The policy for student pilots and for certificated renters. | HIGH |
-| B8 | What is the daily minimum charge on an overnight or multi-day rental? | Most schools bill a minimum number of hours per day away from base. On a 3-day trip that can dominate the cost. | The minimum hours per day and how weather delays are treated. | HIGH |
-| B9 | Is a 5+ consecutive-day booking possible, and is it easier midweek? | This is how I'd build cross-country PIC time efficiently later — several long legs in one trip rather than a dozen separate rentals. | Feasibility, notice required, and any premium. | HIGH |
-| B10 | Can I hold a 5-hour block for the 150 NM solo cross-country, plus a backup day for weather? | 61.109(a)(5) requires a 150 NM solo cross-country with landings at three points. It needs most of a day and it needs to happen before daylight gets short. | A long block and a standing weather alternate. | HIGH |
+| B1 | Can I lock a standing recurring reservation — five days a week, every week, with two blocks on some days? | The most valuable thing I can get from this meeting, and the whole plan rests on it. Five days a week with doubles finishes the course in 7–10 weeks instead of 12–16, and at that frequency there is essentially no skill decay between lessons. Ad-hoc booking cannot hold that cadence. | A named recurring pattern in writing — five weekday mornings, plus an afternoon block on at least two of them — reserved for the duration of the course. | **MUST** |
+| B2 | Can you actually support 6–7 sessions a week for one student — aircraft and instructor both? | This is a real capacity question, not a formality. It needs an aircraft free twice a day and an instructor who can fly that much alongside their other students. | An honest yes or no. If it is no, I need to know the true ceiling now so the plan and the examiner booking match it. | **MUST** |
+| B3 | For double days: morning dual plus an afternoon solo block in the same aircraft once I'm endorsed? | Two lessons of new material in a day doesn't stick, but dual in the morning and solo consolidation in the afternoon does — and the afternoon runs at $196/hr instead of $282/hr. First solo should land around 29 Sept–6 Oct at this pace. | Agreement to that shape, and the aircraft held across both blocks so I'm not re-preflighting a different airplane. | HIGH |
+| B4 | How many 172P/172N are in service right now, and which tail numbers? | One airplane means every inspection stops my training. Two or more means a backup exists. | Specific tail numbers, and ideally seeing them today. | **MUST** |
+| B5 | Will you assign me a primary aircraft and a named backup? | Flying the same airplane speeds up learning; a named backup keeps a maintenance day from becoming a cancelled week. | One primary, one backup, both the same type. | HIGH |
+| B6 | What does maintenance downtime actually look like — 100-hour inspection cadence, and how do you schedule it around students? | A rental trainer needs 100-hour inspections. Unplanned downtime is the second-biggest schedule risk after weather. | Typical days out per inspection and how far ahead it's planned. | HIGH |
+| B7 | Can I have the first slot of the day, around 07:00, five days a week? | Calm air, fewest cancellations, no delay inherited from earlier flights. At five days a week the early slot is what makes the 30% weather attrition survivable. | The 07:00 slot as my standing booking on all five days. | **MUST** |
+| B8 | How far ahead can I book, and which days and times are hardest to get? | I need to plan around contention rather than discover it. | The booking window and the busy periods. | — |
+| B9 | Can a student pilot take an aircraft overnight or multi-day, or is that post-certificate only? | Affects my long solo cross-country planning now, and matters much more for the instrument phase when I need ~44 more hours of cross-country PIC. | The policy for student pilots and for certificated renters. | HIGH |
+| B10 | What is the daily minimum charge on an overnight or multi-day rental? | Most schools bill a minimum number of hours per day away from base. On a 3-day trip that can dominate the cost. | The minimum hours per day and how weather delays are treated. | HIGH |
+| B11 | Is a 5+ consecutive-day booking possible, and is it easier midweek? | This is how I'd build cross-country PIC time efficiently later — several long legs in one trip rather than a dozen separate rentals. | Feasibility, notice required, and any premium. | HIGH |
+| B12 | Can I hold a 5-hour block for the 150 NM solo cross-country, plus a backup day for weather? | 61.109(a)(5) requires a 150 NM solo cross-country with landings at three points. It needs most of a day and it needs to happen before daylight gets short. | A long block and a standing weather alternate. | HIGH |
 
 ## C. Block time — using the reservation efficiently
 
@@ -147,11 +188,14 @@ Four levers, in order of value:
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
 | E1 | Do you have a ForeFlight volume or education licence that covers students, or do I buy my own? Which tier? | ForeFlight offers volume pricing to organisations that distribute licences to students and instructors. Individual plans are Starter $130/yr, Essential $260/yr, Premium $390/yr — note the tiers were renamed from Basic/Pro. If the school covers it, that's up to $390 a year I don't spend, and the school's plates and data are standardised with my instructor's. | Either a school licence I can be added to, or a clear 'buy your own' plus which tier your instructors actually teach with. | **MUST** |
-| E2 | Do the aircraft have ADS-B In, or do you have a loaner receiver I can pair with ForeFlight? | ADS-B In is what makes traffic and weather appear on the iPad. It changes situational awareness on every flight, especially solo cross-countries in busy New York-area airspace. | Installed ADS-B In, a loaner receiver, or a recommendation on what to buy. | HIGH |
-| E3 | Do the aircraft have ADS-B Out? | Determines which airspace I can legally enter — relevant this close to the New York Class B. | Confirmation per tail number. | HIGH |
-| E4 | Is scheduling self-serve online, and can I see live aircraft and instructor availability? | Self-serve booking is how I grab a released slot the same day — which is how cancelled lessons get replaced instead of lost. | Access to the scheduler on day one. | HIGH |
-| E5 | Do you use a syllabus or training-tracking app, and will I have access to my own training record? | I need my record to be portable when I move to Denton. | Access, and the ability to export. | HIGH |
-| E6 | Are there any other required apps, subscriptions or fees I haven't budgeted? | I'd rather find these now than on the first invoice. | A complete list. | HIGH |
+| E2 | If I take a school ForeFlight licence, will it be attached to my own personal ForeFlight account and email, or to an account you create for me? | This single answer decides everything about what I keep when I move to Texas. ForeFlight says flight schools own the licences and assign and re-assign them; it does not publish whether the seat attaches to the student's own ForeFlight ID. If it attaches to my account, I keep my logbook, routes, checklists and documents forever and merely lose the subscription when the licence is withdrawn. If you create an account on a school address, the account is yours and I could lose the history with it. | The licence assigned to my own personal ForeFlight ID. If that isn't how your group account works, I'll buy my own subscription instead. | **MUST** |
+| E3 | If I leave mid-course, what happens to my ForeFlight account, logbook and documents — and how much notice do I get before the licence is withdrawn? | I am relocating to Denton part-way through. I want to leave with my data intact and no surprise cut-off. | Confirmation that the account survives, and notice before the seat is reclaimed so I can export and re-subscribe. | HIGH |
+| E4 | Can I run my own personal ForeFlight subscription alongside a school licence if I prefer? | Belt and braces — nothing about my records then depends on the school's account administration. | No objection to me holding my own, and use of the school's shared content either way. | — |
+| E5 | Do the aircraft have ADS-B In, or do you have a loaner receiver I can pair with ForeFlight? | ADS-B In is what makes traffic and weather appear on the iPad. It changes situational awareness on every flight, especially solo cross-countries in busy New York-area airspace. | Installed ADS-B In, a loaner receiver, or a recommendation on what to buy. | HIGH |
+| E6 | Do the aircraft have ADS-B Out? | Determines which airspace I can legally enter — relevant this close to the New York Class B. | Confirmation per tail number. | HIGH |
+| E7 | Is scheduling self-serve online, and can I see live aircraft and instructor availability? | Self-serve booking is how I grab a released slot the same day — which is how cancelled lessons get replaced instead of lost. | Access to the scheduler on day one. | HIGH |
+| E8 | Do you use a syllabus or training-tracking app, and will I have access to my own training record? | I need my record to be portable when I move to Denton. | Access, and the ability to export. | HIGH |
+| E9 | Are there any other required apps, subscriptions or fees I haven't budgeted? | I'd rather find these now than on the first invoice. | A complete list. | HIGH |
 
 ## F. Aircraft equipment — affects both the flying and the instrument phase later
 
@@ -186,7 +230,7 @@ Four levers, in order of value:
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
-| I1 | Which DPE would examine me, what's the current lead time, and what's the fee? | I've budgeted $1,000. Examiner lead time of 4–8 weeks is normal and it's the item most likely to slip my finish date, so I want to book early — around early November. | A name, a realistic lead time, and the actual fee. | **MUST** |
+| I1 | Which DPE would examine me, what is the current lead time, and what is the fee — and can we book the date today? | At five-plus days a week the examiner, not the flying, becomes the binding constraint. I should be checkride-ready between 1 and 21 November. With a typical 4–8 week lead that means booking at enrollment — an 8-week lead on a 1 November ride would have needed booking before training even starts. | A name, the real lead time, the fee, and a date held now with a weather alternate. If the earliest slot is later than late November, that fact sets my finish date and I need to know today. | **MUST** |
 | I2 | You're an FAA Designated Pilot Examiner yourself. Do you examine your own school's students, or does that create a conflict — and if so, who examines me? | Worth asking directly rather than assuming. Some examiners won't test applicants from their own school. It changes who I book and how far out. | A straight answer on who my examiner will be. | **MUST** |
 | I3 | Does the school book the examiner, or do I? | Determines who owns the most schedule-critical booking in the course. | Clarity, and ideally the school doing it with me copied. | HIGH |
 | I4 | Will an aircraft be reserved for the checkride day, plus a weather backup day? | A checkride cancelled for lack of an airplane costs the examiner fee slot and weeks of delay. | Both days blocked when the ride is booked. | HIGH |
