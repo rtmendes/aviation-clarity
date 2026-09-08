@@ -2,8 +2,8 @@
 
 **Meeting:** head of Century Air (Richard A. Greene, President/CEO and FAA Designated
 Pilot Examiner), Essex County Airport (KCDW).
-**Context:** Part 61 private pilot course, 50-flight-hour budget, Cessna 172P, flying a
-**minimum of five days a week with double blocks where possible**, FAA private
+**Context:** Part 61 private pilot course, 50-flight-hour budget, Cessna 172P,
+**booking six days a week and planning on about five flown**, with double blocks where possible, FAA private
 written booked 9 September 2026, first-class medical held, own equipment, then instrument
 training here and the instrument checkride at Denton, Texas.
 
@@ -21,7 +21,7 @@ schedule · standard = worth asking if there's time.
 | --- | --- | --- |
 | **ForeFlight through them, or my own account?** | ForeFlight does run volume pricing for organisations, which "distribute licences to students and instructors" — so a school licence is a real possibility, not a long shot. Individual tiers are **Starter $130/yr, Essential $260/yr, Premium $390/yr** (renamed from Basic/Pro — ask by the current names). | Ask to be added to the school licence. If not, ask which tier the instructors actually teach with and buy that one, so plates and briefings match. Worth up to **$390/yr**. |
 | **Are pre/post-flight briefings billable?** | Unknown and it is the largest remaining swing in the budget. At $86/hr and 0.3–0.5 hr per lesson across 34 lessons that is **$860–$1,460**, the difference between an 8-hour and a 25-hour ground line. | A per-lesson norm in writing, and whether briefings shorten once I'm self-studying. |
-| **172P availability five days a week** | Not multi-day rentals — session-specific, one or two blocks per day, five days a week. The question is sustained daily availability of one airframe, not taking it away overnight. | A standing five-day pattern on a named primary aircraft with a named backup, plus priority re-assignment if the primary goes unserviceable. |
+| **172P availability six days a week** | Not multi-day rentals — session-specific, one or two blocks per day, six days a week booked. I expect weather and maintenance to cost me about one of those days a week, so five flown is the planning number and the sixth is the buffer. The question is sustained daily availability of one airframe, not taking it away overnight. | A standing six-day pattern on a named primary aircraft with a named backup, plus priority re-assignment if the primary goes unserviceable. |
 | **Is a 3-hour block best?** | Yes as the default — see the block-time section below. A 3-hour reservation yields roughly 1.5–2.0 Hobbs hours after preflight, brief and debrief. | 2 hours for pattern work, **3 hours standard**, 4–5 for cross-countries, a half day for the 150 NM solo — and a 4-hour block combining dual then solo once I'm endorsed. |
 
 
@@ -105,8 +105,8 @@ checklists, binders and documents.
    checklists and documents you have built.
 
 **The economics:** a school licence is worth up to **$390 a year**, and ForeFlight says group
-licences cost less per seat than buying individually. Over a roughly seven-month private course
-the saving is on the order of $150 on the Essential tier. That is not worth losing your flight
+licences cost less per seat than buying individually. Over the roughly six months at Century Air
+— private plus the instrument phase — the saving is on the order of $130 on the Essential tier. That is not worth losing your flight
 history over — but you probably don't have to choose. Ask question E2 first, and if the answer
 is "an account we create", buy your own.
 
@@ -125,11 +125,31 @@ A reservation is not flight time. Budget roughly 30 minutes before (preflight, b
 | Night cross-country plus 10 landings | 4 hours | 3.0 |
 | **150 NM solo cross-country** | **Half day** | 3.0 – 4.0 |
 
+### Booked days versus flown days
+
+Six days a week is the **booking** target. Five is the **planning** number: weather,
+maintenance and the occasional instructor conflict will take roughly one booked day a week in a
+New Jersey autumn, and the sixth day exists to absorb that rather than to add hours. 50 hours is
+about 34 sessions, so the pace works out as:
+
+| Days actually flown | Doubles | Sessions/week | Weeks | Checkride-ready (from 14 Sep) |
+| --- | --- | --- | --- | --- |
+| 5 | none | 5 | 6.8 | 31 Oct 2026 |
+| 5 | one | 6 | 5.7 | 23 Oct 2026 |
+| **5** | **two** | **7** | **4.9** | **18 Oct 2026 — the planning case** |
+| 5 | three | 8 | 4.2 | 13 Oct 2026 |
+| 4 (bad month) | two | 6 | 5.7 | 23 Oct 2026 |
+| 4 (bad month) | none | 4 | 8.5 | 12 Nov 2026 |
+
+The bottom two rows are the point of booking six: even a month that loses two days a week still
+lands the checkride in October if the double blocks hold. **Booking five and flying four is what
+pushes this into December.**
+
 Four levers, in order of value:
 
-1. **A standing recurring reservation.** Four fixed slots a week, locked for the whole course.
-   This is the single most valuable thing to walk out with — the difference between finishing
-   in early November at 50 hours and finishing in January at 65.
+1. **A standing recurring reservation.** Six fixed days a week, locked for the whole course,
+   with doubles on two of them. This is the single most valuable thing to walk out with — the
+   difference between finishing in mid-October at 50 hours and finishing in January at 65.
 2. **Take the first slot of the day.** Calm air, fewest cancellations, and no delay inherited
    from an earlier flight.
 3. **Combine dual and solo in one block.** I owe 15 solo hours; doing 1.5 dual then 1.0 solo in
@@ -156,20 +176,20 @@ Four levers, in order of value:
 | A11 | What is the minimum billing increment — 0.1 or 0.2 hours? | Over 34 flights, rounding up to 0.2 adds up. | 0.1 preferred. | — |
 | A12 | Are there landing, ramp or tie-down fees at KCDW? Who pays fees at destination airports on cross-countries? | My cross-countries include a 150 NM solo trip with landings at three points, and later a 250 NM IFR flight. Destination fees are unbudgeted. | Clarity on who pays, and whether you reimburse. | HIGH |
 | A13 | If I buy fuel away from base, how am I reimbursed and at what rate? | On longer cross-countries I may need to fuel elsewhere. Reimbursed at cost or at your fuel price? | The process and the rate. | HIGH |
-| A14 | What are the cancellation, no-show and late-return fees, and how late can I cancel for weather? | At five-plus days a week in a New Jersey autumn I will cancel often — and at that cadence I am booking far more slots than someone flying twice a week. A tight window plus a fee becomes a recurring cost. | A weather-cancellation carve-out with a same-morning window. | HIGH |
+| A14 | What are the cancellation, no-show and late-return fees, and how late can I cancel for weather? | I am booking six days a week and planning to fly about five of them — the sixth is deliberate slack for a New Jersey autumn. That means I will cancel roughly one booked slot a week by design. A tight window plus a fee turns my weather buffer into a recurring charge. | A weather-cancellation carve-out with a same-morning window. | HIGH |
 | A15 | Is instructor time billed door-to-door, or from engine start to shutdown? | Changes the effective dual rate materially over 35 hours. | A clear definition of when the instructor clock starts and stops. | — |
 
-## B. Aircraft access and scheduling — this decides whether 50 hours in 7–10 weeks is real
+## B. Aircraft access and scheduling — this decides whether 50 hours in 5–7 weeks is real
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
-| B1 | Can I lock a standing recurring reservation — five days a week, every week, with two blocks on some days? | The most valuable thing I can get from this meeting, and the whole plan rests on it. Five days a week with doubles finishes the course in 7–10 weeks instead of 12–16, and at that frequency there is essentially no skill decay between lessons. Ad-hoc booking cannot hold that cadence. | A named recurring pattern in writing — five weekday mornings, plus an afternoon block on at least two of them — reserved for the duration of the course. | **MUST** |
-| B2 | Can you actually support 6–7 sessions a week for one student — aircraft and instructor both? | This is a real capacity question, not a formality. It needs an aircraft free twice a day and an instructor who can fly that much alongside their other students. | An honest yes or no. If it is no, I need to know the true ceiling now so the plan and the examiner booking match it. | **MUST** |
-| B3 | For double days: morning dual plus an afternoon solo block in the same aircraft once I'm endorsed? | Two lessons of new material in a day doesn't stick, but dual in the morning and solo consolidation in the afternoon does — and the afternoon runs at $196/hr instead of $282/hr. First solo should land around 29 Sept–6 Oct at this pace. | Agreement to that shape, and the aircraft held across both blocks so I'm not re-preflighting a different airplane. | HIGH |
+| B1 | Can I lock a standing recurring reservation — six days a week, every week, with two blocks on some days? | The most valuable thing I can get from this meeting, and the whole plan rests on it. I want six days booked and I expect to actually fly about five of them — the sixth day is the weather and maintenance buffer, not an extra ambition. Six booked with two double days finishes the course in about 5 weeks of flying instead of 12–16, and at that frequency there is essentially no skill decay between lessons. Ad-hoc booking cannot hold that cadence. | A named recurring pattern in writing — six mornings a week, plus an afternoon block on at least two of them — reserved for the duration of the course. | **MUST** |
+| B2 | Can you actually support 8–9 booked sessions a week for one student — aircraft and instructor both? | This is a real capacity question, not a formality. Six booked days with doubles on two or three of them is 8–9 slots held; realistically about 7 get flown. It needs an aircraft free twice a day and an instructor who can fly that much alongside their other students. | An honest yes or no. If it is no, I need to know the true ceiling now so the plan and the examiner booking match it. Tell me the ceiling in sessions a week, not in days. | **MUST** |
+| B3 | For double days: morning dual plus an afternoon solo block in the same aircraft once I'm endorsed? | Two lessons of new material in a day doesn't stick, but dual in the morning and solo consolidation in the afternoon does — and the afternoon runs at $196/hr instead of $282/hr. First solo should land around 23–29 September at this pace. | Agreement to that shape, and the aircraft held across both blocks so I'm not re-preflighting a different airplane. | HIGH |
 | B4 | How many 172P/172N are in service right now, and which tail numbers? | One airplane means every inspection stops my training. Two or more means a backup exists. | Specific tail numbers, and ideally seeing them today. | **MUST** |
 | B5 | Will you assign me a primary aircraft and a named backup? | Flying the same airplane speeds up learning; a named backup keeps a maintenance day from becoming a cancelled week. | One primary, one backup, both the same type. | HIGH |
 | B6 | What does maintenance downtime actually look like — 100-hour inspection cadence, and how do you schedule it around students? | A rental trainer needs 100-hour inspections. Unplanned downtime is the second-biggest schedule risk after weather. | Typical days out per inspection and how far ahead it's planned. | HIGH |
-| B7 | Can I have the first slot of the day, around 07:00, five days a week? | Calm air, fewest cancellations, no delay inherited from earlier flights. At five days a week the early slot is what makes the 30% weather attrition survivable. | The 07:00 slot as my standing booking on all five days. | **MUST** |
+| B7 | Can I have the first slot of the day, around 07:00, six days a week? | Calm air, fewest cancellations, no delay inherited from earlier flights. The early slot is what makes six booked days actually convert to five flown ones. | The 07:00 slot as my standing booking on all six days. | **MUST** |
 | B8 | How far ahead can I book, and which days and times are hardest to get? | I need to plan around contention rather than discover it. | The booking window and the busy periods. | — |
 | B9 | Can I hold a 5-hour block for the 150 NM solo cross-country, plus a backup day for weather? | 61.109(a)(5) requires a 150 NM solo cross-country with landings at three points. It needs most of a day and it needs to happen before daylight gets short. | A long block and a standing weather alternate. | HIGH |
 
@@ -177,7 +197,7 @@ Four levers, in order of value:
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
-| C1 | Can you commit to five days a week? Air Fleet is next door at 35 Wright Way with twelve single-engine aircraft — I would rather do this all with you, but cadence is what I am buying. | A fair, factual scheduling question, not a threat. Air Fleet Training Systems operates 1 Cessna 172P, 1 172R, 9 172S and a 182T from the same field. If Century Air cannot support the pace, that is a decision I need to make before enrolling, not in October. | A yes with a written standing schedule, or an honest no with the real ceiling. Either answer is useful today. | **MUST** |
+| C1 | Can you commit to a standing six-day-a-week booking? Air Fleet is next door at 35 Wright Way with twelve single-engine aircraft — I would rather do this all with you, but cadence is what I am buying. | A fair, factual scheduling question, not a threat. Air Fleet Training Systems operates 1 Cessna 172P, 1 172R, 9 172S and a 182T from the same field. If Century Air cannot support the pace, that is a decision I need to make before enrolling, not in October. | A yes with a written standing schedule, or an honest no with the real ceiling. Either answer is useful today. | **MUST** |
 | C2 | After I get my certificate, what is your renter rate and checkout process, and could I buy block time for cross-country time-building? | The instrument rating needs about 44 more hours of cross-country PIC (61.65(d)(1)) and that is pure rental. This is where a second rental source genuinely helps, and where block rates matter most. | The renter rate, checkout requirements and any block discount — knowing I may also rent elsewhere for availability. | HIGH |
 | C3 | Are 3-hour reservation blocks the right default, and can I get longer blocks for cross-country days? | A 3-hour block yields about 1.5–2.0 hours on the Hobbs after preflight, brief and debrief. Pattern lessons need less; cross-countries need 4–5 hours; the long solo needs most of a day. | 3 hours for standard lessons, 2 for pattern work, 4–5 for cross-countries, a half day for the 150 NM. | HIGH |
 | C4 | Can I book a 4-hour block as dual plus solo back-to-back in the same aircraft? | I owe 15 solo hours. Doing 1.5 dual then 1.0 solo in one reservation saves a second preflight, a second commute and a second slot — and the instructor is on hand to endorse and debrief. | Agreement to structure blocks this way once I'm solo-endorsed. | HIGH |
@@ -189,10 +209,10 @@ Four levers, in order of value:
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
 | D1 | Who will my instructor be, and can I meet them today? | Fit and availability matter more than any equipment question in this list. | A name, and a conversation before I commit. | **MUST** |
-| D2 | How many other students do they carry, and are they available at my standing slots? | An over-subscribed instructor is how a four-lesson week becomes two. | Confirmation that my slots are actually theirs. | HIGH |
+| D2 | How many other students do they carry, and are they available at my standing slots? | An over-subscribed instructor is how a six-day booking becomes a three-day week. | Confirmation that my slots are actually theirs. | HIGH |
 | D3 | Are they planning to be here through my checkride, or building hours toward an airline? | Instructor turnover mid-course is the most common cause of extra hours. | An honest answer, and a plan if they leave. | HIGH |
 | D4 | Who is my backup instructor when mine is sick or unavailable? | Keeps the cadence when one person can't fly. | A named second instructor briefed on my progress. | HIGH |
-| D5 | Is the instructor comfortable with five days a week, double blocks on some days, and a checkride in the first three weeks of November? | If they think that is unrealistic I want to hear why today, not in October. At this cadence I am asking for 6–7 of their sessions a week. | Either agreement, or a specific reason it will not work and what pace they can actually sustain. | HIGH |
+| D5 | Is the instructor comfortable with six booked days a week, double blocks on some days, and a checkride in the second half of October? | If they think that is unrealistic I want to hear why today, not in October. At this cadence I am asking them to hold 8–9 slots a week and fly about 7 of them. | Either agreement, or a specific reason it will not work and what pace they can actually sustain. | HIGH |
 
 ## E. Apps, subscriptions and avionics you may already provide
 
@@ -241,7 +261,7 @@ Four levers, in order of value:
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
-| I1 | Which DPE would examine me, what is the current lead time, and what is the fee — and can we book the date today? | At five-plus days a week the examiner, not the flying, becomes the binding constraint. I should be checkride-ready between 1 and 21 November. With a typical 4–8 week lead that means booking at enrollment — an 8-week lead on a 1 November ride would have needed booking before training even starts. | A name, the real lead time, the fee, and a date held now with a weather alternate. If the earliest slot is later than late November, that fact sets my finish date and I need to know today. | **MUST** |
+| I1 | Which DPE would examine me, what is the current lead time, and what is the fee — and can we book the date today? | At six booked days a week the examiner, not the flying, becomes the binding constraint. I should be checkride-ready around 18 October, and no later than mid-November even if the weather is poor. Against a typical 4–8 week lead, an 8-week lead on an 18 October ride would have needed booking in August — that date is already gone, so the booking has to happen now. | A name, the real lead time, the fee, and a date held today with a weather alternate. If the earliest slot is later than mid-November, that fact sets my finish date and I need to know today. | **MUST** |
 | I2 | You're an FAA Designated Pilot Examiner yourself. Do you examine your own school's students, or does that create a conflict — and if so, who examines me? | Worth asking directly rather than assuming. Some examiners won't test applicants from their own school. It changes who I book and how far out. | A straight answer on who my examiner will be. | **MUST** |
 | I3 | Does the school book the examiner, or do I? | Determines who owns the most schedule-critical booking in the course. | Clarity, and ideally the school doing it with me copied. | HIGH |
 | I4 | Will an aircraft be reserved for the checkride day, plus a weather backup day? | A checkride cancelled for lack of an airplane costs the examiner fee slot and weeks of delay. | Both days blocked when the ride is booked. | HIGH |
@@ -289,7 +309,7 @@ Worth being aware of, because it's stronger than a typical walk-in student's:
 | Written test done or imminent | Shows commitment and means no ground-school revenue is being given up by waiving the kit. |
 | First-class medical already held | No delay before solo, and it signals a career track — instrument, commercial and beyond. |
 | Own equipment, self-studied | Nothing to sell me, so the kit waiver costs them little. |
-| Five days a week, with doubles | 6–7 sessions a week is dense, predictable utilisation of one aircraft and one instructor — the most attractive scheduling profile a school can book, and it is worth a standing slot and a block rate. |
+| Six booked days a week, with doubles | 8–9 slots a week on one aircraft and one instructor is dense, predictable utilisation — the most attractive scheduling profile a school can book, and it is worth a standing slot and a block rate. |
 | Private plus a partial instrument phase | Roughly $13.5k of private training delivered in about two months, plus rental and some instrument time before I relocate. Fast, dense revenue on their aircraft — but be straight that the instrument rating and commercial finish in Texas. |
 
 ## Sources
