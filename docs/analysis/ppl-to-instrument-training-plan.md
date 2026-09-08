@@ -3,7 +3,9 @@
 **Student parameters:** Part 61 · 50-hour PPL budget in a Cessna 172P · Sporty's home-study
 course · **FAA private written booked 9 September 2026** · first-class medical held ·
 own equipment, no materials kit · $1,000 budgeted per DPE · instrument training at Century Air
-(KCDW, NJ), relocating to Denton, Texas (KDTO) before the instrument checkride.
+(KCDW, NJ), then relocating to Denton, Texas. **The instrument rating and the commercial are
+both finished at US Aviation Academy in Denton** — Century Air does the private certificate and,
+at most, a partial instrument phase.
 
 > **One reading to confirm.** "Sheppard Air for the instrument test" is read here as
 > **[Sheppard Air](https://www.sheppardair.com/)**, the FAA knowledge-test prep publisher —
@@ -225,6 +227,48 @@ and it is the type most likely to have a match in a 100+ aircraft academy fleet 
 
 ---
 
+## 4A. Because the rating and the commercial finish at USAA, split the work by what survives
+
+The scope changed: Century Air does the **private certificate** and at most a **partial
+instrument phase**; the instrument rating and the commercial are both completed at US Aviation
+Academy. That makes one distinction decide where every dollar should be spent.
+
+| What you do at Century Air | Does it survive the move? |
+| --- | --- |
+| **Cross-country PIC time** | **Always.** It is aeronautical experience under 61.65(d)(1), not course training. Every hour counts wherever you finish, and you owe about 44 of them |
+| **The IRA knowledge test** | **Always.** Valid 24 calendar months (61.39(a)(1)) |
+| **Total flight time** | **Always.** It counts toward whatever the commercial route needs |
+| **Instrument *course* training** | **Only partly.** If you join a Part 141 instrument course at USAA, 141.77 caps credit for Part 61 training at **25%** of the course. Do 20 hours here and most of it may buy nothing |
+
+**So the efficient split is: private certificate, IRA written, and cross-country time-building
+at Century Air — and keep instrument dual there light until USAA's course structure is known.**
+Renting from Century Air to build cross-country PIC is never wasted; heavy instrument dual
+there might be. That also means the G1000 premium is hard to justify at Century Air now: the
+continuity it was buying belongs to whatever USAA operates.
+
+### 4A.1 Verify the commercial hour claim before it drives any decision
+
+Century Air's brochure and website both state **190 hours under Part 141 against 250 under
+Part 61**, and the figure is repeated throughout the industry. It is worth roughly **60 hours**
+— on the order of **$12,000** — so it deserves scrutiny rather than acceptance.
+
+Two things are worth knowing before the conversation at USAA:
+
+- **14 CFR 61.129(a)** requires **250 hours** and its only stated exception is paragraph (i).
+- **14 CFR 61.129(i)** is titled *Permitted credit for use of a flight simulator or flight
+  training device* and deals only with device credit (50 hours for an airplane, 100 hours under
+  Part 142). **It contains no Part 141 exception and no 190-hour figure** — despite being widely
+  cited as the source of one.
+- **Part 141 Appendix D** sets a **120-hour approved course**. It does not contain a 190-hour
+  total-time figure either.
+
+The industry number may well be right through a mechanism not located here, but it is not where
+the common citation says it is. **Ask US Aviation Academy to state, in writing, the exact total
+flight time their Part 141 commercial graduates need and the regulatory basis for it.** A
+five-figure decision should not rest on a number that traces back to a misattributed citation.
+
+---
+
 ## 5. The Denton handoff — and a trap to avoid
 
 ### 5.1 Your instinct is right, and here is the regulation behind it
@@ -255,9 +299,13 @@ rating at Century Air under Part 61 and then enrolling at USAA to use self-exami
 means **repeating 75% of a Part 141 instrument course** — far more expensive than simply
 hiring a DPE at Denton for the $1,000 you have already budgeted.
 
-**Recommendation: stay Part 61 end to end, and use a DPE at Denton.** Consider USAA's course
-only if you want their airline pathway, their financing, or their collegiate partnerships —
-not as a shortcut to the checkride.
+**Recommendation, revised now that the commercial is also at USAA:** the earlier advice to stay
+Part 61 end to end assumed Century Air was the whole story. It isn't. Since you will be a USAA
+student for the commercial anyway, their Part 141 route deserves a real look — for the
+instrument rating *and* the commercial — and that decision should be made on **USAA's written
+answer about total hours and transfer credit**, not on the assumption that Part 61 is cheaper.
+What does not change: do not do heavy instrument dual at Century Air first, because 141.77 caps
+what a 141 course can credit at 25%.
 
 ### 5.3 Aircraft continuity
 

@@ -255,9 +255,10 @@ Four levers, in order of value:
 | --- | --- | --- | --- | --- |
 | J1 | What training records and endorsements will I take with me when I relocate? | Under Part 61 I carry my logbook and my experience — but a clean record summary makes the handoff to a Texas CFII painless. | A written training-record summary at the point I leave. | HIGH |
 | J2 | If I train instrument here and finish at Denton, any concern about the last 3 hours being flown there? | 61.65(d)(2)(i) requires 3 hours with an instructor within 2 calendar months before the test. Doing those at Denton with a local CFII is deliberate, not accidental. | Agreement that this is a normal handoff. | HIGH |
-| J3 | What does your instrument course cost? It isn't in the private pilot brochure. | I'm planning roughly 20 hours of instrument dual here plus cross-country time-building. I need your rates to budget it. | Hourly rates for instrument dual, and any package. | HIGH |
-| J4 | After my certificate, can I rent at solo rates for cross-country time-building, and how does the 60-day currency rule work in practice? | The instrument rating needs 50 hours of cross-country PIC (61.65(d)(1)) and I'll only have about 6. Around 44 hours of renting is the biggest line in that phase, so the rental rate and the currency rule matter. | The renter rate and a workable currency arrangement. | HIGH |
-| J5 | Which aircraft would you recommend for instrument training, given I'll finish in a Cessna 172 in Texas? | Continuity is the whole reason to consider the glass panel. If their 172s in Denton are analog, the G1000 premium buys me nothing. | A recommendation, and flexibility to switch once I know what Denton operates. | HIGH |
+| J3 | What are your instrument instruction rates? I would do a partial instrument phase here and finish at US Aviation Academy in Denton. | Be straight about this: the rating and the commercial finish in Texas. What I need here is the hourly rate for instrument dual, because how much I do at Century Air depends on how US Aviation Academy will credit it — 141.77 caps credit for Part 61 training at 25% of an approved course. | Hourly instrument rates with no package commitment, so I can size the phase once I know USAA's course structure. | HIGH |
+| J4 | Given I finish the rating elsewhere, what would you actually recommend I do here after the private — instrument dual, or just build cross-country time? | Cross-country PIC time is aeronautical experience and counts wherever I finish (61.65(d)(1)). Instrument *course* training may be credited at only 25% if I join a Part 141 course at USAA (141.77). So renting from you to build time is never wasted; heavy instrument dual here might be. | An honest answer. A school that tells me to build time rather than sell me instrument dual I may not be able to use has earned the rest of my business. | HIGH |
+| J5 | After my certificate, can I rent at solo rates for cross-country time-building, and how does the 60-day currency rule work in practice? | The instrument rating needs 50 hours of cross-country PIC (61.65(d)(1)) and I'll only have about 6. Around 44 hours of renting is the biggest line in that phase, so the rental rate and the currency rule matter. | The renter rate and a workable currency arrangement. | HIGH |
+| J6 | Which aircraft would you recommend for a partial instrument phase, given I finish in a Cessna 172 in Texas? | Continuity is the only reason to pay the glass premium. If US Aviation Academy's 172s are analog, the G1000 buys me nothing; if they are G1000, it buys real transfer. | A recommendation, and no commitment to an aircraft until I know what Denton operates. | HIGH |
 
 ## What to bring
 
@@ -290,7 +291,7 @@ Worth being aware of, because it's stronger than a typical walk-in student's:
 | First-class medical already held | No delay before solo, and it signals a career track — instrument, commercial and beyond. |
 | Own equipment, self-studied | Nothing to sell me, so the kit waiver costs them little. |
 | Four lessons a week | High aircraft and instructor utilisation — the most attractive scheduling profile a school can have. |
-| Instrument and commercial to follow | I'm a multi-year customer, not a single certificate. Worth a standing slot and a block rate. |
+| Private plus a partial instrument phase | Roughly $13.5k of private training delivered in about two months, plus rental and some instrument time before I relocate. Fast, dense revenue on their aircraft — but be straight that the instrument rating and commercial finish in Texas. |
 
 ## Sources
 
