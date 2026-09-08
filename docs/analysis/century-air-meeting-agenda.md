@@ -43,11 +43,11 @@ Part 141 course artifacts you may not need at all on Part 61. That makes the ask
 | On-Line Learn To Fly Course | Jeppesen's online ground school. | **Yes — substitute** — Yes — this is what Sporty's replaces, and it is probably the largest single line in the $650. |
 | Airman Certification Standards (ACS) | FAA-S-ACS-6C, the test standard. | **Yes — substitute** — Yes — free PDF from the FAA. |
 | Oral Exam Guide | Checkride oral preparation. | **Yes — substitute** — Yes — ASA's is about $15 if you don't already have one. |
-| Student E6B Flight Navigation Computer | Manual flight computer. | **Check you own one** — Only if you own one — it was not in your list. Check. |
-| Navigation Plotter | Chart plotter. | **Check you own one** — Only if you own one — not in your list. Check. |
-| Pilot Logbook | Your logbook. | **Check you own one** — Only if you own one — not in your list. Check. It must be a real logbook you keep for the life of your flying. |
-| Fuel Strainer | Sump cup for fuel sampling. | **Check you own one** — Only if you own one — not in your list. Cheap to buy, but you need one from day one. |
-| Fuel Level Tester | Calibrated dipstick for the tanks. | **Check you own one** — Only if you own one — and it must be calibrated for the specific aircraft type. |
+| Student E6B Flight Navigation Computer | Manual flight computer. | **Still to buy** — Only if you own one — it was not in your list. Check. |
+| Navigation Plotter | Chart plotter. | **Still to buy** — Only if you own one — not in your list. Check. |
+| Pilot Logbook | Your logbook. | **Still to buy** — Only if you own one — not in your list. Check. It must be a real logbook you keep for the life of your flying. |
+| Fuel Strainer | The brochure's name for a fuel tester/sampler — the clear jar you drain the sumps into. Also sold as a fuel tester, fuel sampler, sump cup or GATS jar. | **✓ You already own it** — Your 12 oz jar with water separation and fuel return is exactly this item; 'fuel strainer' is just the older name, which is why Amazon returned nothing. |
+| Fuel Level Tester | A calibrated dipstick (FuelHawk and similar) you drop into the tank to read actual gallons — a different tool from the sampler jar. | **Still to buy** — Calibration is per tank size, not per model: FuelHawk sells 19, 20 and 26.5-gallon versions for the 172. A 172P holds 40 usable across two tanks = 20 per side; a 172S holds 53 usable = 26.5 per side. Buy the Universal (self-calibrating, tanks up to 16in deep) if you will fly both, or ask the school first — many keep one in the aircraft. |
 | Private Pilot Syllabus & Safety Procedures | Century Air's own course syllabus and their operating procedures. | **No — take theirs** — No — school-specific, and you want it. |
 | Student Progress Chart | Century Air's lesson-by-lesson tracking. | **No — take theirs** — No — school-specific, and useful for keeping to 50 hours. |
 | Aircraft Manual (POH) | Pilot's Operating Handbook for the aircraft you fly. | **No — take theirs** — No — must be the right one for the actual 172P/172N tail number. |
@@ -55,10 +55,20 @@ Part 141 course artifacts you may not need at all on Part 61. That makes the ask
 | Stage Exams | Administered by Century Air. | **Part 61: may not apply** — Part 141 course artifacts. Ask whether they apply to you at all on Part 61. |
 | Course Diploma | Awarded by Century Air. | **Part 61: may not apply** — A Part 141 graduation certificate. Not needed for a Part 61 certificate. |
 
-**Five items to verify you already own before the meeting**, because they are not in the list
-you gave me: an E6B, a navigation plotter, a pilot logbook, a fuel strainer, and a fuel level
-tester calibrated for the Cessna 172. All five are needed from the first lesson, and all five
-are cheap individually — but if you are missing them, the kit stops looking like pure overhead.
+**Equipment status.** You have the E6B (metal, plus a CX-3), a plotter, a paper logbook and the
+fuel tester jar. That leaves exactly **one item outstanding: the fuel level tester** — the
+calibrated dipstick.
+
+Two things to get right on it:
+
+- **It is calibrated per tank size, not per aircraft model.** FuelHawk sells 19, 20 and
+  26.5-gallon versions for the 172. Per TCDS 3A12 a **172P** carries 40 gallons usable across
+  two tanks — **20 per side** — while a **172S** carries 53 usable, **26.5 per side**. A
+  dipstick bought for the wrong one reads wrong.
+- **Ask the school before buying.** Many keep a dipstick in the aircraft, and you need to know
+  which airframe you will actually fly, and whether it has standard or long-range tanks. If you
+  will fly the 172P now and a 172SP later for the instrument rating, the **Universal**
+  self-calibrating version covers both.
 
 
 ## ForeFlight: school licence vs. your own account, and what happens to your records
