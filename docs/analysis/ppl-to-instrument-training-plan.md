@@ -110,6 +110,58 @@ hour buys, and it shows up as repeated lessons — the exact thing that turns 50
 
 ---
 
+## 2A. A second operator at the same field: when it helps and when it can't
+
+**Air Fleet Training Systems** is at **35 Wright Way**, the same airport, a few doors from
+Century Air at 19 Wright Way. Part 61 and 141, with a reported single-engine fleet of
+**1 Cessna 172P, 1 172R, 9 172S and a 182T** plus two Seminoles — a far deeper 172 bench than
+Century Air's. So the availability instinct is sound. The mechanism, though, doesn't work the
+way "buy me some solo block hours" implies.
+
+### 2A.1 You cannot buy solo hours as a student pilot
+
+Two rules close that door:
+
+| Rule | What it says |
+| --- | --- |
+| **14 CFR 61.87(n)** | A student pilot may not solo unless endorsed in their logbook **for the specific make and model**, by **an authorized instructor who gave the training**, **within the preceding 90 days** |
+| **14 CFR 61.87(p)** | No instructor may authorize a solo unless that instructor **has given that student training in that make and model** (or a similar one) and determined proficiency |
+
+So soloing an Air Fleet aircraft means an Air Fleet instructor training you in it and endorsing
+you — plus their pre-solo requirements, their checkout and their insurance. That is a **second
+enrollment**, not a block of hours: several dual hours at their rates before a single solo
+hour, and a re-endorsement every 90 days. Any operator's own rules sit on top of the FAA's, and
+no school lets a student pilot solo its aircraft on another school's endorsement.
+
+### 2A.2 Extra solo hours would not speed you up anyway
+
+The syllabus advances on **dual**. The plan already carries **15 solo hours against a 10-hour
+Part 61 minimum**, and the solo that must happen is specific — 5 hours cross-country including
+the 150 NM flight, plus pattern work. Additional unsupervised hours cost roughly $196 each,
+move you no closer to the checkride, and can groove errors that later cost dual time to undo.
+If Century Air is short of **instructor** capacity but has aircraft, you fly solo there; a
+second airplane source solves nothing.
+
+Fragmentation also has a real price during primary training: two sets of procedures and
+checklists, a separate solo endorsement per make and model, a likely switch between a
+carbureted 160 hp 172P and an injected 180 hp 172S, two insurance positions, and a CFI of
+record who can no longer see all of your time when it comes to endorsements.
+
+### 2A.3 Where a second operator genuinely earns its place
+
+| Situation | Verdict |
+| --- | --- |
+| **After the certificate, for cross-country PIC time-building** | **Yes — this is the strong case.** You owe roughly 44 hours of XC PIC for the instrument rating (61.65(d)(1)) and it is pure rental. A renter checkout is straightforward once certificated, and nine 172S aircraft is exactly the availability that makes block time worth buying |
+| **Century Air genuinely cannot support five days a week** | Then this is a *primary school* decision, not a supplement. Price Air Fleet properly and choose one — do not run two schools through the private certificate |
+| **Instrument phase** | Worth comparing. If Century Air's G1000 is a single airframe, nine 172S may be the better instrument platform — and if those are G1000, it also settles the Denton continuity question |
+| **Topping up solo hours mid-course** | **No.** It is not legally a top-up, it does not accelerate anything, and it costs both money and hours |
+
+**Practical step:** they are a three-minute walk apart. Get Air Fleet's rental rates, block
+terms and post-certificate checkout requirements in writing too, so the comparison exists on
+paper before enrolling anywhere.
+
+---
+
 ## 3. The constraint that decides the whole instrument plan
 
 **14 CFR 61.65(d)(1): 50 hours of cross-country time as pilot in command, of which 10 must be
