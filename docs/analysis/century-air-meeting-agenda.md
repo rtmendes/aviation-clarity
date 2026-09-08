@@ -21,7 +21,7 @@ schedule · standard = worth asking if there's time.
 | --- | --- | --- |
 | **ForeFlight through them, or my own account?** | ForeFlight does run volume pricing for organisations, which "distribute licences to students and instructors" — so a school licence is a real possibility, not a long shot. Individual tiers are **Starter $130/yr, Essential $260/yr, Premium $390/yr** (renamed from Basic/Pro — ask by the current names). | Ask to be added to the school licence. If not, ask which tier the instructors actually teach with and buy that one, so plates and briefings match. Worth up to **$390/yr**. |
 | **Are pre/post-flight briefings billable?** | Unknown and it is the largest remaining swing in the budget. At $86/hr and 0.3–0.5 hr per lesson across 34 lessons that is **$860–$1,460**, the difference between an 8-hour and a 25-hour ground line. | A per-lesson norm in writing, and whether briefings shorten once I'm self-studying. |
-| **172P availability for 5+ consecutive days and multi-day trips** | Two separate questions. During the private course a student pilot may not be allowed to take an aircraft overnight at all. After the certificate it becomes the cheapest way to build the ~44 hours of cross-country PIC the instrument rating needs. | The student-pilot policy now, the renter policy later, and the **daily minimum hours** on multi-day rentals — that minimum, not the hourly rate, is what makes or breaks a 3-day trip. |
+| **172P availability five days a week** | Not multi-day rentals — session-specific, one or two blocks per day, five days a week. The question is sustained daily availability of one airframe, not taking it away overnight. | A standing five-day pattern on a named primary aircraft with a named backup, plus priority re-assignment if the primary goes unserviceable. |
 | **Is a 3-hour block best?** | Yes as the default — see the block-time section below. A 3-hour reservation yields roughly 1.5–2.0 Hobbs hours after preflight, brief and debrief. | 2 hours for pattern work, **3 hours standard**, 4–5 for cross-countries, a half day for the 150 NM solo — and a 4-hour block combining dual then solo once I'm endorsed. |
 
 
@@ -43,9 +43,9 @@ Part 141 course artifacts you may not need at all on Part 61. That makes the ask
 | On-Line Learn To Fly Course | Jeppesen's online ground school. | **Yes — substitute** — Yes — this is what Sporty's replaces, and it is probably the largest single line in the $650. |
 | Airman Certification Standards (ACS) | FAA-S-ACS-6C, the test standard. | **Yes — substitute** — Yes — free PDF from the FAA. |
 | Oral Exam Guide | Checkride oral preparation. | **Yes — substitute** — Yes — ASA's is about $15 if you don't already have one. |
-| Student E6B Flight Navigation Computer | Manual flight computer. | **Still to buy** — Only if you own one — it was not in your list. Check. |
-| Navigation Plotter | Chart plotter. | **Still to buy** — Only if you own one — not in your list. Check. |
-| Pilot Logbook | Your logbook. | **Still to buy** — Only if you own one — not in your list. Check. It must be a real logbook you keep for the life of your flying. |
+| Student E6B Flight Navigation Computer | Manual flight computer. | **✓ You already own it** — You own a metal E6B and a CX-3 electronic computer. Covered twice over. |
+| Navigation Plotter | Chart plotter. | **✓ You already own it** — You own one. |
+| Pilot Logbook | Your logbook. | **✓ You already own it** — You own a paper logbook — and that is your record of authority, where endorsements live. |
 | Fuel Strainer | The brochure's name for a fuel tester/sampler — the clear jar you drain the sumps into. Also sold as a fuel tester, fuel sampler, sump cup or GATS jar. | **✓ You already own it** — Your 12 oz jar with water separation and fuel return is exactly this item; 'fuel strainer' is just the older name, which is why Amazon returned nothing. |
 | Fuel Level Tester | A calibrated dipstick (FuelHawk and similar) you drop into the tank to read actual gallons — a different tool from the sampler jar. | **Still to buy** — Calibration is per tank size, not per model: FuelHawk sells 19, 20 and 26.5-gallon versions for the 172. A 172P holds 40 usable across two tanks = 20 per side; a 172S holds 53 usable = 26.5 per side. Buy the Universal (self-calibrating, tanks up to 16in deep) if you will fly both, or ask the school first — many keep one in the aircraft. |
 | Private Pilot Syllabus & Safety Procedures | Century Air's own course syllabus and their operating procedures. | **No — take theirs** — No — school-specific, and you want it. |
@@ -55,9 +55,11 @@ Part 141 course artifacts you may not need at all on Part 61. That makes the ask
 | Stage Exams | Administered by Century Air. | **Part 61: may not apply** — Part 141 course artifacts. Ask whether they apply to you at all on Part 61. |
 | Course Diploma | Awarded by Century Air. | **Part 61: may not apply** — A Part 141 graduation certificate. Not needed for a Part 61 certificate. |
 
-**Equipment status.** You have the E6B (metal, plus a CX-3), a plotter, a paper logbook and the
-fuel tester jar. That leaves exactly **one item outstanding: the fuel level tester** — the
-calibrated dipstick.
+**Equipment status: one item outstanding.** You own the E6B (metal, plus a CX-3), the plotter,
+the paper logbook and the fuel tester jar. Separately, your **headset, foggles, flashlights and
+flight bag are not in the kit at all** — the brochure lists headsets as a separate
+recommendation — so they were never part of the $650 either way. That leaves exactly
+**one item to buy: the fuel level tester** — the calibrated dipstick.
 
 Two things to get right on it:
 
@@ -169,10 +171,7 @@ Four levers, in order of value:
 | B6 | What does maintenance downtime actually look like — 100-hour inspection cadence, and how do you schedule it around students? | A rental trainer needs 100-hour inspections. Unplanned downtime is the second-biggest schedule risk after weather. | Typical days out per inspection and how far ahead it's planned. | HIGH |
 | B7 | Can I have the first slot of the day, around 07:00, five days a week? | Calm air, fewest cancellations, no delay inherited from earlier flights. At five days a week the early slot is what makes the 30% weather attrition survivable. | The 07:00 slot as my standing booking on all five days. | **MUST** |
 | B8 | How far ahead can I book, and which days and times are hardest to get? | I need to plan around contention rather than discover it. | The booking window and the busy periods. | — |
-| B9 | Can a student pilot take an aircraft overnight or multi-day, or is that post-certificate only? | Affects my long solo cross-country planning now, and matters much more for the instrument phase when I need ~44 more hours of cross-country PIC. | The policy for student pilots and for certificated renters. | HIGH |
-| B10 | What is the daily minimum charge on an overnight or multi-day rental? | Most schools bill a minimum number of hours per day away from base. On a 3-day trip that can dominate the cost. | The minimum hours per day and how weather delays are treated. | HIGH |
-| B11 | Is a 5+ consecutive-day booking possible, and is it easier midweek? | This is how I'd build cross-country PIC time efficiently later — several long legs in one trip rather than a dozen separate rentals. | Feasibility, notice required, and any premium. | HIGH |
-| B12 | Can I hold a 5-hour block for the 150 NM solo cross-country, plus a backup day for weather? | 61.109(a)(5) requires a 150 NM solo cross-country with landings at three points. It needs most of a day and it needs to happen before daylight gets short. | A long block and a standing weather alternate. | HIGH |
+| B9 | Can I hold a 5-hour block for the 150 NM solo cross-country, plus a backup day for weather? | 61.109(a)(5) requires a 150 NM solo cross-country with landings at three points. It needs most of a day and it needs to happen before daylight gets short. | A long block and a standing weather alternate. | HIGH |
 
 ## C. Block time — using the reservation efficiently
 
