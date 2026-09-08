@@ -127,7 +127,7 @@ Four levers, in order of value:
 
 1. **A standing recurring reservation.** Four fixed slots a week, locked for the whole course.
    This is the single most valuable thing to walk out with — the difference between finishing
-   in December at 50 hours and finishing in January at 65.
+   in early November at 50 hours and finishing in January at 65.
 2. **Take the first slot of the day.** Calm air, fewest cancellations, and no delay inherited
    from an earlier flight.
 3. **Combine dual and solo in one block.** I owe 15 solo hours; doing 1.5 dual then 1.0 solo in
@@ -154,10 +154,10 @@ Four levers, in order of value:
 | A11 | What is the minimum billing increment — 0.1 or 0.2 hours? | Over 34 flights, rounding up to 0.2 adds up. | 0.1 preferred. | — |
 | A12 | Are there landing, ramp or tie-down fees at KCDW? Who pays fees at destination airports on cross-countries? | My cross-countries include a 150 NM solo trip with landings at three points, and later a 250 NM IFR flight. Destination fees are unbudgeted. | Clarity on who pays, and whether you reimburse. | HIGH |
 | A13 | If I buy fuel away from base, how am I reimbursed and at what rate? | On longer cross-countries I may need to fuel elsewhere. Reimbursed at cost or at your fuel price? | The process and the rate. | HIGH |
-| A14 | What are the cancellation, no-show and late-return fees, and how late can I cancel for weather? | At four lessons a week in a New Jersey autumn I will cancel often. A tight window plus a fee is a recurring cost. | A weather-cancellation carve-out with a same-morning window. | HIGH |
+| A14 | What are the cancellation, no-show and late-return fees, and how late can I cancel for weather? | At five-plus days a week in a New Jersey autumn I will cancel often — and at that cadence I am booking far more slots than someone flying twice a week. A tight window plus a fee becomes a recurring cost. | A weather-cancellation carve-out with a same-morning window. | HIGH |
 | A15 | Is instructor time billed door-to-door, or from engine start to shutdown? | Changes the effective dual rate materially over 35 hours. | A clear definition of when the instructor clock starts and stops. | — |
 
-## B. Aircraft access and scheduling — this decides whether 50 hours in 12 weeks is real
+## B. Aircraft access and scheduling — this decides whether 50 hours in 7–10 weeks is real
 
 | # | Question | Why it matters | What to push for | Priority |
 | --- | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ Four levers, in order of value:
 | D2 | How many other students do they carry, and are they available at my standing slots? | An over-subscribed instructor is how a four-lesson week becomes two. | Confirmation that my slots are actually theirs. | HIGH |
 | D3 | Are they planning to be here through my checkride, or building hours toward an airline? | Instructor turnover mid-course is the most common cause of extra hours. | An honest answer, and a plan if they leave. | HIGH |
 | D4 | Who is my backup instructor when mine is sick or unavailable? | Keeps the cadence when one person can't fly. | A named second instructor briefed on my progress. | HIGH |
-| D5 | Is the instructor comfortable with a four-lesson-a-week pace and a mid-December checkride target? | If they think that's unrealistic I want to hear why now, not in November. | Either agreement or a specific reason it won't work. | HIGH |
+| D5 | Is the instructor comfortable with five days a week, double blocks on some days, and a checkride in the first three weeks of November? | If they think that is unrealistic I want to hear why today, not in October. At this cadence I am asking for 6–7 of their sessions a week. | Either agreement, or a specific reason it will not work and what pace they can actually sustain. | HIGH |
 
 ## E. Apps, subscriptions and avionics you may already provide
 
@@ -290,7 +290,7 @@ Worth being aware of, because it's stronger than a typical walk-in student's:
 | Written test done or imminent | Shows commitment and means no ground-school revenue is being given up by waiving the kit. |
 | First-class medical already held | No delay before solo, and it signals a career track — instrument, commercial and beyond. |
 | Own equipment, self-studied | Nothing to sell me, so the kit waiver costs them little. |
-| Four lessons a week | High aircraft and instructor utilisation — the most attractive scheduling profile a school can have. |
+| Five days a week, with doubles | 6–7 sessions a week is dense, predictable utilisation of one aircraft and one instructor — the most attractive scheduling profile a school can book, and it is worth a standing slot and a block rate. |
 | Private plus a partial instrument phase | Roughly $13.5k of private training delivered in about two months, plus rental and some instrument time before I relocate. Fast, dense revenue on their aircraft — but be straight that the instrument rating and commercial finish in Texas. |
 
 ## Sources
