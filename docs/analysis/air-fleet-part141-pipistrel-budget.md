@@ -23,6 +23,78 @@ Reported first-hand after visiting Century Air and Air Fleet and asking directly
 
 ---
 
+## 0AA. Resolved at the schools — examining authority, and who delivers the 30 hours
+
+Two open questions from §6.1 and §6.4 were answered directly by the schools on 10 September 2026.
+
+### Air Fleet holds examining authority for the Part 141 private course
+
+Reported first-hand: under Part 141 at Air Fleet there is **no FAA written fee and no outside DPE**
+— the end-of-course check is an internal stage-check approval, and the only aircraft cost is the
+rental. This resolves §6.1, which had flagged the claim as unverified because Air Fleet's own
+price sheet budgets both lines. Those lines evidently belong to their **Part 61** course.
+
+| | Effect |
+| --- | ---: |
+| FAA written test avoided | −$175 (moot if the 9 September test was already sat — it is valid 24 months either way) |
+| Outside DPE fee avoided | **−$1,000** |
+| Still payable: checkride aircraft rental, 2 hr × $195 | $390 — already carried in every figure below |
+| Still payable: **stage-check approval — amount unknown** | **ask** — at $85/hr for 2–3 hours, roughly $170–$255 |
+
+**The schedule consequence is larger than the money.** The earlier timeline analysis identified
+examiner lead time — 4 to 8 weeks, with every 8-week booking date already past — as the *binding
+constraint on the finish date*, and made "book the DPE immediately" the single most urgent action
+item. **Under Part 141 at Air Fleet that constraint does not exist.** The check is scheduled
+internally, against the school's own instructor availability rather than a regional DPE queue.
+
+> **Prior advice now withdrawn: do not chase a DPE booking for the Air Fleet Part 141 route.**
+> The finish date goes back to being set by how fast you fly, which is the thing you can control.
+
+At 40 lessons — Air Fleet's own template of 65 hours over 40 lessons — from a 21 September start:
+
+| Cadence | Weeks | Course complete |
+| --- | ---: | --- |
+| 5 sessions/wk (5 days flown, no doubles) | 8.0 | 16 Nov 2026 |
+| 6 sessions/wk (5 flown, one double) | 6.7 | 6 Nov 2026 |
+| **7 sessions/wk (5 flown, two doubles)** | **5.7** | **31 Oct 2026** |
+| 8 sessions/wk (5 flown, three doubles) | 5.0 | 26 Oct 2026 |
+
+No examiner lead time is added to any of those dates.
+
+**Ask Century Air the same question.** Their brochure prices an FAA written test and their
+president is himself a Designated Pilot Examiner, but whether the school holds *examining
+authority* on the private course is a separate matter and worth $1,175 to know.
+
+### The 30 hours is a self-paced King Schools course at both schools
+
+Also reported first-hand: at **both** Century Air and Air Fleet, the 30-hour ground school is a
+self-paced online King Schools program done at home. Nobody is sitting in a classroom for 30 hours.
+
+That is verifiable against Air Fleet's own line, which decodes exactly:
+
+> $427.57 ÷ 1.06625 (New Jersey sales tax) = **$401.00**
+
+— a $401 third-party course plus NJ tax, passed through at cost, which is precisely what "not set
+by Air Fleet, price subject to change (tax included)" describes.
+[King Schools](https://kingschools.com/private-pilot-ground-school-test-prep) sells the private
+pilot ground school at **$299** standalone and **$349** in the Complete Private Pilot bundle.
+
+**Century Air prices the same 30 hours at 30 × $86 = $2,580.**
+
+| Century's printed ground line against the actual course | Markup |
+| --- | ---: |
+| vs King Schools standalone, $299 | $2,281 |
+| vs King Schools bundle, $349 | $2,231 |
+| vs the $401 Air Fleet pays | **$2,179** |
+
+If the delivery is a self-paced course at both schools, an $86/hr *instruction* rate is being
+applied to hours nobody instructs. **This is now the single largest open number in the
+comparison.** It is possible the $2,580 covers 30 hours of genuine instructor contact on top of
+the King course — but that is not what you were told, and it is not what the brochure implies.
+See §6.5 for the exact wording to use.
+
+---
+
 ## 0A. Correction — the Century Air Part 141 ground line
 
 **An earlier version of this document had the school comparison backwards.** It compared Air
@@ -349,22 +421,35 @@ ground and flight hours?"*
 Note the thresholds differ: a deviation needs 80% first-time pass, examining authority
 (§6.1) needs 90%. A school can hold one without the other.
 
-### 6.5 Century Air's Part 61 ground hours — a ~$1,900 question
+### 6.5 Century Air's ground line — now a ~$2,180 question, on either part
 
-Century Air's page prices Part 141 ground at 30 hours × $86 = $2,580, and says the course "may
-also be conducted under Part 61 of the FAR's if beneficial to the student." Under Part 61,
-[61.105(a)](https://www.law.cornell.edu/cfr/text/14/61.105) accepts a home-study course in lieu
-of logged ground training, so the paid ground line should collapse to a few hours of endorsement
-preparation.
+**Revised.** This was framed as a Part 61 question. It is not — it applies to both parts, because
+the delivery mechanism is the same self-paced King Schools course either way (§0AA).
 
-Whether Century Air actually applies it that way is unknown, and it is the difference between
-Century being the cheaper school and the more expensive one. Ask literally:
+Century Air prints "30 Hrs Ground Instruction @ $86/Hr — $2,580". You were told the 30 hours is a
+King Schools course you do at home. Those two statements do not reconcile, and the gap is about
+$2,180. Ask it plainly, and get the answer as a line on a written quote:
 
-> *"Under Part 61, with my Sporty's course completed and my FAA written already passed, how many
-> paid hours of ground instruction do I actually need — and at what rate?"*
+> *"The 30 hours of ground school is the King Schools self-paced course I do at home. Your sheet
+> prices 30 hours of ground instruction at $86 an hour. What do I actually get invoiced — the
+> cost of the course, or $2,580? And if it is $2,580, what are the 30 hours of instructor contact
+> I am buying?"*
 
-If the answer is "30 hours regardless", Century's Part 61 route costs roughly $1,900 more than
-the table in §0A shows, and Air Fleet wins outright on both routes.
+Then the Part 61 question separately, which still stands:
+
+> *"Under Part 61, with the King course completed and my FAA written already passed, how many paid
+> hours of ground instruction do I actually need, and at what rate?"*
+
+Under [61.105(a)](https://www.law.cornell.edu/cfr/text/14/61.105) a home-study course is accepted
+in lieu of logged ground training, so the Part 61 answer should be a handful of endorsement-prep
+hours, not 30.
+
+### 6.1a Air Fleet examining authority — what is left to confirm
+
+§0AA records this as resolved on the school's word. One number is still missing and should be on
+the written quote before enrolment: **the stage-check approval charge**. Ask what the end-of-course
+check costs beyond the $390 of aircraft rental, and confirm in writing that the Part 141 private
+course carries no FAA knowledge test and no outside examiner.
 
 ### 6.3 Smaller items
 
@@ -409,12 +494,17 @@ both schools say actually happens:
 
 For reference, the Part 141 columns at the same hour counts:
 
-| Air Fleet, Pipistrel, Part 141 | School invoice | All-in |
-| --- | ---: | ---: |
-| 65 hr (55/10) | $19,938 | $21,540 |
-| 50 hr (35/15) | $15,083 | $16,685 |
-| 35 hr (25/10) | $11,079 | $12,681 |
-| If examining authority is real, deduct | — | −$1,175 |
+| Air Fleet, Pipistrel, **Part 141 with examining authority** | Total, no DPE, no FAA written |
+| --- | ---: |
+| 65 hr (55/10) — both schools' stated average | **$19,938** |
+| 50 hr (35/15) — good outcome | **$15,083** |
+| 35 hr (25/10) — legal floor | $11,079 |
+| Plus the stage-check approval charge | **ask** (roughly $170–$255) |
+
+Those figures already include the King Schools course, the 10 classroom hours, the per-lesson
+briefing charge and the checkride aircraft rental. They carry **no DPE fee and no FAA written
+fee**, per §0AA. Against Century Air at 65 hours with its printed $2,580 ground line and a
+$1,000 DPE, the same course is **$21,767** — a gap of **$1,829** in Air Fleet's favour.
 
 ### Why Air Fleet, now that Part 141 is available at both
 
