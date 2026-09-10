@@ -11,6 +11,18 @@ examining-authority claim, which Air Fleet's own price sheet appears to contradi
 
 ---
 
+## 0. Field notes — both schools visited in person, 10 September 2026
+
+Reported first-hand after visiting Century Air and Air Fleet and asking directly:
+
+| Finding | Effect on this analysis |
+| --- | --- |
+| **Both schools offer Part 141 and Part 61** | Removes the biggest reason this document originally gave for choosing Air Fleet. The Part 141 advantages — the 35-hour flight floor and, far more valuable, an Appendix C instrument rating with no 50-hour cross-country PIC requirement — are now available at **either** school. See §4 and §5, both revised. |
+| **Both require 30 hours of ground school** | Below Appendix B's 35-hour floor, so something must reconcile it. Two legitimate possibilities, see §6.4. |
+| **Air Fleet was clearly the more flexible on cadence** — more flying days, and willing to do two flights in a day | This is the decisive finding. Cadence was established earlier in this project as the single largest driver of hour overrun, and §4 now shows the price gap between the two schools is worth only about four hours of dual. |
+
+---
+
 ## 1. The rate card, decoded
 
 Two cells on page 9 are obscured by glare. Both are recoverable exactly from page 1, because the
@@ -140,7 +152,31 @@ $280 dual rate is $2 below the 172P's $282. The difference is that Air Fleet add
 Century Air does not: the per-lesson briefing charge and 10 hours of mandatory classroom
 instruction.
 
-**The saving at Air Fleet comes from Part 141's lower hour floor, not from the aircraft.**
+**The saving at Air Fleet comes from Part 141's lower hour floor, not from the aircraft — and
+since Century Air also offers Part 141, that floor is available at either school.** So the
+comparison that actually decides this is not aircraft or regulation. It is price against cadence.
+
+### The trade that decides it
+
+| Hours (dual/solo) | Century 172P | Air Fleet Pipistrel | Gap | Gap in dual hours |
+| --- | ---: | ---: | ---: | ---: |
+| 50 hr (35/15) | $13,498 | $14,656 | +$1,158 | 4.1 hr |
+| 45 hr (30/15) | $12,088 | $13,179 | +$1,091 | 3.9 hr |
+| 40 hr (30/10) | $11,108 | $12,128 | +$1,020 | 3.6 hr |
+| 35 hr (25/10) | $9,698 | $10,651 | +$953 | 3.4 hr |
+
+Air Fleet is roughly **$1,000–$1,160 more expensive at any matched hour count**. At their $280/hr
+dual rate, that entire gap is **about four hours of dual instruction**.
+
+Cadence is the largest single driver of hour overrun — skill decay between lessons is what turns
+a 50-hour course into a 65-hour one, and re-flying last week's lesson costs $280 an hour. So:
+
+> **If Century Air's scheduling costs you more than about 4 extra dual hours across the whole
+> course, Air Fleet is the cheaper school despite the higher rates.** Century Air at 54 hours
+> costs the same as Air Fleet at 50.
+
+Four hours is a very low bar. It is one cancelled week, or two lessons repeated because the gap
+between them was too long.
 
 | Comparison | Cost | Delta |
 | --- | ---: | ---: |
@@ -154,6 +190,9 @@ instruction.
 ---
 
 ## 5. The downstream finding — this is larger than the private budget
+
+**This is now an argument for Part 141 over Part 61, not for one school over the other** — both
+offer Part 141. It remains the largest single number in the whole plan.
 
 [Part 141 Appendix C](https://www.law.cornell.edu/cfr/text/14/appendix-C_to_part_141), the
 instrument rating course, has **no cross-country PIC hour requirement**. Its only enrollment
@@ -220,6 +259,30 @@ The [ALPHA Trainer POH](https://flypft.com/wp-content/uploads/2023/03/Pipistrel-
   note the POH figures are for the base Alpha Trainer, while the sheet lists the **Alpha Trainer
   PRO (G3X)**, which may differ.
 
+### 6.4 The 30-hour ground school does not obviously meet Appendix B
+
+Both schools told you 30 hours. [Appendix B §3](https://www.law.cornell.edu/cfr/text/14/appendix-B_to_part_141)
+sets the Part 141 floor at **35 hours** of ground training. Two legitimate explanations, and you
+need to know which one applies:
+
+1. **It is supplemented.** Air Fleet's price sheet shows a ~30-hour self-paced course plus
+   **10 hours of live classroom instruction** — 40 hours total, comfortably over the floor. This
+   is the most likely answer and it is what §3 of this document budgets.
+2. **They hold an approved deviation.** [141.55(d)–(e)](https://www.law.cornell.edu/cfr/text/14/141.55)
+   lets the Administrator approve a course that "does not meet the minimum ground and flight
+   training time requirements", once the school has held its certificate 24 consecutive months
+   and has trained at least 10 students in the course with **at least 80% passing on the first
+   attempt**.
+
+**Explanation 2 is worth chasing, because a deviation can cut flight hours too.** If either school
+holds a §141.55(e) deviation, their approved private course may be **below 35 flight hours**, which
+is cheaper than anything in §3's table. Ask directly: *"Is your private pilot course approved at
+the Appendix B minimums, or do you hold a §141.55(e) deviation — and if so, what are the approved
+ground and flight hours?"*
+
+Note the thresholds differ: a deviation needs 80% first-time pass, examining authority
+(§6.1) needs 90%. A school can hold one without the other.
+
 ### 6.3 Smaller items
 
 - **Simulator fuel surcharge.** The surcharge reads "all aircraft except PIAT". A Redbird is not
@@ -255,13 +318,34 @@ anything below 45 as upside. On that basis:
 | Stretch, 35 hr floor | $11,076.00 | $12,678.57 |
 | If examining authority is real, deduct | — | −$1,175.00 |
 
-That is broadly level with the Century Air 172P plan at 50 hours, not dramatically cheaper —
-**the private certificate is close to a wash.** The reason to choose Air Fleet is §5: a Part 141
-instrument rating with no 50-hour cross-country PIC requirement, which is worth roughly $4,700,
-and a Pipistrel at $195/hr wet as the cheapest time-builder on either field.
+### Why Air Fleet, now that Part 141 is available at both
 
-**Do not commit the examining-authority saving, and do not commit to the Pipistrel for night,
-until §6.1 and §6.2 are answered in writing.**
+The original version of this document recommended Air Fleet because of the Part 141 instrument
+advantage. That reasoning no longer separates the two schools — Century Air offers Part 141 too,
+so §5 is worth roughly $4,700 either way. What is left is a straight trade:
+
+| | Century Air 172P | Air Fleet Pipistrel |
+| --- | --- | --- |
+| Cost at matched hours | **$1,000–$1,160 cheaper** | — |
+| Part 141 available | Yes | Yes |
+| Instrument rating without 50 hr XC PIC | Yes, under 141 | Yes, under 141 |
+| Cheapest time-builder | 172P solo $196/hr | **Pipistrel $195/hr wet** |
+| Cadence — days per week, doubles | Unproven; a standing six-day pattern was still an open ask | **Confirmed flexible in person: more days, two flights a day** |
+| Your own read of the place | Did not like it | Preferred it |
+
+**Choose Air Fleet.** The price gap is real but small — about four hours of dual across the whole
+course. Cadence is the thing that decides whether this is a 45-hour course or a 65-hour one, and
+that is worth several times $1,160. Buying the school that will actually fly you six days a week
+with doubles, rather than the one that is $1,158 cheaper on paper, is the correct trade at these
+numbers.
+
+The two soft factors point the same way, which matters: a school you do not enjoy is a school you
+cancel on, and cancelling is exactly what the cadence model cannot absorb.
+
+**Three things still to confirm in writing before money moves:** the examining-authority claim
+(§6.1, worth $1,175), night legality in the actual Pipistrel airframe (§6.2), and whether either
+school holds a §141.55(e) deviation that would put the approved course below 35 flight hours
+(§6.4, potentially worth more than the school choice itself).
 
 ---
 
