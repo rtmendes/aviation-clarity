@@ -470,6 +470,76 @@ course carries no FAA knowledge test and no outside examiner.
 
 ---
 
+## 6B. The aircraft decision — settled
+
+Held to the same 65 hours, the same 40 lessons and the same seven-sessions-a-week cadence:
+
+| 65 hr · 55 dual / 10 solo | Pipistrel ALPHA PRO | 172S steam | 172S G1000NXi |
+| --- | ---: | ---: | ---: |
+| Wet rate (fuel surcharge) | $195 (none) | $260 (+$20) | $300 (+$20) |
+| Dual rate (+$85 CFI) | $280 | $345 | $385 |
+| Dual, 55 hr | $15,400 | $18,975 | $21,175 |
+| Solo, 10 hr | $1,950 | $2,600 | $3,000 |
+| Briefing/debrief, 40 lessons | $1,020 | $1,020 | $1,020 |
+| Classroom 10 hr + King Schools | $1,178 | $1,178 | $1,178 |
+| Stage-check aircraft, 2 hr | $390 | $520 | $600 |
+| **Private certificate total** | **$19,938** | **$24,293** | **$26,973** |
+| **vs the Pipistrel** | — | **+$4,355** | **+$7,035** |
+| …at the +5 hr Century Air budgets for glass | — | — | $28,974 (**+$9,037**) |
+
+The **G1000NXi is comprehensively dominated** — the Pipistrel carries a Garmin G3X, so glass costs
+$7,035 less in the Alpha Trainer than in the Cessna.
+
+### Through the instrument phase
+
+The Alpha Trainer's POH permits IFR in VMC only, so the instrument rating moves to a 172 either
+way. The Pipistrel route therefore pays a transition checkout the 172 route does not:
+
+| | Pipistrel route | 172S route |
+| --- | ---: | ---: |
+| Private certificate, 65 hr | $19,938 | $24,293 |
+| 172S transition checkout, 4 hr dual | $1,380 | — |
+| Instrument, 20 hr aircraft dual in a 172S | $6,900 | $6,900 |
+| Instrument, 20 hr Redbird FMX @ $175 | $3,500 | $3,500 |
+| **Full stack** | **$31,718** | **$34,693** |
+| **Pipistrel advantage** | | **$2,975** |
+
+**The margin absorbs a 15-hour overrun.** Counting the transition, the Pipistrel stays cheaper
+unless it takes more than 15 extra hours than the Cessna would have — a 23% penalty from airframe
+choice alone.
+
+### Two objections that did not survive checking
+
+| Concern | What the source says |
+| --- | --- |
+| *A light aircraft is more weather-limited and will cost flying days* | The opposite. The ALPHA Trainer POH §2.15 states **"Do not take-off or land when crosswind component exceeds 18 kts"** — a hard limit. The 172S figure is **15 knots demonstrated**, which is advisory, not limiting. School policy on student solo winds will bind before either; ask what it is. |
+| *A certificate earned in a light-sport aircraft is restricted* | It is not. Training and testing in an S-LSA yields a full private pilot ASEL certificate. The restriction people have in mind attaches to using a driver's licence for medical eligibility, and a first-class medical is held. |
+
+### What is genuinely different
+
+| Factor | Pipistrel ALPHA Trainer PRO | Cessna 172S |
+| --- | --- | --- |
+| Cabin load, full fuel | ~520 lb, two seats | ~880 lb, four seats |
+| Endurance | 3 hr + reserve, 12.7 gal usable | ~5 hr, 53 gal usable |
+| Night | Approved by type design; legality airframe-specific — §6.2 | No question |
+| Instrument rating | **No** — VMC only | Yes |
+| Panel | **Garmin G3X glass** | Steam, or G1000NXi at +$7,035 |
+| Time-building afterwards | **$195/hr wet** | $260/hr — $65/hr more |
+| Fleet depth at Air Fleet | **3 airframes, in-house maintenance** | 9× 172S |
+
+**The availability risk is resolved.** Reported at the school: **three Alpha Trainers, maintained
+in house.** One airframe would have been a single point of failure on the exact variable being
+bought — cadence — and would have argued for the Cessna despite the $4,355. Three of the same type
+means the Part 141 PIAT course covers any of them and a swap is not a change of course. Still worth
+doing: have the standing reservation name a primary and a backup tail number, so availability is a
+booking rather than an assurance.
+
+**And it compounds.** At $65/hr below the 172S the Alpha Trainer is the cheapest way to build the
+pilot-in-command time the commercial certificate needs later — **100 hours saves $6,500**, more
+than any single number above.
+
+---
+
 ## 7. Recommendation
 
 **Enrol at Air Fleet. Fly the private under Part 61, and the instrument under Part 141.**

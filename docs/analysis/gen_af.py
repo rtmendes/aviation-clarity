@@ -49,9 +49,9 @@ SECTIONS = [
   ("c4", "What is the actual useful load, and does it work with my instructor's weight?",
    "POH figures are max takeoff 1,212 lb, empty 615 lb, useful load 597 lb, usable fuel about 76 lb — leaving roughly 520 lb for two people and bags, against about 880 lb in a 172S. Your aircraft is the Alpha Trainer PRO, which may differ.",
    "The real weight and balance for that tail number, checked against a specific instructor.", "high"),
-  ("c5", "How many Alpha Trainers are in service, and what happens when mine is down?",
-   "One airframe means every inspection stops my training. This matters more here than at a school with nine 172s.",
-   "The number in service and a named backup, ideally the same type.", "high"),
+  ("c5", "The standing reservation should name a primary Alpha Trainer and a backup tail number.",
+   "Resolved at the school: three Alpha Trainers, maintained in house. That is what makes the aircraft choice safe at seven sessions a week — one airframe would have been a single point of failure on the exact variable you are buying. All three are the same type, so the Part 141 PIAT course covers any of them and a swap is not a change of course.",
+   "Not a question so much as a follow-through: get the primary and backup tail numbers written into the standing booking, so availability is a reservation rather than an assurance.", "high")
  ]),
 
  ("D", "Cadence — the reason I am choosing you", [
