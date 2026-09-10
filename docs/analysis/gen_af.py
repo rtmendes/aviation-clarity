@@ -114,7 +114,13 @@ SECTIONS = [
    "The installed navigator by name, and the dates of the last 91.411 and 91.413 checks.", "high"),
   ("f7", "Endurance for the 250 NM instrument cross-country — where is the fuel stop?",
    "Appendix C requires 250 NM along airways with an approach at each airport. At 100 KIAS that is 2.5 hours of cruise, plus roughly 0.9 for three approaches and 0.4 for taxi and vectors — about 3.8 hours against a POH endurance of 3 hours plus a 30-minute reserve, before 91.167 adds destination, alternate and 45 minutes. It needs a planned fuel stop. Legal, since you are landing for the approaches anyway, but the 172 simply does not have this constraint.",
-   "How the school routes that flight in the Alpha Trainer, if they do it at all.", "high")
+   "How the school routes that flight in the Alpha Trainer, if they do it at all.", "high"),
+  ("f8", "What does USAA Denton actually fly for instrument and commercial?",
+   "Your plan is to standardise on one type from the instrument rating onward — Air Fleet to Denton — which is exactly right, because a second transition is a second checkout you pay for twice. But the continuity only holds if Denton flies 172s. If they fly Archers, Diamonds or something else, choosing the 172S here buys nothing and the aircraft decision for the instrument phase should be made on Denton's fleet, not Air Fleet's.",
+   "Denton's instrument and commercial fleet in writing, BEFORE committing to the 172S transition here. This is a question for Denton, not Air Fleet.", "must"),
+  ("f9", "Will a partial instrument phase here transfer, and how much of it?",
+   "141.77 caps transfer credit at 50% of a course from another Part 141 school and 25% from Part 61 training. Twenty hours of aircraft dual and twenty of AATD is real money — roughly $10,400 — and you need to know what survives the move before you spend it here rather than there.",
+   "Air Fleet's stage structure, and Denton's written view of what they would credit. Get both.", "must")
  ]),
 ]
 

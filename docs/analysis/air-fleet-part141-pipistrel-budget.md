@@ -540,6 +540,63 @@ than any single number above.
 
 ---
 
+## 6C. The chosen plan — Pipistrel for the private, 172S for the instrument
+
+Decided: fly the private certificate in the Pipistrel at the lowest cost available, target **55
+hours**, transition to a Cessna 172S for the instrument rating, and hold the difference as the
+instrument fund rather than spending it.
+
+| Line item | 55 hr — target | 65 hr — budget case |
+| --- | ---: | ---: |
+| Dual @ $280/hr | 45 hr — $12,600 | 55 hr — $15,400 |
+| Solo @ $195/hr | 10 hr — $1,950 | 10 hr — $1,950 |
+| Briefing/debrief @ $25.50 | 34 — $867 | 40 — $1,020 |
+| Classroom, 10 hr @ $75 | $750 | $750 |
+| King Schools ground school | $428 | $428 |
+| Stage-check aircraft, 2 hr @ $195 | $390 | $390 |
+| FAA written / outside DPE | none | none |
+| **Private certificate total** | **$16,985** | **$19,938** |
+
+**Finishing at 55 releases $2,953** — 8.6 hours of instrument dual in the 172S. Both schools
+independently state 65 as the average, so 55 is a target, not a plan. Budget the 65 and treat the
+difference as the instrument fund, not a discount.
+
+**The dual/solo split is worth $425 on its own.** At 55 hours, 40 dual / 15 solo instead of 45/10
+moves five hours from $280 to $195. Whether the approved course permits it is §6.4's question B3,
+and it shapes the syllabus rather than the invoice — so ask early.
+
+### Through to the instrument rating
+
+| Phase | Aircraft | Target case | Budget case |
+| --- | --- | ---: | ---: |
+| Private certificate | Pipistrel ALPHA PRO | $16,985 (55 hr) | $19,938 (65 hr) |
+| 172S transition checkout, 4 hr | 172S steam | $1,380 | $1,380 |
+| Instrument, 20 hr aircraft dual | 172S steam @ $345 | $6,900 | $6,900 |
+| Instrument, 20 hr Redbird FMX @ $175 | AATD | $3,500 | $3,500 |
+| **Total at Air Fleet** | | **$28,765** | **$31,718** |
+
+### Take the steam 172S, not the G1000NXi
+
+The NXi costs **$960 more** across the transition and 20 aircraft hours. The tempting argument —
+that glass time banks toward the commercial certificate's technically-advanced-airplane requirement
+— does not survive reading the regulation.
+[61.129(a)(3)(ii)](https://www.law.cornell.edu/cfr/text/14/61.129)'s 10 TAA hours sit **inside** the
+20 hours of training on the commercial areas of operation in 61.127(b)(1). Instrument training in a
+TAA does not count toward it. Buy that time at Denton, where it will actually be commercial
+training.
+
+### The continuity instinct is right, but verify the other end
+
+Standardising on one type from the instrument rating onward — Air Fleet through to Denton — avoids
+paying for a second transition. **That only holds if USAA Denton flies 172s.** If they fly Archers,
+Diamonds or anything else, the aircraft choice for the instrument phase should be made on Denton's
+fleet rather than Air Fleet's. This is a question for Denton, and it needs answering *before*
+committing to the 172S transition here. Recorded as checklist question F8, alongside F9 on what a
+partial instrument phase actually transfers under [141.77](https://www.law.cornell.edu/cfr/text/14/141.77)'s
+50% cap — roughly $10,400 of training rides on that answer.
+
+---
+
 ## 7. Recommendation
 
 **Enrol at Air Fleet. Fly the private under Part 61, and the instrument under Part 141.**
