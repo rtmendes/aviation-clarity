@@ -23,6 +23,67 @@ Reported first-hand after visiting Century Air and Air Fleet and asking directly
 
 ---
 
+## 0A. Correction — the Century Air Part 141 ground line
+
+**An earlier version of this document had the school comparison backwards.** It compared Air
+Fleet's Part 141 pricing against a Century Air figure that carried a *Part 61* ground line of
+roughly $688 (home study under [61.105(a)](https://www.law.cornell.edu/cfr/text/14/61.105) plus a
+few paid hours for endorsements). Century Air's own Private Pilot Certification Course page,
+collected 10 September 2026, prices their Part 141 ground training very differently:
+
+> 30 Hrs Ground Instruction @ $86/Hr — **$2,580**
+
+| Ground training, Part 141 | Cost |
+| --- | ---: |
+| Century Air — 30 hr live instruction @ $86/hr | **$2,580.00** |
+| Air Fleet — $427.57 self-paced course + 10 hr classroom @ $75/hr | **$1,177.57** |
+| **Gap, in Air Fleet's favour** | **$1,402.43** |
+
+That single line is larger than the flight-rate advantage Century holds, and it reverses the
+result. **Under Part 141, Air Fleet is cheaper at every hour count**, not more expensive.
+
+### The comparison flips on which part you fly
+
+School invoice, kit waived, written and DPE excluded, checkride rental included on both sides:
+
+| Hours (dual/solo) | **Part 141** Century | **Part 141** Air Fleet | | **Part 61** Century | **Part 61** Air Fleet |
+| --- | ---: | ---: | --- | ---: | ---: |
+| 35 hr (25/10) — the 141 floor | $12,132 | **$11,079** | | **$10,090** | $10,501 |
+| 50 hr (35/15) | $15,932 | **$15,083** | | **$13,890** | $14,506 |
+| 65 hr (55/10) — both schools' stated average | $20,592 | **$19,938** | | **$18,550** | $19,360 |
+| | | *Air Fleet by $654–$1,053* | | *Century by $411–$810* | |
+
+Part 61 figures assume your Sporty's course is accepted under 61.105(a) with roughly 8 hours of
+paid ground for endorsement preparation. That assumption is worth about $1,900 at Century and
+needs confirming — see §6.5.
+
+### The combination that beats both columns
+
+**Appendix C's only enrolment prerequisite is holding a private pilot certificate** with the
+appropriate category and class rating. It does **not** require the private to have been earned
+under Part 141. So the two advantages are separable:
+
+- **Private under Part 61** — home study collapses the ground line under 61.105(a).
+- **Instrument under Part 141** — Appendix C carries no 50-hour cross-country PIC requirement,
+  the single largest number in this plan at roughly $4,700 (§5).
+
+You can have both. Nothing requires the private certificate and the instrument rating to be flown
+under the same part.
+
+---
+
+## 0B. What else this page confirms
+
+| From Century Air's own page | Reading |
+| --- | --- |
+| "a minimum of 35 flight hours (25 hours of flight instruction / 10 hours of solo flight)" | Their approved course sets a 25/10 split. Appendix B's floor is 20 dual / 5 solo, so their TCO is stricter than the regulation — which it is entitled to be. |
+| "30 hours of ground instruction" | 5 hours **below** [Appendix B §3(a)(1)](https://www.law.cornell.edu/cfr/text/14/appendix-B_to_part_141)'s 35. Both schools say 30. See §6.4. |
+| "most students will take **65 or more** flight hours" | Air Fleet's template independently assumes 65. Two schools converging on the same number is a strong signal — see the revised §7. |
+| 172P/172SP average **65 hr**; 172SP G1000 TAA average **70 hr**; Cirrus SR-20 TAA average **80 hr** | **The school's own estimate is that glass costs +5 hours and the Cirrus +15** over the 172. This is Century Air, in print, confirming the conclusion of the aircraft-selection analysis: glass does not shorten a private course, it lengthens it. |
+| $12,565 + $8,460 = $21,025, but the printed total reads **$21,100** | The brochure's arithmetic is **$75 out**. Unchanged from the earlier review of this page. Not material, but do not let it anchor a quote. |
+
+---
+
 ## 1. The rate card, decoded
 
 Two cells on page 9 are obscured by glare. Both are recoverable exactly from page 1, because the
@@ -274,6 +335,11 @@ need to know which one applies:
    and has trained at least 10 students in the course with **at least 80% passing on the first
    attempt**.
 
+**Both schools quote 30, and Century Air attributes it in print to "FAR Part 141".** The current
+regulation says 35. At Air Fleet this is moot — their 30-hour course plus 10 classroom hours is
+40, clearing either figure. At Century it is worth 5 hours × $86 = **$430** if their brochure is
+simply stale rather than reflecting an approved deviation.
+
 **Explanation 2 is worth chasing, because a deviation can cut flight hours too.** If either school
 holds a §141.55(e) deviation, their approved private course may be **below 35 flight hours**, which
 is cheaper than anything in §3's table. Ask directly: *"Is your private pilot course approved at
@@ -282,6 +348,23 @@ ground and flight hours?"*
 
 Note the thresholds differ: a deviation needs 80% first-time pass, examining authority
 (§6.1) needs 90%. A school can hold one without the other.
+
+### 6.5 Century Air's Part 61 ground hours — a ~$1,900 question
+
+Century Air's page prices Part 141 ground at 30 hours × $86 = $2,580, and says the course "may
+also be conducted under Part 61 of the FAR's if beneficial to the student." Under Part 61,
+[61.105(a)](https://www.law.cornell.edu/cfr/text/14/61.105) accepts a home-study course in lieu
+of logged ground training, so the paid ground line should collapse to a few hours of endorsement
+preparation.
+
+Whether Century Air actually applies it that way is unknown, and it is the difference between
+Century being the cheaper school and the more expensive one. Ask literally:
+
+> *"Under Part 61, with my Sporty's course completed and my FAA written already passed, how many
+> paid hours of ground instruction do I actually need — and at what rate?"*
+
+If the answer is "30 hours regardless", Century's Part 61 route costs roughly $1,900 more than
+the table in §0A shows, and Air Fleet wins outright on both routes.
 
 ### 6.3 Smaller items
 
@@ -304,19 +387,34 @@ Note the thresholds differ: a deviation needs 80% first-time pass, examining aut
 
 ## 7. Recommendation
 
-**Enrol Part 141 on the Pipistrel, but budget 45–50 hours, not 35.**
+**Enrol at Air Fleet. Fly the private under Part 61, and the instrument under Part 141.**
 
-The 35-hour column is the legal floor, not a plan. Air Fleet's own estimate of what the average
-student actually takes is 65 hours, and the national average is higher still. A motivated,
-self-studied student flying six booked days a week should plan around **45–50 hours** and treat
-anything below 45 as upside. On that basis:
+### On hours — a correction to my own earlier advice
 
-| | Air Fleet invoice | All-in |
+An earlier version of this document recommended planning at 45–50 hours. **Both schools
+independently state 65**: Century Air's page says "most students will take 65 or more flight
+hours", and Air Fleet's estimate template is built on 60 dual + 5 solo. Two competitors with
+opposite commercial incentives converging on the same number is stronger evidence than my
+optimism, and the national average is higher still.
+
+Plan **60–65 hours** as the expected case. Treat 50 as a good outcome and 35 as the legal floor
+you will not see. Fast cadence and self-study should pull the number down, but budget for what
+both schools say actually happens:
+
+| Air Fleet, Pipistrel, Part 61 | School invoice | With ground school, written and $1,000 DPE |
 | --- | ---: | ---: |
-| Plan at 45 hr | $13,604.00 | **$15,206.57** |
-| Plan at 50 hr | $15,080.50 | **$16,683.07** |
-| Stretch, 35 hr floor | $11,076.00 | $12,678.57 |
-| If examining authority is real, deduct | — | −$1,175.00 |
+| 65 hr (55/10) — both schools' stated average | $19,360 | **$20,962** |
+| 50 hr (35/15) — good outcome | $14,506 | **$16,108** |
+| 35 hr (25/10) — legal floor, will not happen | $10,501 | $12,103 |
+
+For reference, the Part 141 columns at the same hour counts:
+
+| Air Fleet, Pipistrel, Part 141 | School invoice | All-in |
+| --- | ---: | ---: |
+| 65 hr (55/10) | $19,938 | $21,540 |
+| 50 hr (35/15) | $15,083 | $16,685 |
+| 35 hr (25/10) | $11,079 | $12,681 |
+| If examining authority is real, deduct | — | −$1,175 |
 
 ### Why Air Fleet, now that Part 141 is available at both
 
@@ -326,18 +424,23 @@ so §5 is worth roughly $4,700 either way. What is left is a straight trade:
 
 | | Century Air 172P | Air Fleet Pipistrel |
 | --- | --- | --- |
-| Cost at matched hours | **$1,000–$1,160 cheaper** | — |
+| Cost, Part 141 | — | **$654–$1,053 cheaper** |
+| Cost, Part 61 | **$411–$810 cheaper** | — |
 | Part 141 available | Yes | Yes |
 | Instrument rating without 50 hr XC PIC | Yes, under 141 | Yes, under 141 |
 | Cheapest time-builder | 172P solo $196/hr | **Pipistrel $195/hr wet** |
 | Cadence — days per week, doubles | Unproven; a standing six-day pattern was still an open ask | **Confirmed flexible in person: more days, two flights a day** |
 | Your own read of the place | Did not like it | Preferred it |
 
-**Choose Air Fleet.** The price gap is real but small — about four hours of dual across the whole
-course. Cadence is the thing that decides whether this is a 45-hour course or a 65-hour one, and
-that is worth several times $1,160. Buying the school that will actually fly you six days a week
-with doubles, rather than the one that is $1,158 cheaper on paper, is the correct trade at these
-numbers.
+**Choose Air Fleet.** Neither school is decisively cheaper — Century wins the Part 61 column by
+$411–$810, Air Fleet wins the Part 141 column by $654–$1,053, and every one of those gaps is
+worth two to four hours of dual instruction across a course both schools expect to run 65 hours.
+The money is a wash inside the noise.
+
+Cadence is not a wash. It decides whether this is a 50-hour course or a 65-hour one, and at $280
+an hour that swing is roughly **$4,200** — four times the largest price gap in either column.
+Air Fleet is the school that told you, in person, that it will fly you more days a week and twice
+in a day. That is the variable worth buying.
 
 The two soft factors point the same way, which matters: a school you do not enjoy is a school you
 cancel on, and cancelling is exactly what the cadence model cannot absorb.
